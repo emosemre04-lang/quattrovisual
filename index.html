@@ -10,11 +10,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap">
 <style>
   :root {
-    --bg: #f6f4fb;
-    --bg-soft: #ffffff;
-    --bg-form: #efeaff;
+    --bg: #ffffff;
+    --bg-soft: #faf9fc;
+    --bg-form: #f5f2ff;
     --surface: #ffffff;
-    --border: #e7e3f3;
+    --border: #ece8f5;
     --border-strong: #cfc6e8;
     --ink: #0e0a24;
     --ink-2: #4a4565;
@@ -22,12 +22,12 @@
     --accent: #6b3df5;
     --accent-2: #a06bff;
     --accent-dark: #5429d8;
-    --accent-soft: #efeaff;
+    --accent-soft: #f0ecff;
     --red: #e23a3a;
     --green: #16a16a;
-    --shadow-sm: 0 2px 8px rgba(60, 30, 140, 0.08);
-    --shadow-md: 0 12px 30px rgba(60, 30, 140, 0.1), 0 2px 6px rgba(60, 30, 140, 0.05);
-    --shadow-lg: 0 30px 70px rgba(60, 30, 140, 0.18), 0 8px 16px rgba(60, 30, 140, 0.08);
+    --shadow-sm: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05);
+    --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.05);
     --radius: 16px;
     --radius-lg: 24px;
   }
@@ -45,110 +45,32 @@
   }
   img { max-width: 100%; display: block; }
 
-  /* ============ GALAXY BACKGROUND ============ */
+  /* ============ BACKGROUND — clean white with top accent ============ */
   .galaxy-bg {
     position: fixed; inset: 0;
     z-index: -2;
-    background:
-      radial-gradient(ellipse at 20% 10%, rgba(160, 107, 255, 0.18), transparent 55%),
-      radial-gradient(ellipse at 80% 30%, rgba(107, 61, 245, 0.16), transparent 55%),
-      radial-gradient(ellipse at 50% 90%, rgba(200, 170, 255, 0.14), transparent 60%),
-      linear-gradient(180deg, #f6f4fb 0%, #ece6fb 50%, #f6f4fb 100%);
+    background: #ffffff;
     pointer-events: none;
   }
+  /* Subtle violet gradient only at the very top */
   .galaxy-bg::before {
     content: "";
-    position: absolute; inset: 0;
-    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
-    opacity: 0.06;
-    mix-blend-mode: multiply;
-  }
-  /* 3D scroll parallax blobs */
-  .parallax-blob {
-    position: fixed;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: -1;
-    will-change: transform;
-    transition: transform 0.05s linear;
-  }
-  #pb1 {
-    width: 600px; height: 600px;
-    top: -10%; left: -15%;
-    background: radial-gradient(circle, rgba(107,61,245,0.13), transparent 70%);
-    filter: blur(40px);
-  }
-  #pb2 {
-    width: 480px; height: 480px;
-    top: 20%; right: -12%;
-    background: radial-gradient(circle, rgba(160,107,255,0.11), transparent 70%);
-    filter: blur(50px);
-  }
-  #pb3 {
-    width: 400px; height: 400px;
-    bottom: 5%; left: 25%;
-    background: radial-gradient(circle, rgba(80,30,240,0.1), transparent 70%);
-    filter: blur(55px);
-  }
-  @media (max-width: 720px) {
-    .parallax-blob { display: none !important; }
-  }
-
-  .stars-layer {
-    position: fixed; inset: 0;
-    pointer-events: none;
-    z-index: -1;
-  }
-  .nebula {
     position: absolute;
-    border-radius: 50%;
-    filter: blur(70px);
-    pointer-events: none;
-    mix-blend-mode: multiply;
-    opacity: 0.55;
+    top: 0; left: 0; right: 0;
+    height: 60vh;
+    background: radial-gradient(ellipse 90% 70% at 50% -10%, rgba(107,61,245,0.055), transparent 70%);
   }
-  .nebula.n1 {
-    width: 500px; height: 500px;
-    top: 5%; left: -10%;
-    background: radial-gradient(circle, rgba(140, 95, 255, 0.45), transparent 65%);
-    animation: drift1 22s ease-in-out infinite;
-  }
-  .nebula.n2 {
-    width: 420px; height: 420px;
-    top: 30%; right: -10%;
-    background: radial-gradient(circle, rgba(190, 140, 255, 0.4), transparent 65%);
-    animation: drift2 18s ease-in-out infinite;
-  }
-  .nebula.n3 {
-    width: 360px; height: 360px;
-    bottom: 5%; left: 30%;
-    background: radial-gradient(circle, rgba(120, 70, 240, 0.32), transparent 65%);
-    animation: drift3 26s ease-in-out infinite;
-  }
-  @keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(80px,50px) scale(1.12);} }
-  @keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(-60px,40px) scale(1.15);} }
-  @keyframes drift3 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(40px,-50px) scale(0.92);} }
-
-  .comet {
+  /* Violet line accent at page top */
+  .page-accent-line {
     position: fixed;
-    top: 8%; left: -10%;
-    width: 200px; height: 2px;
-    background: linear-gradient(90deg, transparent, #fff, var(--accent));
-    border-radius: 2px;
-    box-shadow: 0 0 14px var(--accent), 0 0 28px rgba(107,61,245,0.6);
-    opacity: 0;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-dark) 0%, var(--accent) 25%, var(--accent-2) 60%, var(--accent) 80%, var(--accent-dark) 100%);
+    z-index: 200;
     pointer-events: none;
-    z-index: -1;
-    transform: rotate(18deg);
-    animation: comet 16s ease-out infinite;
-    animation-delay: 4s;
   }
-  @keyframes comet {
-    0% { opacity: 0; transform: translate(-100vw, 0) rotate(18deg); }
-    5% { opacity: 1; }
-    20% { opacity: 0.8; transform: translate(120vw, 60vh) rotate(18deg); }
-    20.01%, 100% { opacity: 0; transform: translate(-100vw, 0) rotate(18deg); }
-  }
+  .stars-layer { display: none !important; }
+  .nebula { display: none !important; }
 
   .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
   h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
@@ -577,8 +499,8 @@
     perspective: 1400px;
   }
   .inclus-card {
-    background: rgba(255,255,255,0.94);
-    border: 1px solid rgba(207,198,232,0.7);
+    background: #ffffff;
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 22px 18px;
     display: flex;
@@ -708,7 +630,7 @@
 
   /* ============ FORM ============ */
   .form-section {
-    background: linear-gradient(180deg, transparent 0%, rgba(239,234,255,0.6) 20%, rgba(239,234,255,0.6) 80%, transparent 100%);
+    background: linear-gradient(180deg, transparent 0%, rgba(107,61,245,0.04) 20%, rgba(107,61,245,0.04) 80%, transparent 100%);
     padding: 36px 0 64px;
     position: relative;
   }
@@ -842,7 +764,7 @@
   }
   .why-card {
     background: #fff;
-    border: 1px solid rgba(207,198,232,0.7);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 28px 22px;
     text-align: center;
@@ -902,7 +824,7 @@
   }
   .how-step {
     background: #fff;
-    border: 1px solid rgba(207,198,232,0.7);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 28px 20px 24px;
     text-align: center;
@@ -940,11 +862,11 @@
   footer.foot {
     padding: 32px 20px 110px;
     text-align: center;
-    border-top: 1px solid rgba(207,198,232,0.5);
+    border-top: 2px solid transparent;
+    border-image: linear-gradient(90deg, transparent, var(--accent), var(--accent-2), var(--accent), transparent) 1;
     color: var(--ink-3);
     font-size: 12px;
-    background: rgba(255,255,255,0.5);
-    backdrop-filter: blur(10px);
+    background: var(--bg-soft);
   }
 
   /* ============ STICKY CTA ============ */
@@ -1045,19 +967,20 @@
     .trust-item { font-size: 12px; }
 
     .portfolio-track {
-      grid-template-columns: none;
+      display: block;
+      overflow: hidden;
+      touch-action: none;
+      pointer-events: none;
+      margin: 0 -14px;
+    }
+    .portfolio-inner-mob {
       display: flex;
-      overflow-x: auto;
-      scroll-snap-type: none;
       gap: 12px;
       padding: 4px 14px 14px;
-      margin: 0 -14px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+      will-change: transform;
     }
-    .portfolio-track::-webkit-scrollbar { display: none; }
-    .portfolio-track { touch-action: pan-x; overscroll-behavior-x: contain; }
-    .mockup { flex: 0 0 74%; }
+    .portfolio-inner-mob .mockup { flex: 0 0 72%; }
+    .mockup:hover { transform: none; }
     .mockup:hover { transform: none; }
     .swipe-hint { text-align: center; font-size: 11px; color: var(--ink-3); margin-top: 10px; letter-spacing: 0.05em; }
 
@@ -1094,19 +1017,9 @@
     .swipe-hint { display: none; }
   }
 
-  /* ============ MOBILE PERF — kill GPU hogs ============ */
+  /* ============ MOBILE PERF ============ */
   @media (max-width: 720px) {
-    /* Stop nebula blur animations — filter:blur() + mix-blend-mode = GPU hell */
-    .nebula { display: none !important; }
-    /* Stop comet crossing full viewport */
-    .comet { display: none !important; }
-    /* Remove star parallax layers — not visible enough to justify GPU cost */
-    .stars-layer { display: none !important; }
-    /* Remove fractal noise SVG filter on background */
-    .galaxy-bg::before { display: none !important; }
-    /* Replace backdrop-filter blur with solid backgrounds */
-    header.top,
-    header.top.scrolled {
+    header.top, header.top.scrolled {
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
       background: rgba(255,255,255,0.97) !important;
@@ -1116,11 +1029,10 @@
       -webkit-backdrop-filter: none !important;
       background: #fff !important;
     }
-    /* pulse-dot animation can stay (cheap) but simplify trust-bar */
     .trust-bar {
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
-      background: rgba(255,255,255,0.85) !important;
+      background: rgba(255,255,255,0.95) !important;
     }
   }
 
@@ -1349,20 +1261,9 @@
 </head>
 <body>
 
-<!-- GALAXY BACKGROUND -->
-<div class="galaxy-bg">
-  <div class="nebula n1"></div>
-  <div class="nebula n2"></div>
-  <div class="nebula n3"></div>
-</div>
-<!-- 3D PARALLAX SCROLL LAYERS (desktop only) -->
-<div class="parallax-blob" id="pb1"></div>
-<div class="parallax-blob" id="pb2"></div>
-<div class="parallax-blob" id="pb3"></div>
-<div class="stars-layer" id="stars-1"></div>
-<div class="stars-layer" id="stars-2"></div>
-<div class="stars-layer" id="stars-3"></div>
-<div class="comet"></div>
+<!-- BACKGROUND -->
+<div class="galaxy-bg"></div>
+<div class="page-accent-line"></div>
 
 <!-- ICONS -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1724,42 +1625,6 @@
   const isMobileDevice = window.innerWidth <= 720;
   const hasFinePointer = matchMedia('(pointer: fine)').matches;
 
-  if (!isMobileDevice) {
-    function makeStars(el, count, size, opacity) {
-      const w = 1920, h = 1080;
-      let svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}' preserveAspectRatio='xMidYMid slice' style='width:100%;height:100%;opacity:${opacity}'>`;
-      for (let i = 0; i < count; i++) {
-        const x = Math.random() * w, y = Math.random() * h;
-        const r = size * (0.3 + Math.random() * 0.9);
-        const o = 0.4 + Math.random() * 0.6;
-        const hue = Math.random() < 0.4 ? 270 : 260;
-        svg += `<circle cx='${x}' cy='${y}' r='${r}' fill='hsl(${hue}, 80%, ${45 + Math.random()*20}%)' opacity='${o}'/>`;
-      }
-      svg += `</svg>`;
-      el.innerHTML = svg;
-    }
-    const s1 = document.getElementById('stars-1');
-    const s2 = document.getElementById('stars-2');
-    const s3 = document.getElementById('stars-3');
-    if (s1) makeStars(s1, 70, 0.9, 0.45);
-    if (s2) makeStars(s2, 50, 1.4, 0.55);
-    if (s3) makeStars(s3, 25, 2.0, 0.7);
-
-    let mx = 0, my = 0, sy = 0;
-    function parallax() {
-      if (s1) s1.style.transform = `translate3d(${mx*-10}px, ${sy*-0.04 + my*-10}px, 0)`;
-      if (s2) s2.style.transform = `translate3d(${mx*-20}px, ${sy*-0.08 + my*-20}px, 0)`;
-      if (s3) s3.style.transform = `translate3d(${mx*-35}px, ${sy*-0.14 + my*-35}px, 0)`;
-    }
-    window.addEventListener('scroll', () => { sy = window.scrollY; parallax(); }, { passive: true });
-    if (hasFinePointer) {
-      window.addEventListener('mousemove', (e) => {
-        mx = (e.clientX / window.innerWidth - 0.5);
-        my = (e.clientY / window.innerHeight - 0.5);
-        parallax();
-      });
-    }
-  }
 
   // ====== REVEAL ======
   // Auto-stagger grid children that don't already have a delay class
@@ -1829,25 +1694,29 @@
     });
   });
 
-  // ====== PORTFOLIO AUTO-SCROLL (mobile — smooth continuous drift) ======
+  // ====== PORTFOLIO SMOOTH MARQUEE (mobile — GPU transform, fully untouchable) ======
   (function() {
+    if (window.innerWidth > 720) return;
     const track = document.getElementById('portfolio-track');
-    if (!track || window.innerWidth > 720) return;
-    const items = track.querySelectorAll('.mockup');
-    if (items.length < 2) return;
+    if (!track) return;
+    const mockups = [...track.querySelectorAll('.mockup')];
+    if (mockups.length < 2) return;
 
-    const SPEED = 0.45; // px per frame — steady gentle drift
+    // Build inner wrapper for transform-based drift — no scrollLeft = no jitter
+    const inner = document.createElement('div');
+    inner.className = 'portfolio-inner-mob';
+    mockups.forEach(m => inner.appendChild(m));
+    track.appendChild(inner);
+
     let pos = 0;
-
-    // If user manually scrolls, pick up from their position
-    track.addEventListener('scroll', () => { pos = track.scrollLeft; }, { passive: true });
+    const SPEED = 0.48;
 
     function step() {
-      const max = track.scrollWidth - track.clientWidth;
+      const max = inner.offsetWidth - track.offsetWidth;
       if (max <= 0) { requestAnimationFrame(step); return; }
       pos += SPEED;
       if (pos >= max) pos = 0;
-      track.scrollLeft = pos;
+      inner.style.transform = `translate3d(-${pos}px, 0, 0)`;
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -1859,20 +1728,6 @@
     siteHeader.classList.toggle('scrolled', window.scrollY > 50);
   }, { passive: true });
 
-  // ====== BACKGROUND 3D PARALLAX SCROLL ======
-  if (!isMobileDevice) {
-    const pb1 = document.getElementById('pb1');
-    const pb2 = document.getElementById('pb2');
-    const pb3 = document.getElementById('pb3');
-    function updateBgParallax() {
-      const sy = window.scrollY;
-      if (pb1) pb1.style.transform = `translate3d(${sy * 0.04}px, ${sy * -0.12}px, 0) scale(${1 + sy * 0.00015})`;
-      if (pb2) pb2.style.transform = `translate3d(${sy * -0.06}px, ${sy * 0.09}px, 0) scale(${1 + sy * 0.0001})`;
-      if (pb3) pb3.style.transform = `translate3d(${sy * 0.03}px, ${sy * -0.07}px, 0) scale(${1 - sy * 0.00008})`;
-    }
-    window.addEventListener('scroll', updateBgParallax, { passive: true });
-    updateBgParallax();
-  }
 
   // ====== METIER "AUTRE" TOGGLE ======
   document.getElementById('metier').addEventListener('change', function() {
