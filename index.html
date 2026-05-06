@@ -32,7 +32,7 @@
     --radius-lg: 24px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
   body {
     background: var(--bg);
     color: var(--ink);
@@ -527,11 +527,15 @@
     background: #fff;
   }
   .mockup-meta h4 { font-size: 14px; font-weight: 700; }
-  .mockup-meta .url-link {
-    font-size: 12px;
-    color: var(--accent);
-    font-weight: 600;
-    cursor: default;
+  .mockup-meta .sector-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 700;
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+    border: 1px solid rgba(107,61,245,0.15);
+    border-radius: 999px;
+    padding: 3px 10px;
+    letter-spacing: 0.01em;
   }
 
   /* ============ INCLUS ============ */
@@ -974,7 +978,7 @@
       grid-template-columns: none;
       display: flex;
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
+      scroll-snap-type: none;
       gap: 12px;
       padding: 4px 14px 14px;
       margin: 0 -14px;
@@ -983,7 +987,7 @@
     }
     .portfolio-track::-webkit-scrollbar { display: none; }
     .portfolio-track { touch-action: pan-x; overscroll-behavior-x: contain; }
-    .mockup { flex: 0 0 88%; scroll-snap-align: start; }
+    .mockup { flex: 0 0 88%; }
     .mockup:hover { transform: none; }
     .swipe-hint { text-align: center; font-size: 11px; color: var(--ink-3); margin-top: 10px; letter-spacing: 0.05em; }
 
@@ -1236,136 +1240,41 @@
     .btn-wa-big { padding: 16px 28px; font-size: 15px; }
   }
 
-  /* ============ ADMIN PANEL ============ */
-  #admin-overlay {
-    position: fixed; inset: 0;
-    background: rgba(14,10,36,0.82);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    overflow-y: auto;
+  /* ============ CONVERSION STRIP ============ */
+  .conv-strip {
+    background: linear-gradient(135deg, rgba(107,61,245,0.06) 0%, rgba(160,107,255,0.1) 100%);
+    border-top: 1px solid rgba(107,61,245,0.12);
+    border-bottom: 1px solid rgba(107,61,245,0.12);
+    padding: 18px 0;
+    text-align: center;
+    position: relative; overflow: hidden;
   }
-  .admin-card {
-    background: #fff;
-    border-radius: 22px;
-    padding: 32px 28px;
-    width: 100%;
-    max-width: 700px;
-    box-shadow: 0 40px 80px rgba(107,61,245,0.25), 0 8px 16px rgba(107,61,245,0.1);
-    position: relative;
+  .conv-strip::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, transparent 0px, transparent 100px, rgba(107,61,245,0.03) 100px, rgba(107,61,245,0.03) 101px);
+    pointer-events: none;
   }
-  .admin-card h2 {
-    font-size: 22px;
-    margin-bottom: 6px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+  .conv-inner {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 6px 24px;
   }
-  .admin-card .sub { color: var(--ink-3); font-size: 13px; margin-bottom: 22px; }
-  #admin-pwd-input {
-    width: 100%; padding: 14px 16px;
-    border: 1.5px solid var(--border-strong);
-    border-radius: 12px;
-    font-size: 16px; font-family: inherit;
-    color: var(--ink);
-    margin-bottom: 12px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+  .conv-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 700; color: var(--ink);
   }
-  #admin-pwd-input:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(107,61,245,0.15);
+  .conv-item .conv-icon {
+    font-size: 16px; line-height: 1;
   }
-  #admin-pwd-error { color: var(--red); font-size: 13px; margin-bottom: 10px; display: none; }
-  .admin-btn-row { display: flex; gap: 10px; }
-  .admin-btn {
-    flex: 1; padding: 13px 20px;
-    border-radius: 12px; border: none;
-    font-family: inherit; font-size: 14px; font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+  .conv-sep {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--accent); opacity: 0.35;
   }
-  .admin-btn.primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: #fff;
-    box-shadow: 0 8px 20px -4px rgba(107,61,245,0.45);
+  @media (max-width: 720px) {
+    .conv-sep { display: none; }
+    .conv-item { font-size: 12px; }
   }
-  .admin-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -4px rgba(107,61,245,0.55); }
-  .admin-btn.ghost {
-    background: var(--accent-soft);
-    color: var(--accent-dark);
-    border: 1px solid rgba(107,61,245,0.2);
-  }
-  .admin-btn.ghost:hover { background: #e6dfff; }
-  .admin-header-row {
-    display: flex; align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px; gap: 12px; flex-wrap: wrap;
-  }
-  .admin-header-row h2 { margin-bottom: 0; }
-  .admin-actions { display: flex; gap: 8px; }
-  .admin-badge {
-    display: inline-flex; align-items: center;
-    background: var(--accent-soft);
-    color: var(--accent-dark);
-    font-size: 12px; font-weight: 700;
-    padding: 4px 10px; border-radius: 999px;
-    border: 1px solid rgba(107,61,245,0.2);
-  }
-  .leads-table {
-    width: 100%; border-collapse: collapse;
-    font-size: 13px; margin-top: 4px;
-  }
-  .leads-table th {
-    text-align: left;
-    padding: 10px 12px;
-    background: var(--accent-soft);
-    color: var(--accent-dark);
-    font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border-bottom: 2px solid rgba(107,61,245,0.15);
-  }
-  .leads-table th:first-child { border-radius: 8px 0 0 8px; }
-  .leads-table th:last-child { border-radius: 0 8px 8px 0; }
-  .leads-table td {
-    padding: 11px 12px;
-    border-bottom: 1px solid var(--border);
-    color: var(--ink);
-    vertical-align: middle;
-  }
-  .leads-table tr:last-child td { border-bottom: none; }
-  .leads-table tr:hover td { background: rgba(107,61,245,0.03); }
-  .leads-empty {
-    text-align: center; padding: 40px 16px;
-    color: var(--ink-3); font-size: 14px;
-  }
-  .leads-empty .ico-empty {
-    font-size: 36px; margin-bottom: 10px;
-    opacity: 0.4;
-  }
-  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
-  .meta-tag {
-    display: inline-flex; align-items: center;
-    background: var(--bg);
-    color: var(--ink-2);
-    padding: 3px 8px; border-radius: 6px;
-    font-size: 11.5px; font-weight: 600;
-    border: 1px solid var(--border);
-  }
-  @media (max-width: 600px) {
-    .admin-card { padding: 22px 16px; }
-    .leads-table { font-size: 12px; }
-    .leads-table th, .leads-table td { padding: 9px 10px; }
-  }
+
 </style>
 </head>
 <body>
@@ -1409,7 +1318,7 @@
 <!-- HERO -->
 <section class="hero">
   <div class="container">
-    <span class="badge-pill reveal"><span class="pulse-dot"></span> 7 places restantes ce mois-ci</span>
+    <span class="badge-pill reveal"><span class="pulse-dot"></span> <span id="places-label">3</span> places restantes ce mois-ci</span>
     <h1 class="reveal-left d1">Votre site professionnel<br><span class="grad">clé en main</span></h1>
 
     <div class="price-card reveal-scale d2" data-tilt>
@@ -1434,6 +1343,19 @@
   </div>
 </div>
 
+<!-- CONVERSION STRIP -->
+<div class="conv-strip">
+  <div class="container">
+    <div class="conv-inner">
+      <div class="conv-item"><span class="conv-icon">📉</span> Chaque jour sans site = des clients perdus</div>
+      <div class="conv-sep"></div>
+      <div class="conv-item"><span class="conv-icon">🔍</span> Soyez visible sur Google dès cette semaine</div>
+      <div class="conv-sep"></div>
+      <div class="conv-item"><span class="conv-icon">⚡</span> Livré en 5 jours, paiement unique</div>
+    </div>
+  </div>
+</div>
+
 <!-- PORTFOLIO -->
 <section>
   <div class="container">
@@ -1448,7 +1370,7 @@
           <div class="mockup-url">rnconstruction.bzh</div>
         </div>
         <div class="mockup-screen"><img src="assets/portfolio/rnconstruction.png" alt="RN Construction"></div>
-        <div class="mockup-meta"><h4>RN Construction</h4><span class="url-link">rnconstruction.bzh</span></div>
+        <div class="mockup-meta"><h4>RN Construction</h4><span class="sector-tag">BTP · France</span></div>
       </div>
       <div class="mockup reveal d1" data-tilt>
         <div class="mockup-bar">
@@ -1456,7 +1378,7 @@
           <div class="mockup-url">bahnmotors.be</div>
         </div>
         <div class="mockup-screen"><img src="assets/portfolio/bahnmotors.png" alt="Bahn Motors"></div>
-        <div class="mockup-meta"><h4>Bahn Motors</h4><span class="url-link">bahnmotors.be</span></div>
+        <div class="mockup-meta"><h4>Bahn Motors</h4><span class="sector-tag">Automobile · Belgique</span></div>
       </div>
       <div class="mockup reveal d2" data-tilt>
         <div class="mockup-bar">
@@ -1464,7 +1386,7 @@
           <div class="mockup-url">trocplace.fr</div>
         </div>
         <div class="mockup-screen"><img src="assets/portfolio/trocplace.png" alt="Trocplace"></div>
-        <div class="mockup-meta"><h4>Trocplace</h4><span class="url-link">trocplace.fr</span></div>
+        <div class="mockup-meta"><h4>Trocplace</h4><span class="sector-tag">Marketplace · France</span></div>
       </div>
       <div class="mockup reveal d3" data-tilt>
         <div class="mockup-bar">
@@ -1472,7 +1394,7 @@
           <div class="mockup-url">quattroshopping.com</div>
         </div>
         <div class="mockup-screen"><img src="assets/portfolio/quattroshopping.png" alt="Quattro Shopping"></div>
-        <div class="mockup-meta"><h4>Quattro Shopping</h4><span class="url-link">quattroshopping.com</span></div>
+        <div class="mockup-meta"><h4>Quattro Shopping</h4><span class="sector-tag">E-commerce · Europe</span></div>
       </div>
     </div>
     <p class="swipe-hint">← Glissez pour voir plus →</p>
@@ -1703,6 +1625,17 @@
 <!-- FOOTER -->
 <footer class="foot">
   <span id="footer-trigger" style="cursor:default;user-select:none;">© 2026 Quattro Visual</span> · Sites professionnels clé en main
+  <div style="margin-top:14px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 14px;">
+    <a href="mentions-legales.html" style="color:var(--ink-3);text-decoration:none;font-size:11px;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink-3)'">Mentions légales</a>
+    <span style="color:var(--border-strong)">·</span>
+    <a href="cgu.html" style="color:var(--ink-3);text-decoration:none;font-size:11px;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink-3)'">CGU</a>
+    <span style="color:var(--border-strong)">·</span>
+    <a href="cgv.html" style="color:var(--ink-3);text-decoration:none;font-size:11px;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink-3)'">CGV</a>
+    <span style="color:var(--border-strong)">·</span>
+    <a href="confidentialite.html" style="color:var(--ink-3);text-decoration:none;font-size:11px;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink-3)'">Confidentialité</a>
+    <span style="color:var(--border-strong)">·</span>
+    <a href="cookies.html" style="color:var(--ink-3);text-decoration:none;font-size:11px;transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--ink-3)'">Cookies</a>
+  </div>
 </footer>
 
 <!-- STICKY CTA -->
@@ -1711,52 +1644,6 @@
   <a href="#formulaire" class="btn btn-primary" data-cta>Je réserve →</a>
 </div>
 
-<!-- ADMIN PANEL -->
-<div id="admin-overlay" style="display:none">
-  <!-- Login -->
-  <div class="admin-card" id="admin-login-card">
-    <h2>Espace Admin</h2>
-    <p class="sub">Accès réservé — entrez le mot de passe</p>
-    <p id="admin-pwd-error">Mot de passe incorrect</p>
-    <input type="password" id="admin-pwd-input" placeholder="Mot de passe" autocomplete="current-password">
-    <div class="admin-btn-row">
-      <button class="admin-btn primary" id="admin-login-btn">Accéder</button>
-      <button class="admin-btn ghost" id="admin-close-btn">Fermer</button>
-    </div>
-  </div>
-  <!-- Dashboard -->
-  <div class="admin-card" id="admin-dashboard" style="display:none">
-    <div class="admin-header-row">
-      <div>
-        <h2>Formulaires reçus</h2>
-        <span class="admin-badge" id="admin-count">0 lead</span>
-      </div>
-      <div class="admin-actions">
-        <button class="admin-btn ghost" id="admin-export-btn" style="flex:unset;padding:9px 14px;font-size:12px;">Exporter CSV</button>
-        <button class="admin-btn ghost" id="admin-clear-btn" style="flex:unset;padding:9px 14px;font-size:12px;color:var(--red);border-color:rgba(226,58,58,0.2);">Vider</button>
-        <button class="admin-btn ghost" id="admin-logout-btn" style="flex:unset;padding:9px 14px;font-size:12px;">Déconnexion</button>
-      </div>
-    </div>
-    <div class="table-wrap" id="admin-table-wrap">
-      <div class="leads-empty" id="leads-empty">
-        <div class="ico-empty">📋</div>
-        <p>Aucun formulaire reçu pour l'instant.</p>
-      </div>
-      <table class="leads-table" id="leads-table" style="display:none">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Prénom</th>
-            <th>Téléphone</th>
-            <th>Métier</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody id="leads-tbody"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
 
 <script>
   // ====== STARS + PARALLAX (desktop only) ======
@@ -1868,44 +1755,54 @@
     });
   });
 
-  // ====== PORTFOLIO AUTO-SCROLL (mobile only) ======
+  // ====== PORTFOLIO AUTO-SCROLL (mobile — smooth continuous drift) ======
   (function() {
     const track = document.getElementById('portfolio-track');
-    if (!track) return;
-    const isMobile = () => window.innerWidth <= 720;
-    if (!isMobile()) return;
+    if (!track || window.innerWidth > 720) return;
     const items = track.querySelectorAll('.mockup');
     if (items.length < 2) return;
-    let idx = 0;
-    let paused = false;
-    let timer;
 
-    function scrollTo(i) {
-      const item = items[i];
-      if (!item) return;
-      track.scrollTo({ left: item.offsetLeft - 14, behavior: 'smooth' });
+    const SPEED = 0.55; // px per frame (~33px/s at 60fps)
+    let pos = 0;
+    let touching = false;
+    let raf;
+    let maxScroll = 0;
+
+    function getMax() {
+      return track.scrollWidth - track.clientWidth;
     }
 
-    function next() {
-      if (paused) return;
-      idx = (idx + 1) % items.length;
-      scrollTo(idx);
+    function step() {
+      if (!touching) {
+        maxScroll = getMax();
+        pos += SPEED;
+        // Seamless: when we reach the end, jump back to start smoothly
+        if (pos >= maxScroll) {
+          // Snap first item width and loop
+          const firstWidth = items[0].offsetWidth + 12; // gap
+          pos = pos - maxScroll < firstWidth ? pos - maxScroll : 0;
+        }
+        track.scrollLeft = pos;
+      }
+      raf = requestAnimationFrame(step);
     }
-
-    function start() { timer = setInterval(next, 3200); }
-    function stop() { clearInterval(timer); }
 
     track.addEventListener('touchstart', () => {
-      paused = true;
-      stop();
+      touching = true;
+      pos = track.scrollLeft;
     }, { passive: true });
 
     track.addEventListener('touchend', () => {
-      clearTimeout(track._resumeTimer);
-      track._resumeTimer = setTimeout(() => { paused = false; start(); }, 3000);
+      pos = track.scrollLeft;
+      clearTimeout(track._rt);
+      track._rt = setTimeout(() => { touching = false; }, 2200);
     }, { passive: true });
 
-    start();
+    track.addEventListener('scroll', () => {
+      if (touching) pos = track.scrollLeft;
+    }, { passive: true });
+
+    raf = requestAnimationFrame(step);
   })();
 
   // ====== HEADER SCROLL SHRINK ======
@@ -1962,92 +1859,23 @@
     success.classList.add('show');
   });
 
-  // ====== FOOTER SECRET CLICK → ADMIN ======
-  const ADMIN_PWD = 'Quattro2024';
+  // ====== PLACES RESTANTES (dynamic) ======
+  (function() {
+    const saved = parseInt(localStorage.getItem('qv_places'));
+    const el = document.getElementById('places-label');
+    if (el && !isNaN(saved)) el.textContent = saved;
+  })();
+
+  // ====== FOOTER SECRET CLICK → ADMIN PAGE ======
   let footClicks = 0, footTimer;
   document.getElementById('footer-trigger').addEventListener('click', () => {
     footClicks++;
     clearTimeout(footTimer);
-    footTimer = setTimeout(() => { footClicks = 0; }, 1200);
+    footTimer = setTimeout(() => { footClicks = 0; }, 1400);
     if (footClicks >= 3) {
       footClicks = 0;
-      document.getElementById('admin-overlay').style.display = 'flex';
-      document.getElementById('admin-pwd-input').focus();
+      window.location.href = '/admin.html';
     }
-  });
-
-  // ====== ADMIN LOGIC ======
-  function renderLeads() {
-    const leads = JSON.parse(localStorage.getItem('qv_leads') || '[]');
-    const count = leads.length;
-    document.getElementById('admin-count').textContent = count + (count === 1 ? ' lead' : ' leads');
-    const tbody = document.getElementById('leads-tbody');
-    tbody.innerHTML = '';
-    if (count === 0) {
-      document.getElementById('leads-empty').style.display = 'block';
-      document.getElementById('leads-table').style.display = 'none';
-    } else {
-      document.getElementById('leads-empty').style.display = 'none';
-      document.getElementById('leads-table').style.display = 'table';
-      leads.forEach((l, i) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><span class="meta-tag">${count - i}</span></td>
-          <td><strong>${l.prenom}</strong></td>
-          <td>${l.telephone}</td>
-          <td><span class="meta-tag">${l.metier}</span></td>
-          <td style="color:var(--ink-3);font-size:12px;">${l.date}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-  }
-
-  function closeAdmin() {
-    document.getElementById('admin-overlay').style.display = 'none';
-    document.getElementById('admin-login-card').style.display = 'block';
-    document.getElementById('admin-dashboard').style.display = 'none';
-    document.getElementById('admin-pwd-input').value = '';
-    document.getElementById('admin-pwd-error').style.display = 'none';
-  }
-
-  document.getElementById('admin-login-btn').addEventListener('click', () => {
-    const val = document.getElementById('admin-pwd-input').value;
-    if (val === ADMIN_PWD) {
-      document.getElementById('admin-login-card').style.display = 'none';
-      document.getElementById('admin-dashboard').style.display = 'block';
-      renderLeads();
-    } else {
-      document.getElementById('admin-pwd-error').style.display = 'block';
-      document.getElementById('admin-pwd-input').value = '';
-      document.getElementById('admin-pwd-input').focus();
-    }
-  });
-  document.getElementById('admin-pwd-input').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') document.getElementById('admin-login-btn').click();
-  });
-  document.getElementById('admin-close-btn').addEventListener('click', closeAdmin);
-  document.getElementById('admin-logout-btn').addEventListener('click', closeAdmin);
-
-  document.getElementById('admin-clear-btn').addEventListener('click', () => {
-    if (confirm('Supprimer tous les leads ?')) {
-      localStorage.removeItem('qv_leads');
-      renderLeads();
-    }
-  });
-
-  document.getElementById('admin-export-btn').addEventListener('click', () => {
-    const leads = JSON.parse(localStorage.getItem('qv_leads') || '[]');
-    if (!leads.length) return;
-    const rows = [['Prénom','Téléphone','Métier','Date'], ...leads.map(l => [l.prenom, l.telephone, l.metier, l.date])];
-    const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
-    const a = document.createElement('a');
-    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-    a.download = 'leads-quattrovisual.csv';
-    a.click();
-  });
-
-  document.getElementById('admin-overlay').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('admin-overlay')) closeAdmin();
   });
 </script>
 

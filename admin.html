@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Quattro Visual — Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+:root {
+  --bg: #0d0b1a;
+  --bg-2: #13102b;
+  --bg-card: #1a1635;
+  --bg-card-2: #201c3e;
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(160,107,255,0.25);
+  --ink: #f0eeff;
+  --ink-2: #a99fd6;
+  --ink-3: #6e6898;
+  --accent: #7c4dff;
+  --accent-2: #b07aff;
+  --accent-dark: #5c2ee0;
+  --accent-soft: rgba(124,77,255,0.12);
+  --green: #22d77c;
+  --green-soft: rgba(34,215,124,0.14);
+  --red: #ff4f6a;
+  --red-soft: rgba(255,79,106,0.12);
+  --gold: #f5c842;
+  --gold-soft: rgba(245,200,66,0.12);
+  --shadow-card: 0 20px 60px rgba(0,0,0,0.45), 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-glow: 0 0 60px rgba(124,77,255,0.25);
+  --radius: 16px;
+  --radius-lg: 24px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ===== BACKGROUND ===== */
+.admin-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 0%, rgba(124,77,255,0.18), transparent),
+    radial-gradient(ellipse 50% 60% at 85% 100%, rgba(80,40,200,0.14), transparent),
+    var(--bg);
+}
+.admin-bg::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ===== SCREENS ===== */
+.screen {
+  position: relative; z-index: 1;
+  min-height: 100dvh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 32px 20px;
+  transition: opacity 0.4s cubic-bezier(.22,1,.36,1), transform 0.4s cubic-bezier(.22,1,.36,1);
+}
+.screen.hidden {
+  opacity: 0; pointer-events: none;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  transform: scale(0.96);
+}
+.screen.exit-up {
+  opacity: 0; transform: translateY(-40px) scale(0.97);
+}
+
+/* ===== PIN SCREEN ===== */
+.pin-logo {
+  margin-bottom: 36px; text-align: center;
+}
+.pin-logo img {
+  height: 32px; filter: brightness(0) invert(1); opacity: 0.9;
+}
+.pin-logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px; font-weight: 700; letter-spacing: -0.5px;
+  color: var(--ink); margin-top: 8px;
+}
+
+.pin-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px 36px;
+  width: 100%; max-width: 340px;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.pin-title {
+  font-size: 14px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-2);
+  margin-bottom: 28px;
+}
+
+/* Dot indicators */
+.pin-dots {
+  display: flex; gap: 14px; justify-content: center;
+  margin-bottom: 36px;
+}
+.pin-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--ink-3);
+  background: transparent;
+  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), background 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.pin-dot.filled {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+  box-shadow: 0 0 12px rgba(176,122,255,0.6);
+  transform: scale(1.2);
+}
+.pin-dot.error {
+  background: var(--red);
+  border-color: var(--red);
+  box-shadow: 0 0 12px rgba(255,79,106,0.6);
+}
+.pin-dot.success {
+  background: var(--green);
+  border-color: var(--green);
+  box-shadow: 0 0 16px rgba(34,215,124,0.7);
+  transform: scale(1.3);
+}
+
+/* Shake animation */
+@keyframes pinShake {
+  0%,100% { transform: translateX(0); }
+  15% { transform: translateX(-10px); }
+  30% { transform: translateX(9px); }
+  45% { transform: translateX(-7px); }
+  60% { transform: translateX(6px); }
+  75% { transform: translateX(-4px); }
+  88% { transform: translateX(3px); }
+}
+.pin-dots.shake { animation: pinShake 0.55s cubic-bezier(.22,1,.36,1); }
+
+/* Success pulse */
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+.pin-card.success { animation: successPulse 0.4s ease-out; }
+
+/* Numpad */
+.numpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.numpad-key {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-card-2);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s, transform 0.1s cubic-bezier(.34,1.56,.64,1), box-shadow 0.12s, border-color 0.15s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.numpad-key:hover {
+  background: rgba(124,77,255,0.1);
+  border-color: var(--border-strong);
+}
+.numpad-key:active {
+  transform: scale(0.91);
+  background: rgba(124,77,255,0.22);
+  border-color: var(--accent);
+}
+.numpad-key.empty { opacity: 0; pointer-events: none; }
+.numpad-key.del {
+  font-size: 18px; color: var(--ink-2);
+  background: transparent;
+}
+.numpad-key.del:hover { background: var(--red-soft); border-color: var(--red); color: var(--red); }
+
+/* Ripple */
+.numpad-key .ripple {
+  position: absolute; border-radius: 50%;
+  transform: scale(0); background: rgba(124,77,255,0.35);
+  animation: rippleAnim 0.5s ease-out forwards;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+.pin-hint {
+  margin-top: 20px; font-size: 12px; color: var(--ink-3);
+  text-align: center; letter-spacing: 0.02em;
+}
+
+/* ===== DASHBOARD SCREEN ===== */
+#screen-dashboard {
+  justify-content: flex-start;
+  padding-top: 0;
+}
+
+.dash-header {
+  width: 100%; background: rgba(13,11,26,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 10;
+}
+.dash-logo {
+  display: flex; align-items: center; gap: 10px;
+}
+.dash-logo img { height: 26px; filter: brightness(0) invert(1); opacity: 0.85; }
+.dash-logo-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px; font-weight: 700; color: var(--ink-2);
+}
+.dash-logo-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--accent-soft);
+  color: var(--accent-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px; padding: 2px 7px;
+  margin-left: 4px;
+}
+.dash-header-actions {
+  display: flex; gap: 8px; align-items: center;
+}
+.dash-btn {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--ink-2);
+  font-size: 12px; font-weight: 600;
+  padding: 7px 14px; border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.dash-btn:hover { background: var(--accent-soft); border-color: var(--border-strong); color: var(--accent-2); }
+.dash-btn.danger:hover { background: var(--red-soft); border-color: var(--red); color: var(--red); }
+.dash-btn.logout { color: var(--ink-3); }
+
+.dash-body {
+  width: 100%; max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px 24px 60px;
+}
+
+/* Stat grid */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 36px;
+}
+@media (max-width: 680px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .dash-header { padding: 14px 16px; }
+  .dash-body { padding: 24px 16px 60px; }
+  .dash-btn span { display: none; }
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 22px 22px;
+  position: relative; overflow: hidden;
+  transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s;
+}
+.stat-card::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.stat-card::after {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--card-accent, linear-gradient(90deg, var(--accent), var(--accent-2)));
+}
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4), var(--shadow-glow);
+}
+.stat-card .stat-icon {
+  font-size: 28px; margin-bottom: 14px;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  background: var(--icon-bg, var(--accent-soft));
+}
+.stat-card .stat-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px;
+}
+.stat-card .stat-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 36px; font-weight: 700; letter-spacing: -1px;
+  color: var(--ink); line-height: 1;
+}
+.stat-card .stat-sub {
+  font-size: 12px; color: var(--ink-3); margin-top: 6px;
+}
+
+/* Places restantes control */
+.places-control {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+}
+.places-input {
+  width: 70px;
+  background: var(--bg-card-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--ink);
+  font-size: 20px; font-weight: 700; text-align: center;
+  padding: 6px 8px;
+  outline: none; cursor: text;
+}
+.places-input:focus { border-color: var(--accent); }
+.places-btn {
+  width: 34px; height: 34px;
+  border-radius: 10px; border: 1px solid var(--border);
+  background: var(--bg-card-2); color: var(--ink);
+  font-size: 20px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+.places-btn:hover { background: var(--accent-soft); border-color: var(--border-strong); }
+.places-save {
+  font-size: 11px; font-weight: 700; padding: 6px 12px;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: 8px; cursor: pointer;
+  transition: background 0.15s;
+  margin-left: 4px;
+}
+.places-save:hover { background: var(--accent-dark); }
+
+/* Lead section */
+.leads-section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; flex-wrap: wrap; gap: 10px;
+}
+.leads-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; font-weight: 700;
+}
+.leads-actions { display: flex; gap: 8px; }
+.leads-count-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700;
+  background: var(--accent-soft); color: var(--accent-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 100px; padding: 3px 10px;
+  margin-left: 10px; vertical-align: middle;
+}
+
+/* Lead cards */
+.leads-list { display: flex; flex-direction: column; gap: 10px; }
+.lead-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 16px;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative; overflow: hidden;
+}
+.lead-card::before {
+  content: "";
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  border-radius: 3px;
+}
+.lead-card:hover { border-color: var(--border-strong); background: var(--bg-card-2); }
+.lead-num {
+  font-size: 11px; font-weight: 700; color: var(--ink-3);
+  min-width: 24px; text-align: right;
+}
+.lead-avatar {
+  width: 38px; height: 38px; border-radius: 12px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent-2));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 14px; color: #fff;
+}
+.lead-info { flex: 1; min-width: 0; }
+.lead-name { font-weight: 700; font-size: 15px; }
+.lead-phone { font-size: 12px; color: var(--ink-2); margin-top: 1px; }
+.lead-metier {
+  font-size: 11px; font-weight: 600;
+  background: var(--bg-card-2); color: var(--ink-2);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 3px 9px;
+  white-space: nowrap;
+}
+.lead-date { font-size: 11px; color: var(--ink-3); white-space: nowrap; }
+.lead-revenue {
+  font-weight: 800; font-size: 15px; color: var(--green);
+  background: var(--green-soft); border-radius: 10px;
+  padding: 4px 11px; white-space: nowrap; flex-shrink: 0;
+}
+
+.leads-empty-state {
+  text-align: center; padding: 60px 20px;
+  color: var(--ink-3);
+}
+.leads-empty-icon {
+  font-size: 48px; margin-bottom: 16px; opacity: 0.4;
+}
+.leads-empty-txt { font-size: 15px; }
+
+/* Section divider */
+.section-divider {
+  height: 1px; background: var(--border);
+  margin: 32px 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--bg-card-2); border: 1px solid var(--border);
+  color: var(--ink); font-size: 13px; font-weight: 600;
+  padding: 10px 20px; border-radius: 100px;
+  box-shadow: var(--shadow-card);
+  opacity: 0; z-index: 1000;
+  transition: opacity 0.3s, transform 0.3s cubic-bezier(.34,1.56,.64,1);
+  white-space: nowrap; pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.green { border-color: var(--green); color: var(--green); }
+
+/* Transition overlay */
+.success-overlay {
+  position: fixed; inset: 0; z-index: 50;
+  background: var(--green);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s;
+}
+.success-overlay.flash { opacity: 0.18; }
+</style>
+</head>
+<body>
+<div class="admin-bg"></div>
+
+<!-- PIN SCREEN -->
+<div class="screen" id="screen-pin">
+  <div class="pin-logo">
+    <img src="assets/logo-v2-bold.png" alt="Quattro Visual" onerror="this.style.display='none'">
+    <div class="pin-logo-text">Quattro Visual</div>
+  </div>
+
+  <div class="pin-card" id="pin-card">
+    <div class="pin-title">Code d'accès</div>
+
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot" id="dot-0"></div>
+      <div class="pin-dot" id="dot-1"></div>
+      <div class="pin-dot" id="dot-2"></div>
+      <div class="pin-dot" id="dot-3"></div>
+      <div class="pin-dot" id="dot-4"></div>
+      <div class="pin-dot" id="dot-5"></div>
+    </div>
+
+    <div class="numpad" id="numpad">
+      <button class="numpad-key" data-digit="1">1</button>
+      <button class="numpad-key" data-digit="2">2</button>
+      <button class="numpad-key" data-digit="3">3</button>
+      <button class="numpad-key" data-digit="4">4</button>
+      <button class="numpad-key" data-digit="5">5</button>
+      <button class="numpad-key" data-digit="6">6</button>
+      <button class="numpad-key" data-digit="7">7</button>
+      <button class="numpad-key" data-digit="8">8</button>
+      <button class="numpad-key" data-digit="9">9</button>
+      <button class="numpad-key empty"></button>
+      <button class="numpad-key" data-digit="0">0</button>
+      <button class="numpad-key del" id="btn-del">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="13" y2="14"/><line x1="13" y1="9" x2="18" y2="14"/></svg>
+      </button>
+    </div>
+
+    <div class="pin-hint">Interface sécurisée — accès privé</div>
+  </div>
+</div>
+
+<!-- DASHBOARD SCREEN -->
+<div class="screen hidden" id="screen-dashboard">
+  <div class="dash-header">
+    <div class="dash-logo">
+      <img src="assets/logo-v2-bold.png" alt="" onerror="this.style.display='none'">
+      <span class="dash-logo-label">Quattro Visual</span>
+      <span class="dash-logo-badge">Admin</span>
+    </div>
+    <div class="dash-header-actions">
+      <button class="dash-btn" id="btn-export"><span>Exporter </span>CSV</button>
+      <button class="dash-btn danger" id="btn-clear"><span>Vider </span>leads</button>
+      <button class="dash-btn logout" id="btn-logout">Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- Stat cards -->
+    <div class="stat-grid">
+
+      <!-- Leads -->
+      <div class="stat-card" style="--card-accent: linear-gradient(90deg, #7c4dff, #b07aff); --icon-bg: rgba(124,77,255,0.14);">
+        <div class="stat-icon">📥</div>
+        <div class="stat-label">Clients potentiels</div>
+        <div class="stat-value" id="stat-leads">0</div>
+        <div class="stat-sub">formulaires reçus</div>
+      </div>
+
+      <!-- Revenus potentiels -->
+      <div class="stat-card" style="--card-accent: linear-gradient(90deg, #22d77c, #4dffa3); --icon-bg: rgba(34,215,124,0.12);">
+        <div class="stat-icon">💸</div>
+        <div class="stat-label">Revenus potentiels</div>
+        <div class="stat-value" id="stat-revenue">0€</div>
+        <div class="stat-sub">si tous signent à 490€</div>
+      </div>
+
+      <!-- Places restantes -->
+      <div class="stat-card" style="--card-accent: linear-gradient(90deg, #f5c842, #ffdf6e); --icon-bg: rgba(245,200,66,0.12);">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-label">Places restantes</div>
+        <div class="stat-value" id="stat-places-display">—</div>
+        <div class="stat-sub" style="margin-bottom:4px;">affiché sur le site</div>
+        <div class="places-control">
+          <button class="places-btn" id="places-minus">−</button>
+          <input class="places-input" type="number" id="places-input" min="0" max="99" value="3">
+          <button class="places-btn" id="places-plus">+</button>
+          <button class="places-save" id="places-save-btn">Sauvegarder</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Leads section -->
+    <div class="leads-section-head">
+      <div>
+        <span class="leads-title">Leads reçus</span>
+        <span class="leads-count-badge" id="leads-badge">0</span>
+      </div>
+      <div class="leads-actions">
+        <button class="dash-btn" id="btn-refresh">↻ Actualiser</button>
+      </div>
+    </div>
+
+    <div id="leads-container">
+      <div class="leads-empty-state">
+        <div class="leads-empty-icon">📭</div>
+        <div class="leads-empty-txt">Aucun formulaire reçu pour l'instant.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Success flash overlay -->
+<div class="success-overlay" id="success-overlay"></div>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== PIN LOGIC =====
+const CORRECT_PIN = '312110';
+let pinBuffer = '';
+let pinLocked = false;
+
+const dots = Array.from({ length: 6 }, (_, i) => document.getElementById('dot-' + i));
+const pinDotsEl = document.getElementById('pin-dots');
+const pinCard = document.getElementById('pin-card');
+
+function updateDots() {
+  dots.forEach((d, i) => {
+    d.classList.toggle('filled', i < pinBuffer.length);
+  });
+}
+
+function addRipple(btn, e) {
+  const rect = btn.getBoundingClientRect();
+  const x = (e.clientX || rect.left + rect.width / 2) - rect.left;
+  const y = (e.clientY || rect.top + rect.height / 2) - rect.top;
+  const span = document.createElement('span');
+  span.className = 'ripple';
+  const size = Math.max(rect.width, rect.height);
+  span.style.cssText = `width:${size}px;height:${size}px;left:${x - size/2}px;top:${y - size/2}px`;
+  btn.appendChild(span);
+  setTimeout(() => span.remove(), 600);
+}
+
+function pressDigit(d, btn, e) {
+  if (pinLocked || pinBuffer.length >= 6) return;
+  if (btn && e) addRipple(btn, e);
+  pinBuffer += d;
+  updateDots();
+  if (pinBuffer.length === 6) {
+    setTimeout(checkPin, 120);
+  }
+}
+
+function pressDelete() {
+  if (pinLocked) return;
+  if (pinBuffer.length > 0) {
+    pinBuffer = pinBuffer.slice(0, -1);
+    updateDots();
+  }
+}
+
+function checkPin() {
+  pinLocked = true;
+  if (pinBuffer === CORRECT_PIN) {
+    // Success: fill all dots green
+    dots.forEach(d => { d.classList.remove('filled'); d.classList.add('success'); });
+    pinCard.classList.add('success');
+    const overlay = document.getElementById('success-overlay');
+    overlay.classList.add('flash');
+    setTimeout(() => {
+      overlay.classList.remove('flash');
+      showDashboard();
+    }, 650);
+  } else {
+    // Error: fill all dots red + shake
+    dots.forEach(d => { d.classList.remove('filled'); d.classList.add('error'); });
+    pinDotsEl.classList.add('shake');
+    setTimeout(() => {
+      pinDotsEl.classList.remove('shake');
+      dots.forEach(d => d.classList.remove('error'));
+      pinBuffer = '';
+      pinLocked = false;
+      updateDots();
+    }, 600);
+  }
+}
+
+// Numpad buttons
+document.querySelectorAll('.numpad-key[data-digit]').forEach(btn => {
+  btn.addEventListener('click', (e) => pressDigit(btn.dataset.digit, btn, e));
+  // Touch support
+  btn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    pressDigit(btn.dataset.digit, btn, e.touches[0]);
+  }, { passive: false });
+});
+
+document.getElementById('btn-del').addEventListener('click', pressDelete);
+document.getElementById('btn-del').addEventListener('touchstart', (e) => {
+  e.preventDefault(); pressDelete();
+}, { passive: false });
+
+// Keyboard support (fallback)
+window.addEventListener('keydown', (e) => {
+  if (document.getElementById('screen-pin').classList.contains('hidden')) return;
+  if (e.key >= '0' && e.key <= '9') pressDigit(e.key);
+  else if (e.key === 'Backspace' || e.key === 'Delete') pressDelete();
+});
+
+// ===== SCREEN TRANSITIONS =====
+function showDashboard() {
+  const pinScreen = document.getElementById('screen-pin');
+  const dashScreen = document.getElementById('screen-dashboard');
+
+  pinScreen.classList.add('exit-up');
+  setTimeout(() => {
+    pinScreen.classList.add('hidden');
+    pinScreen.classList.remove('exit-up');
+    dashScreen.classList.remove('hidden');
+    loadDashboard();
+  }, 350);
+}
+
+function logout() {
+  pinBuffer = '';
+  pinLocked = false;
+  updateDots();
+  dots.forEach(d => { d.classList.remove('filled', 'success', 'error'); });
+
+  const pinScreen = document.getElementById('screen-pin');
+  const dashScreen = document.getElementById('screen-dashboard');
+  dashScreen.classList.add('hidden');
+  pinScreen.classList.remove('hidden');
+}
+
+document.getElementById('btn-logout').addEventListener('click', logout);
+
+// ===== DASHBOARD LOGIC =====
+const PRICE_PER_LEAD = 490;
+
+function loadDashboard() {
+  const leads = JSON.parse(localStorage.getItem('qv_leads') || '[]');
+  const places = parseInt(localStorage.getItem('qv_places') || '3');
+
+  // Stats
+  document.getElementById('stat-leads').textContent = leads.length;
+  document.getElementById('stat-revenue').textContent = (leads.length * PRICE_PER_LEAD).toLocaleString('fr-FR') + '€';
+  document.getElementById('stat-places-display').textContent = places;
+  document.getElementById('places-input').value = places;
+  document.getElementById('leads-badge').textContent = leads.length;
+
+  // Leads list
+  const container = document.getElementById('leads-container');
+  if (leads.length === 0) {
+    container.innerHTML = `
+      <div class="leads-empty-state">
+        <div class="leads-empty-icon">📭</div>
+        <div class="leads-empty-txt">Aucun formulaire reçu pour l'instant.<br>Les leads apparaissent ici en temps réel.</div>
+      </div>`;
+    return;
+  }
+
+  const list = document.createElement('div');
+  list.className = 'leads-list';
+
+  leads.forEach((lead, i) => {
+    const initials = lead.prenom ? lead.prenom.charAt(0).toUpperCase() : '?';
+    const card = document.createElement('div');
+    card.className = 'lead-card';
+    card.innerHTML = `
+      <div class="lead-num">#${leads.length - i}</div>
+      <div class="lead-avatar">${initials}</div>
+      <div class="lead-info">
+        <div class="lead-name">${lead.prenom}</div>
+        <div class="lead-phone">${lead.telephone}</div>
+      </div>
+      <span class="lead-metier">${lead.metier}</span>
+      <span class="lead-date">${lead.date}</span>
+      <span class="lead-revenue">+${PRICE_PER_LEAD}€</span>
+    `;
+    list.appendChild(card);
+  });
+
+  container.innerHTML = '';
+  container.appendChild(list);
+}
+
+// Places restantes controls
+const placesInput = document.getElementById('places-input');
+
+document.getElementById('places-minus').addEventListener('click', () => {
+  const v = Math.max(0, parseInt(placesInput.value || 0) - 1);
+  placesInput.value = v;
+});
+document.getElementById('places-plus').addEventListener('click', () => {
+  const v = Math.min(99, parseInt(placesInput.value || 0) + 1);
+  placesInput.value = v;
+});
+document.getElementById('places-save-btn').addEventListener('click', () => {
+  const v = parseInt(placesInput.value);
+  if (isNaN(v) || v < 0) return;
+  localStorage.setItem('qv_places', v);
+  document.getElementById('stat-places-display').textContent = v;
+  showToast('Places restantes sauvegardées ✓', true);
+});
+
+// Refresh
+document.getElementById('btn-refresh').addEventListener('click', loadDashboard);
+
+// Export CSV
+document.getElementById('btn-export').addEventListener('click', () => {
+  const leads = JSON.parse(localStorage.getItem('qv_leads') || '[]');
+  if (!leads.length) { showToast('Aucun lead à exporter'); return; }
+  const rows = [
+    ['#', 'Prénom', 'Téléphone', 'Métier', 'Date', 'Valeur'],
+    ...leads.map((l, i) => [leads.length - i, l.prenom, l.telephone, l.metier, l.date, PRICE_PER_LEAD + '€'])
+  ];
+  const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+  a.download = `leads-quattrovisual-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  showToast('Export téléchargé ✓', true);
+});
+
+// Clear leads
+document.getElementById('btn-clear').addEventListener('click', () => {
+  if (!confirm('Supprimer tous les leads ? Cette action est irréversible.')) return;
+  localStorage.removeItem('qv_leads');
+  loadDashboard();
+  showToast('Leads supprimés');
+});
+
+// Toast
+function showToast(msg, green = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (green ? ' green' : '') + ' show';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.classList.remove('show'); }, 2800);
+}
+</script>
+</body>
+</html>
