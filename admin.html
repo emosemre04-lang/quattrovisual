@@ -275,10 +275,21 @@ body {
   margin-bottom: 36px;
 }
 @media (max-width: 680px) {
-  .stat-grid { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .stat-grid .stat-card:last-child { grid-column: 1 / -1; }
+  .stat-card { padding: 16px 14px 14px; }
+  .stat-card .stat-icon { width: 40px; height: 40px; font-size: 22px; margin-bottom: 10px; }
+  .stat-card .stat-value { font-size: 28px; }
+  .stat-card .stat-sub { font-size: 11px; }
+  .places-control { flex-wrap: wrap; gap: 8px; }
+  .places-save { flex: 1; text-align: center; }
   .dash-header { padding: 14px 16px; }
-  .dash-body { padding: 24px 16px 60px; }
+  .dash-body { padding: 20px 14px 60px; }
   .dash-btn span { display: none; }
+  .lead-card { padding: 12px 14px; gap: 10px; }
+  .lead-date { display: none; }
+  .lead-metier { display: none; }
+  .lead-num { display: none; }
 }
 
 .stat-card {
@@ -394,6 +405,7 @@ body {
   background: linear-gradient(180deg, var(--accent), var(--accent-2));
   border-radius: 3px;
 }
+.lead-card { cursor: pointer; }
 .lead-card:hover { border-color: var(--border-strong); background: var(--bg-card-2); }
 .lead-num {
   font-size: 11px; font-weight: 700; color: var(--ink-3);
@@ -464,6 +476,81 @@ body {
   transition: opacity 0.4s;
 }
 .success-overlay.flash { opacity: 0.18; }
+
+/* ===== LEAD DETAIL DRAWER ===== */
+.drawer-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.drawer-overlay.open { opacity: 1; pointer-events: all; }
+
+.lead-drawer {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 101;
+  background: var(--bg-card);
+  border-radius: 24px 24px 0 0;
+  border-top: 1px solid var(--border-strong);
+  padding: 8px 24px 48px;
+  transform: translateY(110%);
+  transition: transform 0.42s cubic-bezier(.22,1,.36,1);
+  max-width: 520px; margin: 0 auto;
+  box-shadow: 0 -20px 60px rgba(0,0,0,0.5);
+}
+.lead-drawer.open { transform: translateY(0); }
+
+.drawer-handle {
+  width: 36px; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.15);
+  margin: 0 auto 20px;
+}
+.drawer-close {
+  position: absolute; top: 20px; right: 20px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--bg-card-2); border: 1px solid var(--border);
+  color: var(--ink-2); font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.drawer-close:hover { background: var(--red-soft); color: var(--red); }
+
+.drawer-avatar-wrap { text-align: center; margin-bottom: 14px; }
+.drawer-avatar {
+  width: 72px; height: 72px; border-radius: 22px;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent-2));
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 28px; color: #fff;
+  box-shadow: 0 12px 32px -6px rgba(124,77,255,0.5);
+}
+.drawer-name { text-align: center; font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+.drawer-metier-wrap { text-align: center; margin-bottom: 22px; }
+
+.drawer-phone-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg-card-2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 16px; margin-bottom: 14px;
+}
+.drawer-phone-num { flex: 1; font-size: 20px; font-weight: 700; letter-spacing: 0.06em; color: var(--ink); }
+.drawer-copy-btn {
+  background: var(--accent); color: #fff; border: none;
+  border-radius: 10px; padding: 10px 16px; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s, transform 0.1s;
+  white-space: nowrap; flex-shrink: 0;
+}
+.drawer-copy-btn:active { transform: scale(0.94); }
+.drawer-copy-btn.copied { background: var(--green); }
+
+.drawer-info-list { border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+.drawer-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; background: var(--bg-card-2);
+  border-bottom: 1px solid var(--border);
+  font-size: 13px; color: var(--ink-2);
+}
+.drawer-row:last-child { border-bottom: none; }
+.drawer-row strong { color: var(--ink); font-weight: 600; text-align: right; }
+.drawer-revenue-val { color: var(--green); font-weight: 800; font-size: 15px; }
 </style>
 </head>
 <body>
@@ -588,6 +675,28 @@ body {
 <div class="success-overlay" id="success-overlay"></div>
 <!-- Toast -->
 <div class="toast" id="toast"></div>
+
+<!-- Lead detail drawer -->
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<div class="lead-drawer" id="lead-drawer">
+  <div class="drawer-handle"></div>
+  <button class="drawer-close" id="drawer-close">✕</button>
+  <div class="drawer-avatar-wrap">
+    <div class="drawer-avatar" id="drawer-avatar"></div>
+  </div>
+  <div class="drawer-name" id="drawer-name"></div>
+  <div class="drawer-metier-wrap">
+    <span class="lead-metier" id="drawer-metier"></span>
+  </div>
+  <div class="drawer-phone-row">
+    <div class="drawer-phone-num" id="drawer-phone"></div>
+    <button class="drawer-copy-btn" id="drawer-copy">📋 Copier</button>
+  </div>
+  <div class="drawer-info-list">
+    <div class="drawer-row"><span>Date</span><strong id="drawer-date"></strong></div>
+    <div class="drawer-row"><span>Valeur client estimée</span><span class="drawer-revenue-val" id="drawer-revenue"></span></div>
+  </div>
+</div>
 
 <script>
 // ===== PIN LOGIC =====
@@ -754,6 +863,7 @@ function loadDashboard() {
       <span class="lead-date">${lead.date}</span>
       <span class="lead-revenue">+${PRICE_PER_LEAD}€</span>
     `;
+    card.addEventListener('click', () => openDrawer(lead));
     list.appendChild(card);
   });
 
@@ -805,6 +915,50 @@ document.getElementById('btn-clear').addEventListener('click', () => {
   localStorage.removeItem('qv_leads');
   loadDashboard();
   showToast('Leads supprimés');
+});
+
+// ===== LEAD DETAIL DRAWER =====
+function openDrawer(lead) {
+  const initials = (lead.prenom || '?').charAt(0).toUpperCase();
+  document.getElementById('drawer-avatar').textContent = initials;
+  document.getElementById('drawer-name').textContent = lead.prenom;
+  document.getElementById('drawer-metier').textContent = lead.metier;
+  document.getElementById('drawer-phone').textContent = lead.telephone;
+  document.getElementById('drawer-date').textContent = lead.date;
+  document.getElementById('drawer-revenue').textContent = '+' + PRICE_PER_LEAD + '€';
+  const copyBtn = document.getElementById('drawer-copy');
+  copyBtn.classList.remove('copied');
+  copyBtn.textContent = '📋 Copier';
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('lead-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('lead-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+document.getElementById('drawer-overlay').addEventListener('click', closeDrawer);
+
+document.getElementById('drawer-copy').addEventListener('click', () => {
+  const phone = document.getElementById('drawer-phone').textContent;
+  const btn = document.getElementById('drawer-copy');
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(phone).then(() => {
+      btn.classList.add('copied'); btn.textContent = '✓ Copié !';
+      setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '📋 Copier'; }, 2200);
+    });
+  } else {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = phone; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    btn.classList.add('copied'); btn.textContent = '✓ Copié !';
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = '📋 Copier'; }, 2200);
+  }
 });
 
 // Toast

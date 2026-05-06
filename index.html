@@ -63,6 +63,37 @@
     opacity: 0.06;
     mix-blend-mode: multiply;
   }
+  /* 3D scroll parallax blobs */
+  .parallax-blob {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    will-change: transform;
+    transition: transform 0.05s linear;
+  }
+  #pb1 {
+    width: 600px; height: 600px;
+    top: -10%; left: -15%;
+    background: radial-gradient(circle, rgba(107,61,245,0.13), transparent 70%);
+    filter: blur(40px);
+  }
+  #pb2 {
+    width: 480px; height: 480px;
+    top: 20%; right: -12%;
+    background: radial-gradient(circle, rgba(160,107,255,0.11), transparent 70%);
+    filter: blur(50px);
+  }
+  #pb3 {
+    width: 400px; height: 400px;
+    bottom: 5%; left: 25%;
+    background: radial-gradient(circle, rgba(80,30,240,0.1), transparent 70%);
+    filter: blur(55px);
+  }
+  @media (max-width: 720px) {
+    .parallax-blob { display: none !important; }
+  }
+
   .stars-layer {
     position: fixed; inset: 0;
     pointer-events: none;
@@ -543,54 +574,93 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
-    perspective: 1200px;
+    perspective: 1400px;
   }
   .inclus-card {
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.94);
     border: 1px solid rgba(207,198,232,0.7);
     border-radius: var(--radius);
-    padding: 20px 18px;
+    padding: 22px 18px;
     display: flex;
     align-items: flex-start;
-    gap: 14px;
-    box-shadow: var(--shadow-sm);
+    gap: 16px;
+    box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,0.9);
     position: relative;
-    transition: transform 0.4s cubic-bezier(.2,.8,.2,1), box-shadow 0.4s, border-color 0.3s;
+    transition: transform 0.45s cubic-bezier(.2,.8,.2,1), box-shadow 0.45s, border-color 0.3s;
     transform-style: preserve-3d;
     overflow: hidden;
+  }
+  /* Gloss overlay on card */
+  .inclus-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+    border-radius: var(--radius) var(--radius) 0 0;
   }
   .inclus-card::after {
     content: "";
     position: absolute;
     top: 0; right: 0;
-    width: 80px; height: 80px;
-    background: radial-gradient(circle at top right, rgba(160,107,255,0.18), transparent 70%);
+    width: 100px; height: 100px;
+    background: radial-gradient(circle at top right, rgba(160,107,255,0.14), transparent 70%);
     border-radius: 0 var(--radius) 0 100%;
     pointer-events: none;
   }
   .inclus-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--accent);
+    transform: perspective(900px) translateY(-5px) rotateX(3deg);
+    box-shadow: var(--shadow-md), 0 0 0 1px rgba(107,61,245,0.15);
+    border-color: rgba(107,61,245,0.4);
   }
   .inclus-card:hover .ico-box {
-    transform: translateZ(20px) rotate(-6deg) scale(1.08);
+    transform: perspective(600px) translateY(-6px) rotateY(15deg) rotateX(-8deg) scale(1.08);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.4) inset,
+      0 -1px 0 rgba(0,0,0,0.2) inset,
+      0 22px 44px -8px rgba(107,61,245,0.75),
+      0 8px 16px -4px rgba(107,61,245,0.45),
+      6px 12px 0 rgba(80,30,180,0.18);
   }
+
+  /* ===== 3D ICON BOX ===== */
   .ico-box {
-    width: 44px; height: 44px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    width: 50px; height: 50px;
+    border-radius: 14px;
+    background: linear-gradient(145deg, var(--accent-2) 0%, var(--accent) 55%, var(--accent-dark) 100%);
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 8px 16px -4px rgba(107,61,245,0.45), inset 0 1px 0 rgba(255,255,255,0.3), inset 0 -2px 0 rgba(0,0,0,0.12);
-    transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
+    position: relative; overflow: hidden;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.4) inset,
+      0 -2px 0 rgba(0,0,0,0.18) inset,
+      0 14px 28px -6px rgba(107,61,245,0.65),
+      0 4px 10px -2px rgba(107,61,245,0.4),
+      4px 6px 0 rgba(80,30,180,0.2);
+    transition: transform 0.45s cubic-bezier(.2,.8,.2,1), box-shadow 0.45s;
     transform-style: preserve-3d;
+    z-index: 1;
   }
-  .ico-box svg { width: 22px; height: 22px; }
+  /* Gloss streak on icon */
+  .ico-box::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 48%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.38) 0%, transparent 100%);
+    border-radius: 14px 14px 50% 50%;
+    pointer-events: none;
+  }
+  .ico-box svg {
+    width: 23px; height: 23px;
+    position: relative; z-index: 1;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.28));
+  }
   .inclus-card h3 {
     font-size: 14.5px;
     margin-bottom: 4px;
@@ -793,13 +863,13 @@
     pointer-events: none;
   }
   .why-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-md);
+    transform: perspective(900px) translateY(-7px) rotateX(4deg);
+    box-shadow: var(--shadow-md), 0 0 0 1px rgba(107,61,245,0.12);
   }
   .why-card:hover::before { opacity: 1; }
-  .why-card:hover .ico-box { transform: translateZ(25px) rotate(-8deg) scale(1.1); }
-  .why-card .ico-box { margin: 0 auto 16px; width: 52px; height: 52px; }
-  .why-card .ico-box svg { width: 26px; height: 26px; }
+  .why-card:hover .ico-box { transform: perspective(600px) translateY(-8px) rotateY(-14deg) rotateX(-6deg) scale(1.1); }
+  .why-card .ico-box { margin: 0 auto 18px; width: 54px; height: 54px; }
+  .why-card .ico-box svg { width: 27px; height: 27px; }
   .why-card h3 { font-size: 16px; margin-bottom: 8px; }
   .why-card p { color: var(--ink-2); font-size: 13.5px; line-height: 1.5; }
 
@@ -914,38 +984,38 @@
   }
   #sticky-cta .btn { padding: 14px 22px; font-size: 14px; flex-shrink: 0; }
 
-  /* ============ REVEAL ============ */
-  /* Float up — headings, text, badges */
+  /* ============ REVEAL — 3D scroll animations ============ */
+  /* Float up + rotateX flip-in from below */
   .reveal {
     opacity: 0;
-    transform: translateY(22px);
-    transition: opacity 0.48s cubic-bezier(.22,1,.36,1), transform 0.48s cubic-bezier(.22,1,.36,1);
+    transform: perspective(900px) translateY(32px) rotateX(9deg);
+    transition: opacity 0.55s cubic-bezier(.22,1,.36,1), transform 0.55s cubic-bezier(.22,1,.36,1);
   }
-  .reveal.in { opacity: 1; transform: none; }
+  .reveal.in { opacity: 1; transform: perspective(900px) translateY(0) rotateX(0deg); }
 
-  /* Slide from left — section titles left */
+  /* Slide from left + rotateY — section titles left */
   .reveal-left {
     opacity: 0;
-    transform: translateX(-22px);
-    transition: opacity 0.48s cubic-bezier(.22,1,.36,1), transform 0.48s cubic-bezier(.22,1,.36,1);
+    transform: perspective(900px) translateX(-32px) rotateY(-7deg);
+    transition: opacity 0.55s cubic-bezier(.22,1,.36,1), transform 0.55s cubic-bezier(.22,1,.36,1);
   }
-  .reveal-left.in { opacity: 1; transform: none; }
+  .reveal-left.in { opacity: 1; transform: perspective(900px) translateX(0) rotateY(0deg); }
 
-  /* Slide from right — section titles right */
+  /* Slide from right + rotateY — section titles right */
   .reveal-right {
     opacity: 0;
-    transform: translateX(22px);
-    transition: opacity 0.48s cubic-bezier(.22,1,.36,1), transform 0.48s cubic-bezier(.22,1,.36,1);
+    transform: perspective(900px) translateX(32px) rotateY(7deg);
+    transition: opacity 0.55s cubic-bezier(.22,1,.36,1), transform 0.55s cubic-bezier(.22,1,.36,1);
   }
-  .reveal-right.in { opacity: 1; transform: none; }
+  .reveal-right.in { opacity: 1; transform: perspective(900px) translateX(0) rotateY(0deg); }
 
-  /* Scale pop — price card, form, big elements (spring bounce) */
+  /* Scale pop + rotateX — price card, form, big elements */
   .reveal-scale {
     opacity: 0;
-    transform: scale(0.93);
-    transition: opacity 0.45s cubic-bezier(.22,1,.36,1), transform 0.52s cubic-bezier(.34,1.45,.64,1);
+    transform: perspective(900px) scale(0.88) rotateX(10deg);
+    transition: opacity 0.5s cubic-bezier(.22,1,.36,1), transform 0.58s cubic-bezier(.34,1.45,.64,1);
   }
-  .reveal-scale.in { opacity: 1; transform: none; }
+  .reveal-scale.in { opacity: 1; transform: perspective(900px) scale(1) rotateX(0deg); }
 
   .reveal.d1,.reveal-left.d1,.reveal-right.d1,.reveal-scale.d1 { transition-delay: 0.07s; }
   .reveal.d2,.reveal-left.d2,.reveal-right.d2,.reveal-scale.d2 { transition-delay: 0.14s; }
@@ -987,7 +1057,7 @@
     }
     .portfolio-track::-webkit-scrollbar { display: none; }
     .portfolio-track { touch-action: pan-x; overscroll-behavior-x: contain; }
-    .mockup { flex: 0 0 88%; }
+    .mockup { flex: 0 0 74%; }
     .mockup:hover { transform: none; }
     .swipe-hint { text-align: center; font-size: 11px; color: var(--ink-3); margin-top: 10px; letter-spacing: 0.05em; }
 
@@ -1285,6 +1355,10 @@
   <div class="nebula n2"></div>
   <div class="nebula n3"></div>
 </div>
+<!-- 3D PARALLAX SCROLL LAYERS (desktop only) -->
+<div class="parallax-blob" id="pb1"></div>
+<div class="parallax-blob" id="pb2"></div>
+<div class="parallax-blob" id="pb3"></div>
 <div class="stars-layer" id="stars-1"></div>
 <div class="stars-layer" id="stars-2"></div>
 <div class="stars-layer" id="stars-3"></div>
@@ -1762,47 +1836,21 @@
     const items = track.querySelectorAll('.mockup');
     if (items.length < 2) return;
 
-    const SPEED = 0.55; // px per frame (~33px/s at 60fps)
+    const SPEED = 0.45; // px per frame — steady gentle drift
     let pos = 0;
-    let touching = false;
-    let raf;
-    let maxScroll = 0;
 
-    function getMax() {
-      return track.scrollWidth - track.clientWidth;
-    }
+    // If user manually scrolls, pick up from their position
+    track.addEventListener('scroll', () => { pos = track.scrollLeft; }, { passive: true });
 
     function step() {
-      if (!touching) {
-        maxScroll = getMax();
-        pos += SPEED;
-        // Seamless: when we reach the end, jump back to start smoothly
-        if (pos >= maxScroll) {
-          // Snap first item width and loop
-          const firstWidth = items[0].offsetWidth + 12; // gap
-          pos = pos - maxScroll < firstWidth ? pos - maxScroll : 0;
-        }
-        track.scrollLeft = pos;
-      }
-      raf = requestAnimationFrame(step);
+      const max = track.scrollWidth - track.clientWidth;
+      if (max <= 0) { requestAnimationFrame(step); return; }
+      pos += SPEED;
+      if (pos >= max) pos = 0;
+      track.scrollLeft = pos;
+      requestAnimationFrame(step);
     }
-
-    track.addEventListener('touchstart', () => {
-      touching = true;
-      pos = track.scrollLeft;
-    }, { passive: true });
-
-    track.addEventListener('touchend', () => {
-      pos = track.scrollLeft;
-      clearTimeout(track._rt);
-      track._rt = setTimeout(() => { touching = false; }, 2200);
-    }, { passive: true });
-
-    track.addEventListener('scroll', () => {
-      if (touching) pos = track.scrollLeft;
-    }, { passive: true });
-
-    raf = requestAnimationFrame(step);
+    requestAnimationFrame(step);
   })();
 
   // ====== HEADER SCROLL SHRINK ======
@@ -1810,6 +1858,21 @@
   window.addEventListener('scroll', () => {
     siteHeader.classList.toggle('scrolled', window.scrollY > 50);
   }, { passive: true });
+
+  // ====== BACKGROUND 3D PARALLAX SCROLL ======
+  if (!isMobileDevice) {
+    const pb1 = document.getElementById('pb1');
+    const pb2 = document.getElementById('pb2');
+    const pb3 = document.getElementById('pb3');
+    function updateBgParallax() {
+      const sy = window.scrollY;
+      if (pb1) pb1.style.transform = `translate3d(${sy * 0.04}px, ${sy * -0.12}px, 0) scale(${1 + sy * 0.00015})`;
+      if (pb2) pb2.style.transform = `translate3d(${sy * -0.06}px, ${sy * 0.09}px, 0) scale(${1 + sy * 0.0001})`;
+      if (pb3) pb3.style.transform = `translate3d(${sy * 0.03}px, ${sy * -0.07}px, 0) scale(${1 - sy * 0.00008})`;
+    }
+    window.addEventListener('scroll', updateBgParallax, { passive: true });
+    updateBgParallax();
+  }
 
   // ====== METIER "AUTRE" TOGGLE ======
   document.getElementById('metier').addEventListener('change', function() {
