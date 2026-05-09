@@ -54,7 +54,11 @@ body {
   border-bottom: 1px solid var(--border);
   z-index: 100;
 }
-.lnav .logo { height: 26px; }
+/* Logo forcé en noir */
+.lnav .logo {
+  height: 26px;
+  filter: brightness(0) saturate(0);
+}
 
 .btn-back {
   display: flex; align-items: center; gap: 6px;
@@ -119,68 +123,64 @@ body {
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-.hero-sub {
-  font-size: 16px; color: var(--text-2); line-height: 1.65; margin-bottom: 28px;
-}
+.hero-sub { font-size: 16px; color: var(--text-2); line-height: 1.65; margin-bottom: 28px; }
 
-/* 4 trust badges: 2-col mobile, 4-col desktop */
+/* 4 trust badges: 2-col mobile / 4-col desktop */
 .trust-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 20px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 20px;
 }
 @media (min-width: 480px) { .trust-grid { grid-template-columns: repeat(4, 1fr); } }
 .trust-badge {
   display: flex; align-items: center; justify-content: center; gap: 6px;
   background: var(--bg); border: 1px solid var(--border);
   border-radius: 99px; padding: 8px 10px;
-  font-size: 12px; color: var(--text-2);
-  white-space: nowrap;
+  font-size: 12px; color: var(--text-2); white-space: nowrap;
 }
 
-/* ── Q1 Big cards ── */
+/* ── Q1 Big cards — CORRECTION 1 ── */
 .q1-card {
   display: block; width: 100%; text-align: left;
-  padding: 18px 20px;
-  background: var(--bg); border: 2px solid var(--border);
-  border-radius: var(--r);
+  background: #ffffff;
+  border: 2px solid #E5E7EB;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  padding: 24px;
+  margin-bottom: 20px;
   cursor: pointer; font-family: inherit; color: var(--text);
-  margin-bottom: 10px;
-  transition: border-color .18s, background .18s, transform .2s var(--spring), box-shadow .2s;
+  transition: all 250ms ease-out;
 }
 .q1-card:hover {
-  border-color: var(--accent); background: var(--accent-soft);
-  transform: translateY(-2px); box-shadow: var(--shadow-md);
+  border-color: #7C3AED;
+  box-shadow: 0 8px 24px rgba(124,58,237,.15);
+  transform: translateY(-2px);
 }
-.q1-card:active { transform: scale(.98); }
+.q1-card:active {
+  border-color: #7C3AED;
+  background: #FAF8FF;
+  transform: translateY(0);
+}
 .q1-head {
   display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 10px; margin-bottom: 10px;
+  gap: 10px; margin-bottom: 12px;
 }
 .q1-icon-title { display: flex; align-items: center; gap: 10px; }
-.q1-icon { font-size: 28px; line-height: 1; flex-shrink: 0; }
+.q1-icon  { font-size: 28px; line-height: 1; flex-shrink: 0; }
 .q1-title { font-size: 15px; font-weight: 700; line-height: 1.3; }
 .q1-price {
   background: var(--accent); color: #fff;
   font-size: 13px; font-weight: 700;
-  padding: 3px 11px; border-radius: 99px;
-  white-space: nowrap; flex-shrink: 0;
-  margin-top: 2px;
+  padding: 4px 12px; border-radius: 99px;
+  white-space: nowrap; flex-shrink: 0; margin-top: 2px;
 }
-.q1-price.devis { background: var(--bg-soft); color: var(--accent); border: 1px solid var(--accent); }
+.q1-price.devis { background: var(--bg-soft); color: var(--accent); border: 1.5px solid var(--accent); }
 .q1-desc {
-  font-size: 13px; color: var(--text-2); line-height: 1.55;
-  margin-bottom: 12px;
+  font-size: 13px; color: var(--text-2); line-height: 1.55; margin-bottom: 14px;
 }
-.q1-checks { list-style: none; display: flex; flex-direction: column; gap: 5px; }
-.q1-checks li {
-  display: flex; align-items: center; gap: 7px;
-  font-size: 12.5px; color: var(--text);
-}
+.q1-checks { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.q1-checks li { display: flex; align-items: center; gap: 8px; font-size: 13px; }
 .ck {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 16px; height: 16px; border-radius: 50%;
+  width: 17px; height: 17px; border-radius: 50%;
   background: var(--green-soft); flex-shrink: 0;
 }
 .ck svg { stroke: var(--green); }
@@ -213,14 +213,11 @@ body {
   transform: translateY(-2px); box-shadow: var(--shadow-md);
 }
 .opt-card:active { transform: scale(.97); }
-.opt-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
-.opt-text { flex: 1; }
+.opt-icon  { font-size: 22px; line-height: 1; flex-shrink: 0; }
+.opt-text  { flex: 1; }
 .opt-title { font-size: 15px; font-weight: 600; display: block; margin-bottom: 2px; }
 .opt-desc  { font-size: 13px; color: var(--text-2); }
-.opt-check {
-  width: 22px; height: 22px; border-radius: 50%;
-  border: 2px solid var(--border); flex-shrink: 0;
-}
+.opt-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; }
 
 /* ── Text inputs ── */
 .field-wrap { margin-bottom: 4px; }
@@ -250,6 +247,7 @@ body {
 }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(107,61,245,.5); }
 .btn-primary:active { transform: scale(.98); }
+.btn-primary.xl { padding: 20px 28px; font-size: 17px; border-radius: 18px; }
 
 .btn-secondary {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -280,72 +278,7 @@ body {
 }
 .note-sm { font-size: 13px; color: var(--text-2); text-align: center; margin-top: 12px; }
 
-/* ── Testimonial ── */
-.testi-card {
-  background: var(--accent-soft); border: 1px solid rgba(107,61,245,.14);
-  border-radius: var(--r); padding: 22px; margin-bottom: 18px; position: relative;
-}
-.testi-quote { font-size: 52px; line-height: .8; color: var(--accent); opacity: .18; font-family: Georgia, serif; position: absolute; top: 14px; left: 18px; }
-.testi-text  { font-size: 15px; line-height: 1.65; font-style: italic; padding-top: 16px; margin-bottom: 16px; }
-.testi-author { display: flex; align-items: center; gap: 10px; }
-.testi-avatar {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-weight: 700; font-size: 14px; flex-shrink: 0;
-}
-.testi-name { font-weight: 600; font-size: 14px; }
-.testi-role { font-size: 12px; color: var(--text-2); }
-
-/* ── Mini portfolio carousel ── */
-.mp-wrap { margin: 16px 0 20px; }
-.mp-label-top { font-size: 11px; font-weight: 600; color: var(--text-2); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; }
-.mp-track { position: relative; height: 190px; border-radius: 12px; overflow: hidden; }
-.mp-slide {
-  position: absolute; inset: 0;
-  opacity: 0; transition: opacity .5s ease;
-  display: flex; flex-direction: column;
-  border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
-}
-.mp-slide.active { opacity: 1; }
-.mp-bar {
-  background: var(--bg-soft); padding: 7px 12px;
-  display: flex; align-items: center; gap: 8px;
-  border-bottom: 1px solid var(--border); flex-shrink: 0;
-}
-.mp-dots { display: flex; gap: 4px; flex-shrink: 0; }
-.mp-dots span { width: 8px; height: 8px; border-radius: 50%; display: block; }
-.mp-dots span:nth-child(1) { background: #ff5f57; }
-.mp-dots span:nth-child(2) { background: #ffbd2e; }
-.mp-dots span:nth-child(3) { background: #28c940; }
-.mp-url-bar {
-  flex: 1; text-align: center;
-  font-size: 10px; color: var(--text-2);
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 4px; padding: 2px 8px;
-  font-family: 'JetBrains Mono', monospace, sans-serif;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.mp-screen { flex: 1; overflow: hidden; }
-.mp-screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-.mp-meta {
-  background: var(--bg); border-top: 1px solid var(--border);
-  padding: 7px 12px; display: flex; align-items: center; justify-content: space-between;
-  flex-shrink: 0;
-}
-.mp-name  { font-size: 12px; font-weight: 700; }
-.mp-sector { font-size: 11px; color: var(--text-2); }
-.mp-indicators { display: flex; gap: 6px; justify-content: center; margin-top: 9px; }
-.mp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); cursor: pointer; transition: background .3s, transform .3s var(--spring); }
-.mp-dot.active { background: var(--accent); transform: scale(1.4); }
-
-/* ── Stats row ── */
-.stats-row  { display: flex; gap: 10px; margin-bottom: 22px; }
-.stat-pill  { flex: 1; text-align: center; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 13px 8px; }
-.stat-pill .num { font-family: 'Inter Tight', sans-serif; font-size: 20px; font-weight: 800; color: var(--accent); display: block; }
-.stat-pill .lbl { font-size: 11px; color: var(--text-2); }
-
-/* ── Form ── */
+/* ── Form screen ── */
 .form-title {
   font-family: 'Inter Tight', sans-serif;
   font-size: clamp(22px, 5.5vw, 30px);
@@ -354,8 +287,9 @@ body {
 .form-sub { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 24px; }
 .form-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 18px; }
 
-/* Badges sous bouton form */
-.form-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px; }
+.form-badges {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px;
+}
 .form-badge {
   display: flex; align-items: center; gap: 5px;
   font-size: 12px; color: var(--text-2);
@@ -363,26 +297,75 @@ body {
   border-radius: 99px; padding: 5px 11px;
 }
 
-/* ── Confirmation ── */
+/* Trust bar sous le formulaire */
+.trust-bar {
+  display: flex; align-items: center; justify-content: center;
+  flex-wrap: wrap; gap: 6px 10px;
+  margin-top: 20px; padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--text-2);
+}
+.trust-bar strong { color: var(--text); font-weight: 600; }
+.trust-sep { color: var(--border); }
+
+/* ── Confirmation — CORRECTION 3 ── */
+@keyframes checkPop {
+  0%   { transform: scale(0); opacity: 0; }
+  65%  { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
 .confirm-icon {
-  width: 80px; height: 80px; border-radius: 50%;
+  width: 88px; height: 88px; border-radius: 50%;
   background: linear-gradient(135deg, #22c55e, #16a34a);
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 24px;
-  box-shadow: 0 8px 24px rgba(34,197,94,.35);
+  box-shadow: 0 10px 32px rgba(34,197,94,.38);
+  animation: checkPop .8s cubic-bezier(.22,1,.36,1) both;
 }
-.confirm-title { font-family: 'Inter Tight', sans-serif; font-size: 30px; font-weight: 800; margin-bottom: 12px; text-align: center; }
-.confirm-sub   { font-size: 15px; color: var(--text-2); line-height: 1.6; text-align: center; margin-bottom: 30px; }
-.steps-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-.step-item  { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; }
-.step-num   { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.step-txt   { font-size: 14px; font-weight: 500; }
+.confirm-title {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: clamp(24px, 6vw, 34px);
+  font-weight: 800; text-align: center; margin-bottom: 10px;
+}
+.confirm-sub {
+  font-size: 15px; color: var(--text-2);
+  line-height: 1.65; text-align: center; margin-bottom: 28px;
+}
+.confirm-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  padding: 6px 0; margin-bottom: 28px;
+}
+.confirm-info-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+}
+.confirm-info-row:last-child { border-bottom: none; }
+.confirm-info-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
+.confirm-info-text { font-size: 14px; font-weight: 500; }
+
+/* WhatsApp row animation */
+@keyframes waBounce {
+  0%, 80%, 100% { transform: scale(1); }
+  88%            { transform: scale(1.2); }
+}
+@keyframes waGlow {
+  0%, 100% { color: var(--text); }
+  50%       { color: #25D366; }
+}
+.wa-icon { display: inline-block; animation: waBounce 2.2s ease infinite; }
+.wa-text { animation: waGlow 2.2s ease infinite; }
+
+.confirm-note {
+  font-size: 13px; color: var(--text-2);
+  text-align: center; margin-top: 12px; line-height: 1.55;
+}
 
 .spacer-sm { height: 12px; }
 
 @media (max-width: 380px) {
   #screen-container { padding: 24px 14px 70px; }
-  .stats-row { flex-direction: column; }
   .recap-label { min-width: 100px; }
 }
 </style>
@@ -415,6 +398,7 @@ body {
 
 /* ═══════════════════════════════════════
    STATE
+   Screens: 1=Hero 2=Q1 3=Q2 4=Q3 5=Q4 6=Recap 7=Form 8=Confirm
 ═══════════════════════════════════════ */
 const state = {
   step: 1,
@@ -432,12 +416,9 @@ const state = {
   }
 };
 
-/* Screens: 1 Hero · 2 Q1 · 3 Q2 · 4 Q3 · 5 Q4 · 6 Recap · 7 Testi · 8 Form · 9 Confirm */
-const PROGRESS  = {1:0, 2:25, 3:50, 4:75, 5:100, 6:100, 7:100, 8:100, 9:0};
-const BACK_MAP  = {2:1, 3:2, 4:3, 5:4, 6:5, 8:7};   /* step 7 testimonial : no back */
-const HIDE_BACK = new Set([1, 7, 9]);
-
-let carouselTimer = null;
+const PROGRESS  = {1:0, 2:25, 3:50, 4:75, 5:100, 6:100, 7:100, 8:0};
+const BACK_MAP  = {2:1, 3:2, 4:3, 5:4, 6:5, 7:6};
+const HIDE_BACK = new Set([1, 8]);
 
 /* ═══════════════════════════════════════
    NAVIGATION
@@ -445,7 +426,6 @@ let carouselTimer = null;
 function goTo(n) {
   if (state.busy) return;
   state.busy = true;
-  clearInterval(carouselTimer);
   const el = document.getElementById(`screen-container`);
   el.classList.add(`exiting`);
   setTimeout(() => {
@@ -463,7 +443,8 @@ function goTo(n) {
 
 document.getElementById(`btn-back`).addEventListener(`click`, () => {
   if (state.busy) return;
-  const prev = (state.fromSurMesure && state.step === 8) ? 2 : BACK_MAP[state.step];
+  /* Sur-mesure: form (7) revient sur Q1 (2) */
+  const prev = (state.fromSurMesure && state.step === 7) ? 2 : BACK_MAP[state.step];
   if (prev !== undefined) goTo(prev);
 });
 
@@ -475,99 +456,57 @@ function esc(s) {
 }
 
 function getPrix() {
-  if (state.a.typeSite === `Vitrine`)    return `490\u20ac`;
-  if (state.a.typeSite === `Boutique`)   return `790\u20ac`;
+  if (state.a.typeSite === `Vitrine`)  return `490\u20ac`;
+  if (state.a.typeSite === `Boutique`) return `790\u20ac`;
   return null;
 }
 
 function getDeliveryDate() {
   const d = new Date();
   d.setDate(d.getDate() + 5);
-  const jours  = [`dimanche`,`lundi`,`mardi`,`mercredi`,`jeudi`,`vendredi`,`samedi`];
-  const mois   = [`janvier`,`f\u00e9vrier`,`mars`,`avril`,`mai`,`juin`,`juillet`,`ao\u00fbt`,`septembre`,`octobre`,`novembre`,`d\u00e9cembre`];
+  const jours = [`dimanche`,`lundi`,`mardi`,`mercredi`,`jeudi`,`vendredi`,`samedi`];
+  const mois  = [`janvier`,`f\u00e9vrier`,`mars`,`avril`,`mai`,`juin`,`juillet`,`ao\u00fbt`,`septembre`,`octobre`,`novembre`,`d\u00e9cembre`];
   return `${jours[d.getDay()]} ${d.getDate()} ${mois[d.getMonth()]}`;
 }
 
-const ARROW = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+const ARROW  = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+const CHK_OK = `<span class="ck"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>`;
 
-const CHK_SVG = `<span class="ck"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+function optCard(icon, title, desc, field, val, next) {
+  return `<button class="opt-card" data-field="${field}" data-val="${val}" data-next="${next}">
+    <span class="opt-icon">${icon}</span>
+    <span class="opt-text"><span class="opt-title">${title}</span><span class="opt-desc">${desc}</span></span>
+    <span class="opt-check"></span>
+  </button>`;
+}
 
-/* Pick answer & route */
+/* ── Answer + route ── */
 function pick(field, val, next) {
   state.a[field] = val;
   // TODO: Meta Pixel — fbq('trackCustom','QuizAnswer',{field,val});
   if (field === `typeSite` && val === `Sur-mesure`) {
     state.fromSurMesure = true;
-    goTo(8);
+    goTo(7); /* form direct */
   } else {
     if (field === `typeSite`) state.fromSurMesure = false;
     goTo(next);
   }
 }
 
-/* Delegate clicks on q1-cards and opt-cards */
+/* Delegation clics */
 document.addEventListener(`click`, e => {
   if (state.busy) return;
-  /* Q1 big cards */
-  const q1 = e.target.closest(`.q1-card[data-field]`);
-  if (q1) { pick(q1.dataset.field, q1.dataset.val, +q1.dataset.next); return; }
-  /* Generic option cards */
+  const q1  = e.target.closest(`.q1-card[data-field]`);
+  if (q1)  { pick(q1.dataset.field, q1.dataset.val, +q1.dataset.next); return; }
   const opt = e.target.closest(`.opt-card[data-field]`);
   if (opt) { pick(opt.dataset.field, opt.dataset.val, +opt.dataset.next); }
-  /* Carousel dot */
-  const dot = e.target.closest(`.mp-dot[data-idx]`);
-  if (dot) { showSlide(+dot.dataset.idx); }
 });
-
-/* ═══════════════════════════════════════
-   MINI PORTFOLIO CAROUSEL
-═══════════════════════════════════════ */
-const PORTFOLIO = [
-  {url:`rnconstruction.bzh`,  img:`assets/portfolio/rnconstruction.png`, name:`RN Construction`,   sector:`BTP \u00b7 France`},
-  {url:`bahnmotors.be`,       img:`assets/portfolio/bahnmotors.png`,      name:`Bahn Motors`,       sector:`Automobile \u00b7 Belgique`},
-  {url:`trocplace.fr`,        img:`assets/portfolio/trocplace.png`,       name:`Trocplace`,         sector:`Marketplace \u00b7 France`},
-  {url:`quattroshopping.com`, img:`assets/portfolio/quattroshopping.png`, name:`Quattro Shopping`,  sector:`E-commerce \u00b7 Europe`}
-];
-
-let carouselIdx = 0;
-
-function showSlide(i) {
-  carouselIdx = i;
-  document.querySelectorAll(`.mp-slide`).forEach((s, j) => s.classList.toggle(`active`, j === i));
-  document.querySelectorAll(`.mp-dot`).forEach((d, j)  => d.classList.toggle(`active`, j === i));
-}
-
-function startCarousel() {
-  clearInterval(carouselTimer);
-  carouselIdx = 0;
-  showSlide(0);
-  carouselTimer = setInterval(() => {
-    showSlide((carouselIdx + 1) % PORTFOLIO.length);
-  }, 2600);
-}
-
-function buildCarousel() {
-  const slides = PORTFOLIO.map((p, i) => `
-    <div class="mp-slide${i === 0 ? ` active` : ``}">
-      <div class="mp-bar">
-        <div class="mp-dots"><span></span><span></span><span></span></div>
-        <div class="mp-url-bar">${p.url}</div>
-      </div>
-      <div class="mp-screen"><img src="${p.img}" alt="${p.name}" loading="lazy"></div>
-      <div class="mp-meta"><span class="mp-name">${p.name}</span><span class="mp-sector">${p.sector}</span></div>
-    </div>`).join(``);
-  const dots = PORTFOLIO.map((_, i) =>
-    `<span class="mp-dot${i === 0 ? ` active` : ``}" data-idx="${i}"></span>`).join(``);
-  return `
-    <p class="mp-label-top">Nos r\u00e9alisations</p>
-    <div class="mp-track">${slides}</div>
-    <div class="mp-indicators">${dots}</div>`;
-}
 
 /* ═══════════════════════════════════════
    SCREENS
 ═══════════════════════════════════════ */
 
+/* ── 1. HERO ── */
 function screenHero() {
   return `
   <div class="hero-badge"><span class="dot"></span>\u00c0 partir de 490\u20ac</div>
@@ -582,25 +521,26 @@ function screenHero() {
   </div>`;
 }
 
+/* ── 2. Q1 TYPE DE SITE ── */
 function screenQ1() {
   const cards = [
     {
-      val: `Vitrine`, icon: `\uD83C\uDF10`,
-      title: `Site vitrine professionnel`, price: `490\u20ac`,
-      desc: `Pr\u00e9senter votre activit\u00e9, recevoir des appels et des demandes de devis. Id\u00e9al pour artisans, commer\u00e7ants, professions lib\u00e9rales.`,
-      checks: [`Prise de rendez-vous en ligne`, `Demandes de devis automatiques`, `Photos de vos r\u00e9alisations`, `Avis clients int\u00e9gr\u00e9s`, `Design sur-mesure selon votre m\u00e9tier`]
+      val:`Vitrine`, icon:`\uD83C\uDF10`,
+      title:`Site vitrine professionnel`, price:`490\u20ac`,
+      desc:`Pr\u00e9senter votre activit\u00e9, recevoir des appels et des demandes de devis. Id\u00e9al pour artisans, commer\u00e7ants, professions lib\u00e9rales.`,
+      checks:[`Prise de rendez-vous en ligne`,`Demandes de devis automatiques`,`Photos de vos r\u00e9alisations`,`Avis clients int\u00e9gr\u00e9s`,`Design sur-mesure selon votre m\u00e9tier`]
     },
     {
-      val: `Boutique`, icon: `\uD83D\uDED2`,
-      title: `Site avec boutique en ligne`, price: `790\u20ac`,
-      desc: `Vendre vos produits ou services en ligne avec paiement int\u00e9gr\u00e9. Id\u00e9al pour cr\u00e9ateurs, e-commerce, vente \u00e0 distance.`,
-      checks: [`Boutique en ligne compl\u00e8te`, `Paiement s\u00e9curis\u00e9 par carte`, `Tableau de bord pour g\u00e9rer vos articles`, `Modifier prix, photos et stocks vous-m\u00eame`, `Suivi des commandes en temps r\u00e9el`]
+      val:`Boutique`, icon:`\uD83D\uDED2`,
+      title:`Site avec boutique en ligne`, price:`790\u20ac`,
+      desc:`Vendre vos produits ou services en ligne avec paiement int\u00e9gr\u00e9. Id\u00e9al pour cr\u00e9ateurs, e-commerce, vente \u00e0 distance.`,
+      checks:[`Boutique en ligne compl\u00e8te`,`Paiement s\u00e9curis\u00e9 par carte`,`Tableau de bord pour g\u00e9rer vos articles`,`Modifier prix, photos et stocks vous-m\u00eame`,`Suivi des commandes en temps r\u00e9el`]
     },
     {
-      val: `Sur-mesure`, icon: `\uD83C\uDFAF`,
-      title: `Projet sur-mesure`, price: `sur devis`, devis: true,
-      desc: `Application mobile, plateforme m\u00e9tier, espace client priv\u00e9, fonctionnalit\u00e9s sp\u00e9cifiques. On en discute ensemble pour cr\u00e9er exactement ce dont vous avez besoin.`,
-      checks: [`Application mobile iOS et Android`, `Espace client s\u00e9curis\u00e9 avec connexion`, `Plateforme multi-utilisateurs`, `Fonctions personnalis\u00e9es sur-mesure`, `Devis gratuit sous 24h`]
+      val:`Sur-mesure`, icon:`\uD83C\uDFAF`,
+      title:`Projet sur-mesure`, price:`sur devis`, devis:true,
+      desc:`Application mobile, plateforme m\u00e9tier, espace client priv\u00e9, fonctionnalit\u00e9s sp\u00e9cifiques. On en discute ensemble pour cr\u00e9er exactement ce dont vous avez besoin.`,
+      checks:[`Application mobile iOS et Android`,`Espace client s\u00e9curis\u00e9 avec connexion`,`Plateforme multi-utilisateurs`,`Fonctions personnalis\u00e9es sur-mesure`,`Devis gratuit sous 24h`]
     }
   ];
   return `
@@ -608,21 +548,22 @@ function screenQ1() {
   <h2 class="q-title">Quel type de site souhaitez-vous\u00a0?</h2>
   <p class="q-sub">Nous adapterons notre offre \u00e0 votre besoin.</p>
   ${cards.map(c => `
-    <button class="q1-card" data-field="typeSite" data-val="${c.val}" data-next="3">
-      <div class="q1-head">
-        <div class="q1-icon-title">
-          <span class="q1-icon">${c.icon}</span>
-          <span class="q1-title">${c.title}</span>
-        </div>
-        <span class="q1-price${c.devis ? ` devis` : ``}">${c.price}</span>
+  <button class="q1-card" data-field="typeSite" data-val="${c.val}" data-next="3">
+    <div class="q1-head">
+      <div class="q1-icon-title">
+        <span class="q1-icon">${c.icon}</span>
+        <span class="q1-title">${c.title}</span>
       </div>
-      <p class="q1-desc">${c.desc}</p>
-      <ul class="q1-checks">
-        ${c.checks.map(ch => `<li>${CHK_SVG}${ch}</li>`).join(``)}
-      </ul>
-    </button>`).join(``)}`;
+      <span class="q1-price${c.devis ? ` devis` : ``}">${c.price}</span>
+    </div>
+    <p class="q1-desc">${c.desc}</p>
+    <ul class="q1-checks">
+      ${c.checks.map(ch => `<li>${CHK_OK}${ch}</li>`).join(``)}
+    </ul>
+  </button>`).join(``)}`;
 }
 
+/* ── 3. Q2 MÉTIER ── */
 function screenQ2() {
   return `
   <p class="q-label">Question 2 sur 4</p>
@@ -639,6 +580,7 @@ function screenQ2() {
   <button class="btn-primary" onclick="continueMetier()">Continuer ${ARROW}</button>`;
 }
 
+/* ── 4. Q3 PRÉSENCE GOOGLE ── */
 function screenQ3() {
   return `
   <p class="q-label">Question 3 sur 4</p>
@@ -651,6 +593,7 @@ function screenQ3() {
   </div>`;
 }
 
+/* ── 5. Q4 DÉSIR PRINCIPAL ── */
 function screenQ4() {
   return `
   <p class="q-label">Question 4 sur 4</p>
@@ -664,16 +607,17 @@ function screenQ4() {
   </div>`;
 }
 
+/* ── 6. RÉCAP ── */
 function screenRecap() {
   const a = state.a;
-  const typeLabel = a.typeSite === `Vitrine` ? `Vitrine \u2014 490\u20ac` :
+  const typeLabel = a.typeSite === `Vitrine`  ? `Vitrine \u2014 490\u20ac` :
                     a.typeSite === `Boutique` ? `Boutique \u2014 790\u20ac` :
                     a.typeSite || `\u2014`;
   const rows = [
-    [`Type de site`,       typeLabel],
-    [`M\u00e9tier`,        a.metier          || `\u2014`],
-    [`Google`,             a.presenceGoogle  || `\u2014`],
-    [`Objectif`,           a.desirPrincipal  || `\u2014`]
+    [`Type de site`,    typeLabel],
+    [`M\u00e9tier`,     a.metier          || `\u2014`],
+    [`Google`,          a.presenceGoogle  || `\u2014`],
+    [`Objectif`,        a.desirPrincipal  || `\u2014`]
   ];
   const btnTxt = a.typeSite === `Sur-mesure` ? `Discuter de mon projet` : `Voir ma proposition`;
   return `
@@ -681,53 +625,29 @@ function screenRecap() {
   <h2 class="q-title">Votre projet est <span style="color:var(--accent)">r\u00e9alisable</span></h2>
   <p class="recap-delivery">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    Et il sera livr\u00e9 avant le\u00a0<strong>${getDeliveryDate()}</strong>
+    Livraison pr\u00e9vue avant le\u00a0<strong>${getDeliveryDate()}</strong>
   </p>
   <div class="recap-card">
-    ${rows.map(([l,v])=>`<div class="recap-row"><span class="recap-label">${l}</span><span class="recap-val">${esc(v)}</span></div>`).join(``)}
+    ${rows.map(([l,v]) => `<div class="recap-row"><span class="recap-label">${l}</span><span class="recap-val">${esc(v)}</span></div>`).join(``)}
   </div>
   <button class="btn-primary" onclick="goTo(7)">${btnTxt} ${ARROW}</button>
   <p class="note-sm">Sans engagement\u00a0\u2014 100\u00a0% gratuit</p>`;
 }
 
-function screenTestimonial() {
-  const t = state.a.typeSite;
-  const btnTxt = t === `Sur-mesure` ? `Discuter de mon projet` :
-                 t === `Boutique`   ? `Lancer ma boutique`    : `Lancer mon site`;
-  return `
-  <p class="q-label">\uD83D\uDDE3 Ils nous font confiance</p>
-  <h2 class="q-title" style="margin-bottom:16px;">Ce que disent nos clients</h2>
-  <div class="testi-card">
-    <div class="testi-quote">&ldquo;</div>
-    <p class="testi-text">&ldquo;\u00c7a m\u2019a pris 2\u00a0minutes pour remplir le formulaire, et 5\u00a0jours plus tard mon site \u00e9tait en ligne. Franchement bluffant pour le prix. J\u2019ai d\u00e9j\u00e0 eu 3\u00a0nouveaux clients gr\u00e2ce \u00e0 lui.&rdquo;</p>
-    <div class="testi-author">
-      <div class="testi-avatar">K</div>
-      <div><div class="testi-name">Karim B.</div><div class="testi-role">Artisan plombier \u2014 Lyon</div></div>
-    </div>
-  </div>
-  <div class="mp-wrap" id="mp-wrap">${buildCarousel()}</div>
-  <div class="stats-row">
-    <div class="stat-pill"><span class="num">+170</span><span class="lbl">Sites livr\u00e9s</span></div>
-    <div class="stat-pill"><span class="num">4.97/5</span><span class="lbl">Satisfaction</span></div>
-    <div class="stat-pill"><span class="num">5j</span><span class="lbl">D\u00e9lai moyen</span></div>
-  </div>
-  <button class="btn-primary" onclick="goTo(8)">${btnTxt} ${ARROW}</button>`;
-}
-
+/* ── 7. FORMULAIRE ── */
 function screenForm() {
   const isCus = state.fromSurMesure;
-  const prix  = getPrix();
   const btnTxt = isCus ? `Recevoir mon devis` :
-                 state.a.typeSite === `Boutique` ? `Lancer ma boutique \u2014 790\u20ac` : `Lancer mon site \u2014 490\u20ac`;
+                 state.a.typeSite === `Boutique` ? `Lancer ma boutique \u2014 790\u20ac` :
+                 `Lancer mon site \u2014 490\u20ac`;
   const badges = isCus
-    ? `\uD83D\uDCDE R\u00e9ponse sous 1h</span><span class="form-badge">\uD83D\uDCCB Devis gratuit</span><span class="form-badge">\u2705 Sans engagement`
-    : `\u23f1\ufe0f Livr\u00e9 en 5\u00a0jours</span><span class="form-badge">\u2705 Sans abonnement</span><span class="form-badge">\uD83D\uDCAC Service 7j/7</span><span class="form-badge">\uD83C\uDF81 Logo + flyers offerts`;
+    ? [`\uD83D\uDCDE R\u00e9ponse sous 1h`, `\uD83D\uDCCB Devis gratuit`, `\u2705 Sans engagement`]
+    : [`\u23f1\ufe0f Livr\u00e9 en 5\u00a0jours`, `\u2705 Sans abonnement`, `\uD83D\uDCAC Service 7j/7`, `\uD83C\uDF81 Logo + flyers offerts`];
   return `
   <h2 class="form-title">${isCus ? `\uD83C\uDFAF Parlons de votre projet` : `\uD83C\uDFAF Plus qu\u2019une \u00e9tape\u00a0!`}</h2>
   <p class="form-sub">${isCus
     ? `On vous appelle dans l\u2019heure pour discuter de votre projet et \u00e9tablir un devis personnalis\u00e9.`
-    : `On vous appelle dans l\u2019heure pour finaliser les d\u00e9tails et lancer votre site.`
-  }</p>
+    : `On vous appelle dans l\u2019heure pour finaliser les d\u00e9tails et lancer votre site.`}</p>
   <form id="lead-form" novalidate>
     <div class="form-grid">
       <div>
@@ -748,57 +668,73 @@ function screenForm() {
       <div>
         <label class="form-label" for="f-tel">Votre t\u00e9l\u00e9phone *</label>
         <input type="tel" class="text-input" id="f-tel" placeholder="06 00 00 00 00" autocomplete="tel" inputmode="numeric" value="${esc(state.a.telephone)}">
-        <div class="field-error" id="err-tel">Num\u00e9ro invalide (10\u00a0chiffres minimum).</div>
+        <div class="field-error" id="err-tel">Num\u00e9ro invalide (7\u00a0chiffres minimum).</div>
       </div>
     </div>
     <button type="submit" class="btn-primary">${btnTxt} ${ARROW}</button>
   </form>
   <div class="form-badges">
-    <span class="form-badge">${badges}</span>
+    ${badges.map(b => `<span class="form-badge">${b}</span>`).join(``)}
+  </div>
+  <div class="trust-bar">
+    <span>\u2B50 <strong>4.97/5</strong></span>
+    <span class="trust-sep">\u00b7</span>
+    <span><strong>170+</strong> sites livr\u00e9s</span>
+    <span class="trust-sep">\u00b7</span>
+    <span>Livraison en 5\u00a0jours</span>
   </div>`;
 }
 
+/* ── 8. CONFIRMATION — refonte ── */
 function screenConfirm() {
   const name = esc(state.a.prenom) || `vous`;
   return `
   <div style="text-align:center">
     <div class="confirm-icon">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
-    <h2 class="confirm-title">Merci, ${name}\u00a0!</h2>
-    <p class="confirm-sub">Votre demande a bien \u00e9t\u00e9 re\u00e7ue.\u00a0Nous vous contactons sous <strong>1\u00a0heure</strong> pour lancer votre projet.</p>
+    <h2 class="confirm-title">C\u2019est bien not\u00e9\u00a0${name}\u00a0!</h2>
+    <p class="confirm-sub">Emre, le chef de projet de notre \u00e9quipe, va vous contacter dans l\u2019heure pour finaliser votre site.</p>
   </div>
-  <div class="steps-list">
-    <div class="step-item"><div class="step-num">1</div><div class="step-txt">\uD83D\uDCDE Appel de d\u00e9couverte \u2014 on valide votre projet ensemble</div></div>
-    <div class="step-item"><div class="step-num">2</div><div class="step-txt">\uD83C\uDFA8 Votre site cr\u00e9\u00e9 sur-mesure en 5\u00a0jours ouvrés</div></div>
-    <div class="step-item"><div class="step-num">3</div><div class="step-txt">\uD83D\uDE80 Mise en ligne + remise de tous les fichiers sources</div></div>
-  </div>
-  <a href="index.html" class="btn-secondary">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Retour au site
-  </a>`;
-}
 
-/* ═══════════════════════════════════════
-   OPTION CARD BUILDER (Q3-Q4)
-═══════════════════════════════════════ */
-function optCard(icon, title, desc, field, val, next) {
-  return `<button class="opt-card" data-field="${field}" data-val="${val}" data-next="${next}">
-    <span class="opt-icon">${icon}</span>
-    <span class="opt-text"><span class="opt-title">${title}</span><span class="opt-desc">${desc}</span></span>
-    <span class="opt-check"></span>
-  </button>`;
+  <div class="confirm-card">
+    <div class="confirm-info-row">
+      <span class="confirm-info-icon">\u260E\uFE0F</span>
+      <span class="confirm-info-text">Notre \u00e9quipe vous appelle dans l\u2019heure</span>
+    </div>
+    <div class="confirm-info-row">
+      <span class="confirm-info-icon">\uD83D\uDD52</span>
+      <span class="confirm-info-text">Service client disponible 7j/7</span>
+    </div>
+    <div class="confirm-info-row">
+      <span class="confirm-info-icon wa-icon">\uD83D\uDCAC</span>
+      <span class="confirm-info-text wa-text">Disponible aussi sur WhatsApp</span>
+    </div>
+  </div>
+
+  <button class="btn-primary xl" onclick="window.location.href='/'">
+    Voir nos r\u00e9alisations ${ARROW}
+  </button>
+  <p class="confirm-note">En attendant notre appel, d\u00e9couvrez les sites qu\u2019on a livr\u00e9s r\u00e9cemment.</p>
+
+  <div class="trust-bar" style="margin-top:24px">
+    <span>\u2B50 <strong>4.97/5</strong></span>
+    <span class="trust-sep">\u00b7</span>
+    <span><strong>170+</strong> sites livr\u00e9s</span>
+    <span class="trust-sep">\u00b7</span>
+    <span>D\u00e9lai moyen 5\u00a0jours</span>
+  </div>`;
 }
 
 /* ═══════════════════════════════════════
    RENDER
 ═══════════════════════════════════════ */
 function render() {
-  const map = {1:screenHero, 2:screenQ1, 3:screenQ2, 4:screenQ3, 5:screenQ4, 6:screenRecap, 7:screenTestimonial, 8:screenForm, 9:screenConfirm};
+  const map = {1:screenHero, 2:screenQ1, 3:screenQ2, 4:screenQ3, 5:screenQ4, 6:screenRecap, 7:screenForm, 8:screenConfirm};
   document.getElementById(`screen-container`).innerHTML = (map[state.step] || screenHero)();
 
   /* Progress */
-  const show = state.step >= 2 && state.step <= 8;
+  const show = state.step >= 2 && state.step <= 7;
   document.getElementById(`progress-wrap`).classList.toggle(`hidden`, !show);
   const pb = document.getElementById(`progress-bar`);
   if (pb) pb.style.width = (PROGRESS[state.step] || 0) + `%`;
@@ -806,16 +742,11 @@ function render() {
   /* Back button */
   document.getElementById(`btn-back`).classList.toggle(`hidden`, HIDE_BACK.has(state.step));
 
-  /* Attach listeners */
+  /* Listeners */
   const form = document.getElementById(`lead-form`);
   if (form) form.addEventListener(`submit`, submitForm);
   const mi = document.getElementById(`f-metier`);
-  if (mi)  mi.addEventListener(`keydown`, e => { if (e.key === `Enter`) continueMetier(); });
-
-  /* Start carousel on testimonial screen */
-  if (state.step === 7) {
-    requestAnimationFrame(() => startCarousel());
-  }
+  if (mi) mi.addEventListener(`keydown`, e => { if (e.key === `Enter`) continueMetier(); });
 }
 
 /* ═══════════════════════════════════════
@@ -842,7 +773,7 @@ function submitForm(e) {
     {id:`f-prenom`,    key:`prenom`,       errId:`err-prenom`,    ok: v => v.length >= 2},
     {id:`f-entreprise`,key:`nomEntreprise`, errId:`err-entreprise`,ok: v => v.length >= 2},
     {id:`f-ville`,     key:`ville`,         errId:`err-ville`,     ok: v => v.length >= 2},
-    {id:`f-tel`,       key:`telephone`,     errId:`err-tel`,       ok: v => /^\+?[\d\s\-\.\(\)]{9,}$/.test(v)}
+    {id:`f-tel`,       key:`telephone`,     errId:`err-tel`,       ok: v => v.replace(/\D/g,``).length >= 7}
   ];
   let valid = true;
   fields.forEach(f => {
@@ -858,20 +789,19 @@ function submitForm(e) {
   });
   if (!valid) return;
 
-  const lead = Object.assign({}, state.a, {
-    date: new Date().toLocaleDateString(`fr-FR`),
-    timestamp: Date.now()
-  });
   try {
     const arr = JSON.parse(localStorage.getItem(`qv_leads`) || `[]`);
-    arr.unshift(lead);
+    arr.unshift(Object.assign({}, state.a, {
+      date: new Date().toLocaleDateString(`fr-FR`),
+      timestamp: Date.now()
+    }));
     localStorage.setItem(`qv_leads`, JSON.stringify(arr));
   } catch(_) {}
 
   // TODO: Supabase — await sb.from('leads').insert(lead);
   // TODO: Meta Pixel — fbq('track','Lead',{value: state.a.typeSite === 'Boutique' ? 790 : 490, currency:'EUR'});
 
-  goTo(9);
+  goTo(8);
 }
 
 /* ═══════════════════════════════════════
