@@ -139,6 +139,59 @@ body {
   font-size: 12px; color: var(--text-2); white-space: nowrap;
 }
 
+/* ── Mini avis marquee (hero) ── */
+.mini-reviews-wrap {
+  margin-top: 20px;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.mini-reviews-track {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  animation: mini-rev-left 40s linear infinite;
+  will-change: transform;
+}
+@keyframes mini-rev-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.mini-rev-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 13px;
+  width: 210px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.mini-rev-stars { color: #F59E0B; font-size: 11px; letter-spacing: 0.5px; margin-bottom: 5px; }
+.mini-rev-text {
+  font-size: 11.5px;
+  color: var(--text-2);
+  line-height: 1.45;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.mini-rev-author {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.mini-rev-av {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.mini-rev-name { font-size: 11px; font-weight: 700; color: var(--text); }
+.mini-rev-city { font-size: 10px; color: var(--text-3, #9ca3af); }
+
 /* ── Q1 Big cards — CORRECTION 1 ── */
 .q1-card {
   display: block; width: 100%; text-align: left;
@@ -541,6 +594,27 @@ function screenHero() {
     <span class="trust-badge">\u2705 Sans abonnement</span>
     <span class="trust-badge">\uD83D\uDCAC Service 7j/7</span>
     <span class="trust-badge">\uD83C\uDF81 Logo + flyers offerts</span>
+  </div>
+  <div class="mini-reviews-wrap">
+    <div class="mini-reviews-track">
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Mon site livr\u00e9 en 4 jours, design parfait pour mon restaurant.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#6b3df5,#a06bff)">KL</div><div><div class="mini-rev-name">Karim L.</div><div class="mini-rev-city">Lyon</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">J&apos;apparais sur Google et mes appels ont doubl\u00e9 en 1 mois.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#14b8a6,#2dd4bf)">YA</div><div><div class="mini-rev-name">Youssef A.</div><div class="mini-rev-city">Nice</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Logo offert + flyers inclus, le package est vraiment complet.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8)">SM</div><div><div class="mini-rev-name">Sophie M.</div><div class="mini-rev-city">Bordeaux</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">J&apos;ai d\u00e9croch\u00e9 un chantier de 12\u202f000\u20ac gr\u00e2ce au site le mois suivant.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#1d4ed8,#93c5fd)">MR</div><div><div class="mini-rev-name">Maxime R.</div><div class="mini-rev-city">Orl\u00e9ans</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Service client exceptionnel, chaque retouche faite le jour m\u00eame.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#f97316,#fb923c)">MT</div><div><div class="mini-rev-name">Mehdi T.</div><div class="mini-rev-city">Lille</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Livr\u00e9 en 5 jours comme promis. Rien \u00e0 redire, parfait de A \u00e0 Z.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#9d174d,#f9a8d4)">FB</div><div><div class="mini-rev-name">Fran\u00e7ois B.</div><div class="mini-rev-city">Perpignan</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Depuis la mise en ligne plus de demandes qu&apos;en 2 ans de bouche-\u00e0-oreille.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#10b981,#34d399)">AB</div><div><div class="mini-rev-name">Aurore B.</div><div class="mini-rev-city">Strasbourg</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Site livr\u00e9 en 5 jours, design au go\u00fbt du jour. Equipe patiente.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#0369a1,#38bdf8)">CT</div><div><div class="mini-rev-name">C\u00e9line T.</div><div class="mini-rev-city">Nancy</div></div></div></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Mon site livr\u00e9 en 4 jours, design parfait pour mon restaurant.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#6b3df5,#a06bff)">KL</div><div><div class="mini-rev-name">Karim L.</div><div class="mini-rev-city">Lyon</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">J&apos;apparais sur Google et mes appels ont doubl\u00e9 en 1 mois.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#14b8a6,#2dd4bf)">YA</div><div><div class="mini-rev-name">Youssef A.</div><div class="mini-rev-city">Nice</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Logo offert + flyers inclus, le package est vraiment complet.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8)">SM</div><div><div class="mini-rev-name">Sophie M.</div><div class="mini-rev-city">Bordeaux</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">J&apos;ai d\u00e9croch\u00e9 un chantier de 12\u202f000\u20ac gr\u00e2ce au site le mois suivant.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#1d4ed8,#93c5fd)">MR</div><div><div class="mini-rev-name">Maxime R.</div><div class="mini-rev-city">Orl\u00e9ans</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Service client exceptionnel, chaque retouche faite le jour m\u00eame.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#f97316,#fb923c)">MT</div><div><div class="mini-rev-name">Mehdi T.</div><div class="mini-rev-city">Lille</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Livr\u00e9 en 5 jours comme promis. Rien \u00e0 redire, parfait de A \u00e0 Z.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#9d174d,#f9a8d4)">FB</div><div><div class="mini-rev-name">Fran\u00e7ois B.</div><div class="mini-rev-city">Perpignan</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Depuis la mise en ligne plus de demandes qu&apos;en 2 ans de bouche-\u00e0-oreille.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#10b981,#34d399)">AB</div><div><div class="mini-rev-name">Aurore B.</div><div class="mini-rev-city">Strasbourg</div></div></div></div>
+      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Site livr\u00e9 en 5 jours, design au go\u00fbt du jour. Equipe patiente.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#0369a1,#38bdf8)">CT</div><div><div class="mini-rev-name">C\u00e9line T.</div><div class="mini-rev-city">Nancy</div></div></div></div>
+    </div>
   </div>`;
 }
 
