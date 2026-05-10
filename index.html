@@ -1434,6 +1434,98 @@
     .pack-card.pack-popular { order: -1; }
   }
 
+  /* ============ FLOATING WHATSAPP BUTTON ============ */
+  #wa-float {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 50;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    flex-direction: row;
+    pointer-events: none;
+  }
+  .wa-float-bubble {
+    background: #fff;
+    border: 1px solid rgba(207,198,232,0.55);
+    border-radius: 14px 14px 0 14px;
+    padding: 10px 14px 10px 12px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+    pointer-events: all;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+    transform: scale(1);
+    transform-origin: bottom right;
+    transition: opacity 0.35s, transform 0.35s;
+  }
+  .wa-float-bubble.hidden {
+    opacity: 0;
+    transform: scale(0.85);
+    pointer-events: none;
+  }
+  .wa-bubble-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--green);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .wa-bubble-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .wa-bubble-close {
+    position: absolute;
+    top: -8px; right: -8px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--ink-3);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    pointer-events: all;
+  }
+  .wa-float-btn {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 28px -4px rgba(37,211,102,0.6), 0 0 0 0 rgba(37,211,102,0.35);
+    animation: wa-ring 3s ease-out infinite;
+    transition: transform 0.2s cubic-bezier(.2,.8,.2,1);
+    text-decoration: none;
+    flex-shrink: 0;
+    pointer-events: all;
+  }
+  .wa-float-btn:hover { transform: scale(1.12); }
+  .wa-float-btn svg { width: 32px; height: 32px; }
+  @keyframes wa-ring {
+    0%   { box-shadow: 0 8px 28px -4px rgba(37,211,102,0.6), 0 0 0 0 rgba(37,211,102,0.35); }
+    60%  { box-shadow: 0 8px 28px -4px rgba(37,211,102,0.6), 0 0 0 14px rgba(37,211,102,0); }
+    100% { box-shadow: 0 8px 28px -4px rgba(37,211,102,0.6), 0 0 0 0 rgba(37,211,102,0); }
+  }
+  @media (max-width: 720px) {
+    #wa-float {
+      bottom: 82px; /* au-dessus du sticky CTA mobile */
+      right: 14px;
+    }
+    .wa-float-btn { width: 52px; height: 52px; }
+    .wa-float-btn svg { width: 26px; height: 26px; }
+    .wa-bubble-text { font-size: 12px; }
+    .wa-float-bubble { padding: 8px 12px 8px 10px; }
+  }
+
   /* ============ CONVERSION STRIP ============ */
   .conv-strip {
     background: linear-gradient(135deg, rgba(107,61,245,0.06) 0%, rgba(160,107,255,0.1) 100%);
@@ -1585,6 +1677,92 @@
       </div>
     </div>
     <p class="swipe-hint">← Glissez pour voir plus →</p>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section">
+  <div class="container">
+    <div class="section-head reveal-left">
+      <span class="eyebrow">Avis clients</span>
+      <h2>Ce que disent <em>nos clients</em></h2>
+    </div>
+  </div>
+  <div class="reviews-marquee-wrap">
+
+    <!-- ROW 1 (gauche) — 15 avis × 2 pour boucle infinie -->
+    <div class="reviews-track reviews-track-1">
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Mon site a été livré en 4 jours, c&apos;est impressionnant. Le design est exactement ce que je voulais pour mon restaurant.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#6b3df5,#a06bff)">KL</div><div><div class="rev-name">Karim L.</div><div class="rev-city">Lyon, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Logo magnifique, site rapide, équipe ultra réactive. Je recommande à tous les artisans qui cherchent une vraie présence en ligne.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8)">SM</div><div><div class="rev-name">Sophie M.</div><div class="rev-city">Bordeaux, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">En tant que plombier je ne connaissais rien au web. Ils ont tout géré, même le référencement Google. Super satisfait !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">TD</div><div><div class="rev-name">Thomas D.</div><div class="rev-city">Nantes, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Depuis la mise en ligne j&apos;ai reçu plus de demandes qu&apos;en 2 ans de bouche-à-oreille. Vraiment bluffant.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#10b981,#34d399)">AB</div><div><div class="rev-name">Aurore B.</div><div class="rev-city">Strasbourg, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">J&apos;ai demandé 3 retouches et elles ont toutes été faites le jour même. Professionnalisme au top.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#ec4899,#f472b6)">NR</div><div><div class="rev-name">Nicolas R.</div><div class="rev-city">Toulouse, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Mon salon de coiffure a maintenant un site qui ressemble vraiment à ce que je voulais. Les clients me disent souvent qu&apos;il est beau !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#8b5cf6,#c4b5fd)">LF</div><div><div class="rev-name">Lucie F.</div><div class="rev-city">Rennes, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">Service client exceptionnel. Appel rapide, questions pertinentes, résultat parfait. Je referai appel à eux sans hésiter.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#f97316,#fb923c)">MT</div><div><div class="rev-name">Mehdi T.</div><div class="rev-city">Lille, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Le flyer qu&apos;ils m&apos;ont offert est vraiment pro. Je les distribue dans le quartier et ça marche bien avec le site.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#06b6d4,#22d3ee)">CB</div><div><div class="rev-name">Camille B.</div><div class="rev-city">Montpellier, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Site livré en 5 jours comme promis. Chaque étape clairement expliquée. Je ne pensais pas que c&apos;était possible aussi vite.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#6b3df5,#a06bff)">XW</div><div><div class="rev-name">Xavier W.</div><div class="rev-city">Bruxelles, Belgique</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Artisan électricien depuis 15 ans, j&apos;avais jamais eu de site. Maintenant j&apos;apparais sur Google et les appels ont augmenté.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#14b8a6,#2dd4bf)">YA</div><div><div class="rev-name">Youssef A.</div><div class="rev-city">Nice, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">Le design est moderne et professionnel. Mes concurrents n&apos;ont pas encore de site aussi beau. Merci Quattro Visual !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#7c3aed,#ddd6fe)">EM</div><div><div class="rev-name">Elodie M.</div><div class="rev-city">Grenoble, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Excellent. Ils ont su capter l&apos;essence de mon activité de paysagiste et en faire un site qui inspire confiance.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#16a34a,#4ade80)">SV</div><div><div class="rev-name">Sébastien V.</div><div class="rev-city">Liège, Belgique</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Paiement simple, pas d&apos;abonnement, je suis propriétaire de mon site. C&apos;est exactement ce que je cherchais.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#b45309,#fbbf24)">JC</div><div><div class="rev-name">Julien C.</div><div class="rev-city">Dijon, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Mon boucher m&apos;a recommandé Quattro Visual et j&apos;ai pas été déçue. Site livré rapidement, logo qui tue !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#db2777,#fb7185)">FR</div><div><div class="rev-name">Fatima R.</div><div class="rev-city">Marseille, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">Très professionnel. Le site est optimisé mobile, rapide, et mes clients peuvent me contacter directement depuis leur téléphone.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#0284c7,#38bdf8)">RT</div><div><div class="rev-name">Romain T.</div><div class="rev-city">Reims, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <!-- Duplicate for infinite loop -->
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Mon site a été livré en 4 jours, c&apos;est impressionnant. Le design est exactement ce que je voulais pour mon restaurant.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#6b3df5,#a06bff)">KL</div><div><div class="rev-name">Karim L.</div><div class="rev-city">Lyon, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Logo magnifique, site rapide, équipe ultra réactive. Je recommande à tous les artisans qui cherchent une vraie présence en ligne.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8)">SM</div><div><div class="rev-name">Sophie M.</div><div class="rev-city">Bordeaux, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">En tant que plombier je ne connaissais rien au web. Ils ont tout géré, même le référencement Google. Super satisfait !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">TD</div><div><div class="rev-name">Thomas D.</div><div class="rev-city">Nantes, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Depuis la mise en ligne j&apos;ai reçu plus de demandes qu&apos;en 2 ans de bouche-à-oreille. Vraiment bluffant.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#10b981,#34d399)">AB</div><div><div class="rev-name">Aurore B.</div><div class="rev-city">Strasbourg, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">J&apos;ai demandé 3 retouches et elles ont toutes été faites le jour même. Professionnalisme au top.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#ec4899,#f472b6)">NR</div><div><div class="rev-name">Nicolas R.</div><div class="rev-city">Toulouse, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Mon salon de coiffure a maintenant un site qui ressemble vraiment à ce que je voulais. Les clients me disent souvent qu&apos;il est beau !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#8b5cf6,#c4b5fd)">LF</div><div><div class="rev-name">Lucie F.</div><div class="rev-city">Rennes, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">Service client exceptionnel. Appel rapide, questions pertinentes, résultat parfait. Je referai appel à eux sans hésiter.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#f97316,#fb923c)">MT</div><div><div class="rev-name">Mehdi T.</div><div class="rev-city">Lille, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Le flyer qu&apos;ils m&apos;ont offert est vraiment pro. Je les distribue dans le quartier et ça marche bien avec le site.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#06b6d4,#22d3ee)">CB</div><div><div class="rev-name">Camille B.</div><div class="rev-city">Montpellier, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Site livré en 5 jours comme promis. Chaque étape clairement expliquée. Je ne pensais pas que c&apos;était possible aussi vite.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#6b3df5,#a06bff)">XW</div><div><div class="rev-name">Xavier W.</div><div class="rev-city">Bruxelles, Belgique</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Artisan électricien depuis 15 ans, j&apos;avais jamais eu de site. Maintenant j&apos;apparais sur Google et les appels ont augmenté.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#14b8a6,#2dd4bf)">YA</div><div><div class="rev-name">Youssef A.</div><div class="rev-city">Nice, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">Le design est moderne et professionnel. Mes concurrents n&apos;ont pas encore de site aussi beau. Merci Quattro Visual !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#7c3aed,#ddd6fe)">EM</div><div><div class="rev-name">Elodie M.</div><div class="rev-city">Grenoble, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Excellent. Ils ont su capter l&apos;essence de mon activité de paysagiste et en faire un site qui inspire confiance.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#16a34a,#4ade80)">SV</div><div><div class="rev-name">Sébastien V.</div><div class="rev-city">Liège, Belgique</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Paiement simple, pas d&apos;abonnement, je suis propriétaire de mon site. C&apos;est exactement ce que je cherchais.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#b45309,#fbbf24)">JC</div><div><div class="rev-name">Julien C.</div><div class="rev-city">Dijon, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Mon boucher m&apos;a recommandé Quattro Visual et j&apos;ai pas été déçue. Site livré rapidement, logo qui tue !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#db2777,#fb7185)">FR</div><div><div class="rev-name">Fatima R.</div><div class="rev-city">Marseille, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">Très professionnel. Le site est optimisé mobile, rapide, et mes clients peuvent me contacter directement depuis leur téléphone.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#0284c7,#38bdf8)">RT</div><div><div class="rev-name">Romain T.</div><div class="rev-city">Reims, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+    </div>
+
+    <!-- ROW 2 (droite) — 15 autres avis × 2 -->
+    <div class="reviews-track reviews-track-2">
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Vraiment top. J&apos;ai reçu l&apos;appel dans les 40 minutes après ma demande. L&apos;équipe est à l&apos;écoute et efficace.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#6b3df5,#a06bff)">IM</div><div><div class="rev-name">Isabelle M.</div><div class="rev-city">Angers, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">J&apos;avais un devis à 3000€ ailleurs. Même résultat ici pour bien moins cher. Le site est parfait pour ma menuiserie.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#0f766e,#2dd4bf)">AX</div><div><div class="rev-name">Axel B.</div><div class="rev-city">Caen, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Superbe expérience. L&apos;équipe comprend vraiment les besoins des petites entreprises. Résultat professionnel et rapide.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#be185d,#f472b6)">KD</div><div><div class="rev-name">Kevin D.</div><div class="rev-city">Clermont-Ferrand, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">5 étoiles méritées. Mon fleuriste a maintenant une belle vitrine en ligne. Les gens viennent en disant &quot;j&apos;ai vu votre site&quot;.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#7c3aed,#c4b5fd)">AD</div><div><div class="rev-name">Amandine D.</div><div class="rev-city">Rouen, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Entrepreneur depuis 3 ans, j&apos;aurais dû faire ça bien plus tôt. Le site génère des contacts qualifiés chaque semaine.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#d97706,#fbbf24)">PG</div><div><div class="rev-name">Pierre-Yves G.</div><div class="rev-city">Mulhouse, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Rapide, propre, efficace. Mon site de boulangerie est en ligne depuis 3 semaines et j&apos;ai déjà de nouveaux clients grâce à Google.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#2563eb,#60a5fa)">SC</div><div><div class="rev-name">Sandra C.</div><div class="rev-city">Brest, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">J&apos;ai choisi Quattro Visual sur recommandation et c&apos;est la meilleure décision. Rien à redire, parfait de A à Z.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#9d174d,#f9a8d4)">FB</div><div><div class="rev-name">François B.</div><div class="rev-city">Perpignan, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">Couvreur indépendant, mon site m&apos;a permis de décrocher un chantier de 12 000€ le mois après la mise en ligne.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#1d4ed8,#93c5fd)">MR</div><div><div class="rev-name">Maxime R.</div><div class="rev-city">Orléans, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Livré dans les temps, design au goût du jour. L&apos;équipe a été patiente et a respecté ma vision jusqu&apos;au bout.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#0369a1,#38bdf8)">CT</div><div><div class="rev-name">Céline T.</div><div class="rev-city">Nancy, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Ils ont créé un logo que j&apos;adore et un site qui représente parfaitement mon activité de carreleur. Top !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#065f46,#34d399)">DH</div><div><div class="rev-name">David H.</div><div class="rev-city">Metz, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Je craignais que le résultat soit générique. Pas du tout, ils ont vraiment personnalisé le site à mon image. Bravo !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#9333ea,#d8b4fe)">MP</div><div><div class="rev-name">Morgane P.</div><div class="rev-city">Limoges, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">La qualité du code source fourni est impressionnante. J&apos;ai pu le confier à mon hébergeur sans aucun problème.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#b91c1c,#fca5a5)">TV</div><div><div class="rev-name">Thierry V.</div><div class="rev-city">Gand, Belgique</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Serrurier de père en fils, je voulais moderniser l&apos;image de la société. Le résultat est parfait, famille contente !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#0284c7,#7dd3fc)">LK</div><div><div class="rev-name">Leila K.</div><div class="rev-city">Toulon, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Quatre échanges suffisants pour que mon site soit parfaitement bien. Process efficace et équipe sympathique.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#78350f,#fcd34d)">NB</div><div><div class="rev-name">Nora B.</div><div class="rev-city">Charleroi, Belgique</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Mon site de plomberie est en ligne depuis 6 semaines. J&apos;ai reçu 11 nouveaux clients. L&apos;investissement vaut largement le coup.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#1e3a8a,#60a5fa)">PL</div><div><div class="rev-name">Patrick L.</div><div class="rev-city">Tours, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <!-- Duplicate for infinite loop -->
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Vraiment top. J&apos;ai reçu l&apos;appel dans les 40 minutes après ma demande. L&apos;équipe est à l&apos;écoute et efficace.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#6b3df5,#a06bff)">IM</div><div><div class="rev-name">Isabelle M.</div><div class="rev-city">Angers, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">J&apos;avais un devis à 3000€ ailleurs. Même résultat ici pour bien moins cher. Le site est parfait pour ma menuiserie.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#0f766e,#2dd4bf)">AX</div><div><div class="rev-name">Axel B.</div><div class="rev-city">Caen, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Superbe expérience. L&apos;équipe comprend vraiment les besoins des petites entreprises. Résultat professionnel et rapide.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#be185d,#f472b6)">KD</div><div><div class="rev-name">Kevin D.</div><div class="rev-city">Clermont-Ferrand, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">5 étoiles méritées. Mon fleuriste a maintenant une belle vitrine en ligne. Les gens viennent en disant &quot;j&apos;ai vu votre site&quot;.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#7c3aed,#c4b5fd)">AD</div><div><div class="rev-name">Amandine D.</div><div class="rev-city">Rouen, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Entrepreneur depuis 3 ans, j&apos;aurais dû faire ça bien plus tôt. Le site génère des contacts qualifiés chaque semaine.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#d97706,#fbbf24)">PG</div><div><div class="rev-name">Pierre-Yves G.</div><div class="rev-city">Mulhouse, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Rapide, propre, efficace. Mon site de boulangerie est en ligne depuis 3 semaines et j&apos;ai déjà de nouveaux clients grâce à Google.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#2563eb,#60a5fa)">SC</div><div><div class="rev-name">Sandra C.</div><div class="rev-city">Brest, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">J&apos;ai choisi Quattro Visual sur recommandation et c&apos;est la meilleure décision. Rien à redire, parfait de A à Z.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#9d174d,#f9a8d4)">FB</div><div><div class="rev-name">François B.</div><div class="rev-city">Perpignan, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">Couvreur indépendant, mon site m&apos;a permis de décrocher un chantier de 12 000€ le mois après la mise en ligne.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#1d4ed8,#93c5fd)">MR</div><div><div class="rev-name">Maxime R.</div><div class="rev-city">Orléans, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Livré dans les temps, design au goût du jour. L&apos;équipe a été patiente et a respecté ma vision jusqu&apos;au bout.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#0369a1,#38bdf8)">CT</div><div><div class="rev-name">Céline T.</div><div class="rev-city">Nancy, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Ils ont créé un logo que j&apos;adore et un site qui représente parfaitement mon activité de carreleur. Top !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#065f46,#34d399)">DH</div><div><div class="rev-name">David H.</div><div class="rev-city">Metz, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Je craignais que le résultat soit générique. Pas du tout, ils ont vraiment personnalisé le site à mon image. Bravo !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#9333ea,#d8b4fe)">MP</div><div><div class="rev-name">Morgane P.</div><div class="rev-city">Limoges, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">avr. 2026</span></div><p class="rev-text">La qualité du code source fourni est impressionnante. J&apos;ai pu le confier à mon hébergeur sans aucun problème.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#b91c1c,#fca5a5)">TV</div><div><div class="rev-name">Thierry V.</div><div class="rev-city">Gand, Belgique</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">mars 2026</span></div><p class="rev-text">Serrurier de père en fils, je voulais moderniser l&apos;image de la société. Le résultat est parfait, famille contente !</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#0284c7,#7dd3fc)">LK</div><div><div class="rev-name">Leila K.</div><div class="rev-city">Toulon, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">fév. 2026</span></div><p class="rev-text">Quatre échanges suffisants pour que mon site soit parfaitement bien. Process efficace et équipe sympathique.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#78350f,#fcd34d)">NB</div><div><div class="rev-name">Nora B.</div><div class="rev-city">Charleroi, Belgique</div></div><span class="rev-verified">Vérifié</span></div></div>
+      <div class="rev-card"><div class="rev-top"><span class="rev-stars">★★★★★</span><span class="rev-date">janv. 2026</span></div><p class="rev-text">Mon site de plomberie est en ligne depuis 6 semaines. J&apos;ai reçu 11 nouveaux clients. L&apos;investissement vaut largement le coup.</p><div class="rev-author"><div class="rev-avatar" style="background:linear-gradient(135deg,#1e3a8a,#60a5fa)">PL</div><div><div class="rev-name">Patrick L.</div><div class="rev-city">Tours, France</div></div><span class="rev-verified">Vérifié</span></div></div>
+    </div>
+
+  </div>
+  <div class="container">
+    <p class="reviews-summary">⭐⭐⭐⭐⭐ <strong>4.97 / 5</strong> — Plus de <strong>170 clients</strong> accompagnés en France et en Belgique</p>
   </div>
 </section>
 
@@ -1741,15 +1919,8 @@
   </div>
 </section>
 
-<!-- REVIEWS -->
-<section class="reviews-section">
-  <div class="container">
-    <div class="section-head reveal-left">
-      <span class="eyebrow">Avis clients</span>
-      <h2>Ce que disent <em>nos clients</em></h2>
-    </div>
-  </div>
-  <div class="reviews-marquee-wrap">
+<section class="reviews-section-dead" style="display:none">
+  <div style="display:none">
 
     <!-- ROW 1 (gauche) — 15 avis × 2 pour boucle infinie -->
     <div class="reviews-track reviews-track-1">
@@ -1984,6 +2155,21 @@
   </div>
 </footer>
 
+<!-- FLOATING WA -->
+<div id="wa-float">
+  <div class="wa-float-bubble" id="wa-bubble">
+    <button class="wa-bubble-close" id="wa-bubble-close" aria-label="Fermer">✕</button>
+    <span class="wa-bubble-label">Service client 7j/7</span>
+    <span class="wa-bubble-text">On vous répond dans l'heure</span>
+  </div>
+  <a href="https://wa.me/447365758255" target="_blank" rel="noopener" class="wa-float-btn" aria-label="Nous contacter sur WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.556 4.123 1.527 5.855L.057 23.882l6.19-1.624A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.644-.518-5.147-1.416l-.369-.219-3.823 1.003 1.022-3.73-.241-.384A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+    </svg>
+  </a>
+</div>
+
 <!-- STICKY CTA -->
 <div id="sticky-cta">
   <span class="sc-txt">Site clé en main<small>Livré en <span class="price-bold">5 jours</span> · Paiement unique</small></span>
@@ -2177,6 +2363,33 @@
       window.location.href = '/admin.html';
     }
   });
+
+  // ====== FLOATING WA BUBBLE ======
+  (function() {
+    var bubble = document.getElementById('wa-bubble');
+    var closeBtn = document.getElementById('wa-bubble-close');
+    var waFloat = document.getElementById('wa-float');
+    if (!bubble || !closeBtn || !waFloat) return;
+    var dismissed = false;
+    // Auto-hide after 5s
+    setTimeout(function() {
+      if (!dismissed) bubble.classList.add('hidden');
+    }, 5000);
+    // Close button
+    closeBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      dismissed = true;
+      bubble.classList.add('hidden');
+    });
+    // Reshow on hover (desktop)
+    waFloat.addEventListener('mouseenter', function() {
+      bubble.classList.remove('hidden');
+    });
+    waFloat.addEventListener('mouseleave', function() {
+      if (dismissed) bubble.classList.add('hidden');
+    });
+  })();
 </script>
 
 </body>
