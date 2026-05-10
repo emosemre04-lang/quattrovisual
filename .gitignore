@@ -1,0 +1,12 @@
+# Variables d'environnement — contiennent des secrets
+.env
+.env.local
+.env*.local
+.env.production
+
+# macOS
+.DS_Store
+
+# Editeurs
+.vscode/
+*.swp

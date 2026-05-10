@@ -1,23 +1,19 @@
 /**
  * Quattro Visual — Configuration Supabase
  * ────────────────────────────────────────
- * 1. Remplissez vos valeurs ci-dessous
- * 2. Ce fichier est inclus dans landing.html et admin.html
- * 3. NE PAS committer ce fichier avec de vraies clés en prod
- *    (ajoutez supabase-config.js dans .gitignore si besoin)
+ * Seules les cles publiques (anon/publishable) sont ici.
+ * Le token Telegram est retire — il est desormais cote serveur
+ * dans api/notify.js (variable d'environnement Vercel).
  */
 window.QV_CONFIG = {
 
-  // ── Supabase ──────────────────────────────────────────────
-  // Trouvez ces valeurs dans : Supabase → Settings → API
+  // ── Supabase (cles publiques, safe dans le navigateur) ────
   supabaseUrl: 'https://poyrteyprzjojwcqrujg.supabase.co',
   supabaseKey: 'sb_publishable_OwSc8mu_hzgzYNPbCUcS3w_lZycLvW6',
 
   // ── Notification email (Edge Function) ───────────────────
-  notifyEmail: 'emre@quattrovisual.com',
+  notifyEmail: 'emre@quattrovisual.com'
 
-  // ── Telegram ──────────────────────────────────────────────
-  telegramToken:  '8601325358:AAERcx7XKvCyQNdfyJmKK6eZD9-Os09uEuI',
-  telegramChatId: '8246701765'
+  // Telegram : plus de token ici — voir api/notify.js
 
 };
