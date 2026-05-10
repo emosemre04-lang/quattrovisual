@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
 <style>
 :root {
   --bg: #0d0b1a;
@@ -468,6 +470,134 @@ body {
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .toast.green { border-color: var(--green); color: var(--green); }
 
+/* ===== LEADS LANDING SECTION ===== */
+.ll-month-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+@media (max-width: 680px) { .ll-month-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* Filter tabs */
+.ll-filters {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.ll-filter {
+  font-size: 12px; font-weight: 600;
+  padding: 6px 14px; border-radius: 100px;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--ink-2);
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  white-space: nowrap;
+}
+.ll-filter:hover { background: var(--accent-soft); border-color: var(--border-strong); color: var(--accent-2); }
+.ll-filter.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* Lead card landing */
+.ll-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px 14px;
+  margin-bottom: 10px;
+  transition: border-color .2s;
+  position: relative;
+}
+.ll-card::before {
+  content: "";
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  border-radius: 3px 0 0 3px;
+  background: var(--ll-stripe, linear-gradient(180deg, var(--accent), var(--accent-2)));
+}
+.ll-card-top {
+  display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;
+}
+.ll-card-info { flex: 1; min-width: 0; }
+.ll-card-name { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+.ll-card-meta { font-size: 12px; color: var(--ink-2); }
+.ll-card-meta a { color: var(--accent-2); text-decoration: none; }
+.ll-card-meta a:hover { text-decoration: underline; }
+.ll-card-time { font-size: 11px; color: var(--ink-3); margin-top: 3px; }
+.ll-card-badges { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; flex-shrink: 0; }
+
+/* Status badges */
+.ll-status {
+  font-size: 11px; font-weight: 700; padding: 3px 10px;
+  border-radius: 100px; border: 1px solid; white-space: nowrap;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.ll-status.nouveau  { color: var(--accent-2);  background: var(--accent-soft);          border-color: rgba(124,77,255,.3); }
+.ll-status.appele   { color: #f5a623;           background: rgba(245,166,35,.12);        border-color: rgba(245,166,35,.3); }
+.ll-status.signe    { color: var(--green);       background: var(--green-soft);           border-color: rgba(34,215,124,.3); }
+.ll-status.refuse   { color: var(--ink-3);       background: rgba(255,255,255,.04);       border-color: var(--border); }
+
+/* Type badge */
+.ll-type {
+  font-size: 11px; font-weight: 600; padding: 3px 9px;
+  border-radius: 100px; white-space: nowrap;
+}
+.ll-type.vitrine   { background: rgba(107,61,245,.15); color: var(--accent-2); }
+.ll-type.boutique  { background: rgba(34,215,124,.12); color: var(--green); }
+.ll-type.surmesure { background: rgba(245,200,66,.12);  color: var(--gold); }
+
+/* Quiz data chips */
+.ll-quiz-row {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+}
+.ll-chip {
+  font-size: 11px; font-weight: 500;
+  background: var(--bg-card-2); color: var(--ink-2);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 3px 9px;
+  white-space: nowrap;
+}
+
+/* Action buttons */
+.ll-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.ll-action-btn {
+  font-size: 12px; font-weight: 600;
+  padding: 7px 13px; border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-card-2); color: var(--ink-2);
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s, transform .1s;
+}
+.ll-action-btn:active { transform: scale(.95); }
+.ll-action-btn.btn-appele:hover { background: rgba(245,166,35,.15); border-color: rgba(245,166,35,.5); color: #f5a623; }
+.ll-action-btn.btn-signe:hover  { background: var(--green-soft); border-color: rgba(34,215,124,.5); color: var(--green); }
+.ll-action-btn.btn-refuse:hover { background: var(--red-soft); border-color: var(--red); color: var(--red); }
+.ll-action-btn.active-appele { background: rgba(245,166,35,.15); border-color: #f5a623; color: #f5a623; }
+.ll-action-btn.active-signe  { background: var(--green-soft);    border-color: var(--green); color: var(--green); }
+.ll-action-btn.active-refuse { background: var(--red-soft);       border-color: var(--red);  color: var(--red); }
+
+/* Note interne */
+.ll-note {
+  width: 100%;
+  background: var(--bg-card-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--ink-2);
+  font-size: 12px; font-family: inherit;
+  padding: 8px 12px;
+  resize: vertical; min-height: 38px;
+  outline: none;
+  transition: border-color .15s, color .15s;
+}
+.ll-note:focus { border-color: var(--accent); color: var(--ink); }
+.ll-note::placeholder { color: var(--ink-3); }
+
+/* Supabase status banner */
+.sb-status-banner {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; border-radius: 12px; margin-bottom: 20px;
+  font-size: 13px; font-weight: 500;
+}
+.sb-status-banner.ok    { background: var(--green-soft); border: 1px solid rgba(34,215,124,.3); color: var(--green); }
+.sb-status-banner.error { background: var(--red-soft);   border: 1px solid rgba(255,79,106,.3); color: var(--red); }
+.sb-status-banner.warn  { background: var(--gold-soft);  border: 1px solid rgba(245,200,66,.3); color: var(--gold); }
+
 /* Transition overlay */
 .success-overlay {
   position: fixed; inset: 0; z-index: 50;
@@ -665,6 +795,62 @@ body {
       <div class="leads-empty-state">
         <div class="leads-empty-icon">📭</div>
         <div class="leads-empty-txt">Aucun formulaire reçu pour l'instant.</div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ===== LEADS LANDING (Supabase) ===== -->
+    <div id="ll-banner"></div>
+
+    <!-- Compteurs mensuels -->
+    <div class="ll-month-grid" id="ll-month-grid">
+      <div class="stat-card" style="--card-accent:linear-gradient(90deg,#7c4dff,#b07aff);--icon-bg:rgba(124,77,255,.14)">
+        <div class="stat-icon">📥</div>
+        <div class="stat-label">Leads ce mois</div>
+        <div class="stat-value" id="ll-stat-total">—</div>
+        <div class="stat-sub">depuis le 1er</div>
+      </div>
+      <div class="stat-card" style="--card-accent:linear-gradient(90deg,#b07aff,#d0a0ff);--icon-bg:rgba(176,122,255,.12)">
+        <div class="stat-icon">🆕</div>
+        <div class="stat-label">Nouveaux</div>
+        <div class="stat-value" id="ll-stat-new">—</div>
+        <div class="stat-sub">à appeler</div>
+      </div>
+      <div class="stat-card" style="--card-accent:linear-gradient(90deg,#22d77c,#4dffa3);--icon-bg:rgba(34,215,124,.12)">
+        <div class="stat-icon">✅</div>
+        <div class="stat-label">Signés</div>
+        <div class="stat-value" id="ll-stat-signe">—</div>
+        <div class="stat-sub">ce mois</div>
+      </div>
+      <div class="stat-card" style="--card-accent:linear-gradient(90deg,#f5c842,#ffdf6e);--icon-bg:rgba(245,200,66,.12)">
+        <div class="stat-icon">💰</div>
+        <div class="stat-label">CA généré</div>
+        <div class="stat-value" id="ll-stat-ca">—</div>
+        <div class="stat-sub">signés × prix</div>
+      </div>
+    </div>
+
+    <!-- Header + filtres -->
+    <div class="leads-section-head">
+      <div>
+        <span class="leads-title">Leads Landing</span>
+        <span class="leads-count-badge" id="ll-badge">—</span>
+      </div>
+      <div class="ll-filters" id="ll-filters">
+        <button class="ll-filter active" data-f="tous">Tous</button>
+        <button class="ll-filter" data-f="nouveau">Nouveaux</button>
+        <button class="ll-filter" data-f="appele">Appelés</button>
+        <button class="ll-filter" data-f="signe">Signés</button>
+        <button class="ll-filter" data-f="refuse">Refusés</button>
+      </div>
+    </div>
+
+    <!-- Liste leads -->
+    <div id="ll-container">
+      <div class="leads-empty-state">
+        <div class="leads-empty-icon">🔌</div>
+        <div class="leads-empty-txt">Configuration Supabase requise.<br>Remplissez supabase-config.js avec vos credentials.</div>
       </div>
     </div>
 
@@ -969,6 +1155,231 @@ function showToast(msg, green = false) {
   clearTimeout(t._timer);
   t._timer = setTimeout(() => { t.classList.remove('show'); }, 2800);
 }
+
+// ===== SUPABASE INIT =====
+let _sb = null;
+let _llFilter = 'tous';
+let _llLeads  = [];
+
+(function() {
+  const cfg = window.QV_CONFIG;
+  if (!cfg || !cfg.supabaseUrl || cfg.supabaseUrl.includes('VOTRE')) {
+    setBanner('warn', '⚠️ Supabase non configuré — remplissez supabase-config.js pour activer les Leads Landing.');
+    return;
+  }
+  try {
+    _sb = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey);
+    setBanner('ok', '✅ Supabase connecté — les leads du funnel quiz apparaissent ci-dessous.');
+  } catch(e) {
+    setBanner('error', '❌ Erreur Supabase : ' + e.message);
+  }
+})();
+
+function setBanner(type, msg) {
+  const el = document.getElementById('ll-banner');
+  if (!el) return;
+  el.innerHTML = '<div class="sb-status-banner ' + type + '">' + msg + '</div>';
+}
+
+// ===== LOAD LANDING LEADS =====
+async function loadLandingLeads() {
+  if (!_sb) return;
+  try {
+    // Leads de ce mois (pour les stats)
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+    const { data: monthly, error: err1 } = await _sb
+      .from('quattrovisual_landing_leads')
+      .select('statut, type_site')
+      .gte('created_at', startOfMonth);
+    if (!err1 && monthly) updateLLStats(monthly);
+
+    // Tous les leads (pour la liste)
+    const { data: all, error: err2 } = await _sb
+      .from('quattrovisual_landing_leads')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (err2) { console.warn('Supabase fetch error', err2); return; }
+    _llLeads = all || [];
+    document.getElementById('ll-badge').textContent = _llLeads.length;
+    renderLLLeads();
+  } catch(e) {
+    console.warn('loadLandingLeads error', e);
+  }
+}
+
+function updateLLStats(monthly) {
+  const total  = monthly.length;
+  const newL   = monthly.filter(r => r.statut === 'nouveau').length;
+  const signed = monthly.filter(r => r.statut === 'signe');
+  const ca     = signed.reduce((sum, r) => {
+    if (r.type_site === 'Vitrine')  return sum + 490;
+    if (r.type_site === 'Boutique') return sum + 790;
+    return sum;
+  }, 0);
+  document.getElementById('ll-stat-total').textContent = total;
+  document.getElementById('ll-stat-new').textContent   = newL;
+  document.getElementById('ll-stat-signe').textContent = signed.length;
+  document.getElementById('ll-stat-ca').textContent    = ca.toLocaleString('fr-FR') + '\u20ac';
+}
+
+function renderLLLeads() {
+  const container = document.getElementById('ll-container');
+  if (!container) return;
+  const filtered = _llFilter === 'tous' ? _llLeads : _llLeads.filter(l => l.statut === _llFilter);
+  if (!filtered.length) {
+    container.innerHTML = '<div class="leads-empty-state"><div class="leads-empty-icon">📭</div><div class="leads-empty-txt">Aucun lead' + (_llFilter !== 'tous' ? ' avec ce statut' : '') + '.</div></div>';
+    return;
+  }
+  container.innerHTML = '';
+  filtered.forEach(lead => {
+    const card = buildLLCard(lead);
+    container.appendChild(card);
+  });
+}
+
+function buildLLCard(lead) {
+  const initial  = (lead.prenom || '?').charAt(0).toUpperCase();
+  const time     = getRelativeTime(lead.created_at);
+  const typeMap  = { 'Vitrine': { label: 'Vitrine 490\u20ac', cls: 'vitrine' }, 'Boutique': { label: 'Boutique 790\u20ac', cls: 'boutique' }, 'Sur-mesure': { label: 'Sur-mesure', cls: 'surmesure' } };
+  const typeDef  = typeMap[lead.type_site] || { label: lead.type_site || '-', cls: 'vitrine' };
+  const statLabels = { nouveau: 'Nouveau', appele: 'Appel\u00e9', signe: 'Sign\u00e9', refuse: 'Refus\u00e9' };
+  const statLabel  = statLabels[lead.statut] || lead.statut;
+  const stripeMap  = { nouveau: 'linear-gradient(180deg,#7c4dff,#b07aff)', appele: 'linear-gradient(180deg,#f5a623,#ffd080)', signe: 'linear-gradient(180deg,#22d77c,#4dffa3)', refuse: 'linear-gradient(180deg,#555,#888)' };
+
+  const card = document.createElement('div');
+  card.className = 'll-card';
+  card.dataset.id = lead.id;
+  card.style.setProperty('--ll-stripe', stripeMap[lead.statut] || stripeMap.nouveau);
+
+  card.innerHTML = `
+    <div class="ll-card-top">
+      <div class="lead-avatar">${initial}</div>
+      <div class="ll-card-info">
+        <div class="ll-card-name">${esc(lead.prenom)} &mdash; ${esc(lead.nom_entreprise)}</div>
+        <div class="ll-card-meta">
+          <a href="tel:${esc(lead.telephone)}">${esc(lead.telephone)}</a>
+          &nbsp;&middot;&nbsp;${esc(lead.ville)}
+        </div>
+        <div class="ll-card-time">${time}</div>
+      </div>
+      <div class="ll-card-badges">
+        <span class="ll-status ${lead.statut}">${statLabel}</span>
+        <span class="ll-type ${typeDef.cls}">${typeDef.label}</span>
+      </div>
+    </div>
+    <div class="ll-quiz-row">
+      ${lead.metier          ? '<span class="ll-chip">\uD83D\uDD27 ' + esc(lead.metier) + '</span>' : ''}
+      ${lead.presence_google ? '<span class="ll-chip">Google : ' + esc(lead.presence_google) + '</span>' : ''}
+      ${lead.desir_principal ? '<span class="ll-chip">\uD83C\uDFAF ' + esc(lead.desir_principal) + '</span>' : ''}
+    </div>
+    <div class="ll-actions">
+      <button class="ll-action-btn btn-appele ${lead.statut === 'appele' ? 'active-appele' : ''}"
+        onclick="markLLStatus('${lead.id}','appele',this.closest('.ll-card'))">
+        \u260E\uFE0F Marquer appel\u00e9
+      </button>
+      <button class="ll-action-btn btn-signe ${lead.statut === 'signe' ? 'active-signe' : ''}"
+        onclick="markLLStatus('${lead.id}','signe',this.closest('.ll-card'))">
+        \u2705 Sign\u00e9 + pay\u00e9
+      </button>
+      <button class="ll-action-btn btn-refuse ${lead.statut === 'refuse' ? 'active-refuse' : ''}"
+        onclick="markLLStatus('${lead.id}','refuse',this.closest('.ll-card'))">
+        \uD83D\uDEAB Refus\u00e9
+      </button>
+    </div>
+    <textarea class="ll-note" placeholder="Note interne apr\u00e8s l\u2019appel..."
+      onblur="saveLLNote('${lead.id}',this.value)">${esc(lead.note_interne || '')}</textarea>`;
+
+  return card;
+}
+
+// ===== UPDATE STATUS =====
+async function markLLStatus(id, statut, cardEl) {
+  if (!_sb) return;
+  const updates = { statut };
+  if (statut === 'appele')  updates.date_appel     = new Date().toISOString();
+  if (statut === 'signe')   updates.date_paiement  = new Date().toISOString();
+
+  const { error } = await _sb.from('quattrovisual_landing_leads').update(updates).eq('id', id);
+  if (error) { showToast('Erreur mise \u00e0 jour'); console.warn(error); return; }
+
+  // Update in memory
+  const idx = _llLeads.findIndex(l => l.id === id);
+  if (idx !== -1) Object.assign(_llLeads[idx], updates);
+
+  // Refresh card stripe + badges without full re-render
+  const stripeMap = { nouveau: 'linear-gradient(180deg,#7c4dff,#b07aff)', appele: 'linear-gradient(180deg,#f5a623,#ffd080)', signe: 'linear-gradient(180deg,#22d77c,#4dffa3)', refuse: 'linear-gradient(180deg,#555,#888)' };
+  const statLabels = { nouveau: 'Nouveau', appele: 'Appel\u00e9', signe: 'Sign\u00e9', refuse: 'Refus\u00e9' };
+  if (cardEl) {
+    cardEl.style.setProperty('--ll-stripe', stripeMap[statut] || stripeMap.nouveau);
+    const badge = cardEl.querySelector('.ll-status');
+    if (badge) { badge.className = 'll-status ' + statut; badge.textContent = statLabels[statut] || statut; }
+    cardEl.querySelectorAll('.ll-action-btn').forEach(btn => {
+      btn.classList.remove('active-appele','active-signe','active-refuse');
+    });
+    const activeBtn = cardEl.querySelector('.btn-' + statut);
+    if (activeBtn) activeBtn.classList.add('active-' + statut);
+  }
+
+  // Re-render stats
+  updateLLStats(_llLeads);
+  const labelMap = { appele: 'appel\u00e9', signe: 'sign\u00e9', refuse: 'refus\u00e9' };
+  showToast('Lead marqu\u00e9 ' + (labelMap[statut] || statut) + ' \u2713', statut === 'signe');
+
+  // If filter active, refresh list
+  if (_llFilter !== 'tous') renderLLLeads();
+}
+
+// ===== SAVE NOTE =====
+async function saveLLNote(id, note) {
+  if (!_sb) return;
+  const { error } = await _sb.from('quattrovisual_landing_leads').update({ note_interne: note }).eq('id', id);
+  if (!error) {
+    const idx = _llLeads.findIndex(l => l.id === id);
+    if (idx !== -1) _llLeads[idx].note_interne = note;
+  }
+}
+
+// ===== FILTERS =====
+document.getElementById('ll-filters').addEventListener('click', e => {
+  const btn = e.target.closest('.ll-filter');
+  if (!btn) return;
+  document.querySelectorAll('.ll-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  _llFilter = btn.dataset.f;
+  renderLLLeads();
+});
+
+// ===== HELPERS =====
+function getRelativeTime(ts) {
+  if (!ts) return '';
+  const diff  = Date.now() - new Date(ts).getTime();
+  const mins  = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days  = Math.floor(diff / 86400000);
+  if (mins  <  2) return '\u00e0 l\u2019instant';
+  if (mins  < 60) return 'il y a ' + mins + '\u00a0min';
+  if (hours < 24) return 'il y a ' + hours + '\u00a0h';
+  if (days  === 1) return 'hier';
+  if (days  <  7)  return 'il y a ' + days + '\u00a0jours';
+  return new Date(ts).toLocaleDateString('fr-FR');
+}
+
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Appeler loadLandingLeads quand le dashboard s'ouvre
+const _origShowDash = showDashboard;
+showDashboard = function() {
+  _origShowDash();
+};
+// Patch loadDashboard to also load Supabase leads
+const _origLoad = loadDashboard;
+loadDashboard = function() {
+  _origLoad();
+  loadLandingLeads();
+};
 </script>
 </body>
 </html>

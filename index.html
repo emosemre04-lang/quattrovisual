@@ -1712,14 +1712,21 @@
     const SPEED = 0.48;
 
     function step() {
-      const max = inner.offsetWidth - track.offsetWidth;
+      // scrollWidth = total content width (including overflow) — offsetWidth only gives visible box
+      const max = inner.scrollWidth - track.offsetWidth;
       if (max <= 0) { requestAnimationFrame(step); return; }
       pos += SPEED;
       if (pos >= max) pos = 0;
       inner.style.transform = `translate3d(-${pos}px, 0, 0)`;
       requestAnimationFrame(step);
     }
-    requestAnimationFrame(step);
+
+    // Wait for images to load so scrollWidth is accurate
+    if (document.readyState === 'complete') {
+      requestAnimationFrame(step);
+    } else {
+      window.addEventListener('load', function() { requestAnimationFrame(step); });
+    }
   })();
 
   // ====== HEADER SCROLL SHRINK ======

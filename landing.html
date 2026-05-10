@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@400;500;600;700;800&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -331,6 +333,18 @@ body {
   font-size: 15px; color: var(--text-2);
   line-height: 1.65; text-align: center; margin-bottom: 28px;
 }
+.confirm-promise-card {
+  background: #F5F3FF;
+  border: 1.5px solid #C4B5FD;
+  border-radius: var(--r);
+  padding: 22px 24px;
+  margin-bottom: 24px;
+  font-size: clamp(16px, 4vw, 19px);
+  font-weight: 500;
+  color: #1a1a2e;
+  line-height: 1.65;
+  text-align: center;
+}
 .confirm-card {
   background: #fff; border: 1px solid var(--border);
   border-radius: var(--r);
@@ -394,7 +408,16 @@ body {
 
 <script>
 // TODO: Meta Pixel — fbq('init','PIXEL_ID'); fbq('track','PageView');
-// TODO: Supabase  — const sb = window.supabase.createClient(URL, KEY);
+
+/* ── Supabase init ── */
+let _sb = null;
+(function() {
+  const cfg = window.QV_CONFIG;
+  if (!cfg || !cfg.supabaseUrl || cfg.supabaseUrl.includes(`VOTRE`)) return;
+  try {
+    _sb = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey);
+  } catch(e) { console.warn(`Supabase init error`, e); }
+})();
 
 /* ═══════════════════════════════════════
    STATE
@@ -619,7 +642,7 @@ function screenRecap() {
     [`Google`,          a.presenceGoogle  || `\u2014`],
     [`Objectif`,        a.desirPrincipal  || `\u2014`]
   ];
-  const btnTxt = a.typeSite === `Sur-mesure` ? `Discuter de mon projet` : `Voir ma proposition`;
+  const btnTxt = a.typeSite === `Sur-mesure` ? `Discuter de mon projet` : `Rappelez-moi sous 1h`;
   return `
   <p class="q-label">\u2728 Votre profil</p>
   <h2 class="q-title">Votre projet est <span style="color:var(--accent)">r\u00e9alisable</span></h2>
@@ -631,15 +654,15 @@ function screenRecap() {
     ${rows.map(([l,v]) => `<div class="recap-row"><span class="recap-label">${l}</span><span class="recap-val">${esc(v)}</span></div>`).join(``)}
   </div>
   <button class="btn-primary" onclick="goTo(7)">${btnTxt} ${ARROW}</button>
-  <p class="note-sm">Sans engagement\u00a0\u2014 100\u00a0% gratuit</p>`;
+  <p class="note-sm">Sans engagement\u00a0\u2014 Pas de carte bancaire demand\u00e9e</p>`;
 }
 
 /* ── 7. FORMULAIRE ── */
 function screenForm() {
   const isCus = state.fromSurMesure;
   const btnTxt = isCus ? `Recevoir mon devis` :
-                 state.a.typeSite === `Boutique` ? `Lancer ma boutique \u2014 790\u20ac` :
-                 `Lancer mon site \u2014 490\u20ac`;
+                 state.a.typeSite === `Boutique` ? `D\u00e9marrer ma boutique aujourd\u2019hui \u2014 790\u20ac` :
+                 `D\u00e9marrer mon site aujourd\u2019hui \u2014 490\u20ac`;
   const badges = isCus
     ? [`\uD83D\uDCDE R\u00e9ponse sous 1h`, `\uD83D\uDCCB Devis gratuit`, `\u2705 Sans engagement`]
     : [`\u23f1\ufe0f Livr\u00e9 en 5\u00a0jours`, `\u2705 Sans abonnement`, `\uD83D\uDCAC Service 7j/7`, `\uD83C\uDF81 Logo + flyers offerts`];
@@ -695,6 +718,10 @@ function screenConfirm() {
     </div>
     <h2 class="confirm-title">C\u2019est bien not\u00e9\u00a0${name}\u00a0!</h2>
     <p class="confirm-sub">Emre, le chef de projet de notre \u00e9quipe, va vous contacter dans l\u2019heure pour finaliser votre site.</p>
+  </div>
+
+  <div class="confirm-promise-card">
+    On vous appelle dans l\u2019heure pour valider votre projet, vous envoyer la facture et lancer la production de votre site sous 5\u00a0jours.
   </div>
 
   <div class="confirm-card">
@@ -789,19 +816,81 @@ function submitForm(e) {
   });
   if (!valid) return;
 
+  const lead = Object.assign({}, state.a, {
+    date: new Date().toLocaleDateString(`fr-FR`),
+    timestamp: Date.now()
+  });
+
+  /* ── localStorage fallback (admin legacy) ── */
   try {
     const arr = JSON.parse(localStorage.getItem(`qv_leads`) || `[]`);
-    arr.unshift(Object.assign({}, state.a, {
-      date: new Date().toLocaleDateString(`fr-FR`),
-      timestamp: Date.now()
-    }));
+    arr.unshift(lead);
     localStorage.setItem(`qv_leads`, JSON.stringify(arr));
   } catch(_) {}
 
-  // TODO: Supabase — await sb.from('leads').insert(lead);
+  /* ── Supabase INSERT (async, non-bloquant) ── */
+  (async () => {
+    if (!_sb) return;
+    const row = {
+      prenom:          state.a.prenom,
+      nom_entreprise:  state.a.nomEntreprise,
+      ville:           state.a.ville,
+      telephone:       state.a.telephone,
+      type_site:       state.a.typeSite,
+      metier:          state.a.metier,
+      presence_google: state.a.presenceGoogle,
+      desir_principal: state.a.desirPrincipal,
+      statut:          `nouveau`
+    };
+    const { data, error } = await _sb.from(`quattrovisual_landing_leads`).insert([row]).select().single();
+    if (error) { console.warn(`Supabase insert error`, error); return; }
+    /* ── Notification email via Edge Function ── */
+    try {
+      const cfg = window.QV_CONFIG;
+      if (cfg && cfg.supabaseUrl && !cfg.supabaseUrl.includes(`VOTRE`)) {
+        await _sb.functions.invoke(`notify-lead`, { body: data });
+      }
+    } catch(e) { console.warn(`Email notify error`, e); }
+  })();
+
   // TODO: Meta Pixel — fbq('track','Lead',{value: state.a.typeSite === 'Boutique' ? 790 : 490, currency:'EUR'});
 
+  /* ── Telegram notification (async, non-bloquant) ── */
+  sendTelegramNotif(state.a);
+
   goTo(8);
+}
+
+/* ═══════════════════════════════════════
+   TELEGRAM NOTIFICATION
+═══════════════════════════════════════ */
+function sendTelegramNotif(a) {
+  const cfg = window.QV_CONFIG;
+  if (!cfg || !cfg.telegramToken) return;
+
+  const prix = a.typeSite === `Boutique`   ? `790\u20ac` :
+               a.typeSite === `Sur-mesure` ? `sur devis` : `490\u20ac`;
+
+  const msg =
+    `\uD83D\uDD25 NOUVEAU LEAD QUATTRO VISUAL\n\n` +
+    `\uD83D\uDC64 ${a.prenom} \u2014 ${a.nomEntreprise}\n` +
+    `\uD83D\uDCCD ${a.ville}\n` +
+    `\uD83D\uDCDE ${a.telephone}\n\n` +
+    `\uD83D\uDCBC Type : ${a.typeSite} \u2014 ${prix}\n` +
+    `\uD83D\uDEE0 M\u00e9tier : ${a.metier}\n` +
+    `\uD83D\uDD0D Google : ${a.presenceGoogle}\n` +
+    `\uD83C\uDFAF D\u00e9sir : ${a.desirPrincipal}\n\n` +
+    `\u23F0 Re\u00e7u \u00e0 l\u2019instant \u2014 Rappeler dans l\u2019heure`;
+
+  fetch(`https://api.telegram.org/bot${cfg.telegramToken}/sendMessage`, {
+    method: `POST`,
+    headers: { [`Content-Type`]: `application/json` },
+    body: JSON.stringify({
+      chat_id: cfg.telegramChatId,
+      text: msg,
+      parse_mode: `HTML`
+    })
+  }).catch(err => console.error(`Telegram notif failed:`, err));
 }
 
 /* ═══════════════════════════════════════
