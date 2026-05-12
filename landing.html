@@ -865,7 +865,10 @@ function sendCAPI(event_name, user_data, custom_data, event_id) {
       custom_data,
       event_id
     })
-  }).catch(err => console.warn(`[CAPI] ${event_name} error:`, err));
+  })
+  .then(r => r.json())
+  .then(d => console.log(`[CAPI] ${event_name} envoyé — event_id: ${event_id}`, d))
+  .catch(err => console.warn(`[CAPI] ${event_name} error:`, err));
 }
 
 /* ── Meta Pixel — ViewContent sur le formulaire (step 7) ── */
@@ -980,13 +983,7 @@ async function submitForm(e) {
       if (errDiv) { errDiv.textContent = `Erreur : ${error.message || JSON.stringify(error)}`; errDiv.classList.add(`show`); }
       return; /* Ne pas aller à l'écran de confirmation si l'INSERT échoue */
     }
-    /* ── Notification email via Edge Function ── */
-    try {
-      const cfg = window.QV_CONFIG;
-      if (cfg && cfg.supabaseUrl && !cfg.supabaseUrl.includes(`VOTRE`)) {
-        await _sb.functions.invoke(`notify-lead`, { body: data });
-      }
-    } catch(e) { console.warn(`Email notify error`, e); }
+    /* notify-lead Edge Function supprimée — Telegram gère les notifications via /api/notify */
   } else {
     console.warn(`[QV] Supabase non initialisé — lead non sauvegardé en base.`);
   }
