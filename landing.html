@@ -784,6 +784,7 @@ function screenForm() {
         <div class="field-error" id="err-tel">Num\u00e9ro invalide (7\u00a0chiffres minimum).</div>
       </div>
     </div>
+    <div class="field-error" id="err-submit" style="margin-bottom:10px;font-size:13px;"></div>
     <button type="submit" class="btn-primary">${btnTxt} ${ARROW}</button>
   </form>
   <div class="form-badges">
@@ -901,7 +902,7 @@ function continueMetier() {
   goTo(4);
 }
 
-function submitForm(e) {
+async function submitForm(e) {
   e.preventDefault();
   const fields = [
     {id:`f-prenom`,    key:`prenom`,       errId:`err-prenom`,    ok: v => v.length >= 2},
@@ -923,21 +924,19 @@ function submitForm(e) {
   });
   if (!valid) return;
 
-  const lead = Object.assign({}, state.a, {
-    date: new Date().toLocaleDateString(`fr-FR`),
-    timestamp: Date.now()
-  });
+  /* ── Bouton en état chargement ── */
+  const submitBtn = document.querySelector(`#lead-form button[type="submit"]`);
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = `Envoi en cours\u2026`; }
 
-  /* ── localStorage fallback (admin legacy) ── */
+  /* ── localStorage fallback ── */
   try {
     const arr = JSON.parse(localStorage.getItem(`qv_leads`) || `[]`);
-    arr.unshift(lead);
+    arr.unshift(Object.assign({}, state.a, { date: new Date().toLocaleDateString(`fr-FR`) }));
     localStorage.setItem(`qv_leads`, JSON.stringify(arr));
   } catch(_) {}
 
-  /* ── Supabase INSERT (async, non-bloquant) ── */
-  (async () => {
-    if (!_sb) return;
+  /* ── Supabase INSERT ── */
+  if (_sb) {
     const row = {
       prenom:          state.a.prenom,
       nom_entreprise:  state.a.nomEntreprise,
@@ -945,12 +944,19 @@ function submitForm(e) {
       telephone:       state.a.telephone,
       type_site:       state.a.typeSite,
       metier:          state.a.metier,
-      timing:          state.a.timing,
+      presence_google: state.a.timing,
       desir_principal: state.a.desirPrincipal,
       statut:          `nouveau`
     };
     const { data, error } = await _sb.from(`quattrovisual_landing_leads`).insert([row]).select().single();
-    if (error) { console.warn(`Supabase insert error`, error); return; }
+    if (error) {
+      console.error(`[QV] Supabase insert error:`, error);
+      /* Ré-activer le bouton et afficher l'erreur visible */
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = `Réessayer`; }
+      const errDiv = document.getElementById(`err-submit`);
+      if (errDiv) { errDiv.textContent = `Erreur : ${error.message || JSON.stringify(error)}`; errDiv.classList.add(`show`); }
+      return; /* Ne pas aller à l'écran de confirmation si l'INSERT échoue */
+    }
     /* ── Notification email via Edge Function ── */
     try {
       const cfg = window.QV_CONFIG;
@@ -958,15 +964,17 @@ function submitForm(e) {
         await _sb.functions.invoke(`notify-lead`, { body: data });
       }
     } catch(e) { console.warn(`Email notify error`, e); }
-  })();
+  } else {
+    console.warn(`[QV] Supabase non initialisé — lead non sauvegardé en base.`);
+  }
 
   /* ── Meta Pixel — Lead avec advanced matching ── */
-  if (typeof fbq === 'function') {
-    const ph = (state.a.telephone || '').replace(/\D/g, '');
-    fbq('init', '821989530976997', { fn: state.a.prenom, ph: ph });
-    fbq('track', 'Lead', {
-      value:    state.a.typeSite === 'Boutique' ? 790 : state.a.typeSite === 'Sur-mesure' ? 0 : 490,
-      currency: 'EUR'
+  if (typeof fbq === `function`) {
+    const ph = (state.a.telephone || ``).replace(/\D/g, ``);
+    fbq(`init`, `821989530976997`, { fn: state.a.prenom, ph: ph });
+    fbq(`track`, `Lead`, {
+      value:    state.a.typeSite === `Boutique` ? 790 : state.a.typeSite === `Sur-mesure` ? 0 : 490,
+      currency: `EUR`
     });
   }
 
