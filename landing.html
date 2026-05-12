@@ -436,6 +436,23 @@ body {
   .recap-label { min-width: 100px; }
 }
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '821989530976997');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=821989530976997&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 
@@ -460,7 +477,7 @@ body {
 </main>
 
 <script>
-// TODO: Meta Pixel — fbq('init','PIXEL_ID'); fbq('track','PageView');
+// Meta Pixel chargé dans le <head>
 
 /* ── Supabase init ── */
 let _sb = null;
@@ -559,7 +576,6 @@ function optCard(icon, title, desc, field, val, next) {
 /* ── Answer + route ── */
 function pick(field, val, next) {
   state.a[field] = val;
-  // TODO: Meta Pixel — fbq('trackCustom','QuizAnswer',{field,val});
   if (field === `typeSite` && val === `Sur-mesure`) {
     state.fromSurMesure = true;
     goTo(7); /* form direct */
@@ -927,7 +943,15 @@ function submitForm(e) {
     } catch(e) { console.warn(`Email notify error`, e); }
   })();
 
-  // TODO: Meta Pixel — fbq('track','Lead',{value: state.a.typeSite === 'Boutique' ? 790 : 490, currency:'EUR'});
+  /* ── Meta Pixel — Lead avec advanced matching ── */
+  if (typeof fbq === 'function') {
+    const ph = (state.a.telephone || '').replace(/\D/g, '');
+    fbq('init', '821989530976997', { fn: state.a.prenom, ph: ph });
+    fbq('track', 'Lead', {
+      value:    state.a.typeSite === 'Boutique' ? 790 : state.a.typeSite === 'Sur-mesure' ? 0 : 490,
+      currency: 'EUR'
+    });
+  }
 
   /* ── Telegram notification (async, non-bloquant) ── */
   sendTelegramNotif(state.a);
