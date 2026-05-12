@@ -483,7 +483,7 @@ const state = {
   a: {
     typeSite:       ``,
     metier:         ``,
-    presenceGoogle: ``,
+    timing: ``,
     desirPrincipal: ``,
     prenom:         ``,
     nomEntreprise:  ``,
@@ -677,16 +677,16 @@ function screenQ2() {
   <button class="btn-primary" onclick="continueMetier()">Continuer ${ARROW}</button>`;
 }
 
-/* ── 4. Q3 PRÉSENCE GOOGLE ── */
+/* ── 4. Q3 TIMING ── */
 function screenQ3() {
   return `
   <p class="q-label">Question 3 sur 4</p>
-  <h2 class="q-title">\u00cates-vous pr\u00e9sent sur Google\u00a0?</h2>
-  <p class="q-sub">Fiche Google, site existant, r\u00e9seaux sociaux\u2026</p>
+  <h2 class="q-title">Votre projet, c\u2019est pour quand\u00a0?</h2>
+  <p class="q-sub"></p>
   <div class="options-grid">
-    ${optCard(`\u2705`,`Oui`,`J\u2019ai d\u00e9j\u00e0 un site ou une fiche Google`,`presenceGoogle`,`Oui`,5)}
-    ${optCard(`\u274C`,`Non`,`Je n\u2019ai aucune pr\u00e9sence en ligne`,`presenceGoogle`,`Non`,5)}
-    ${optCard(`\uD83E\uDD37`,`Je ne sais pas`,`Je ne suis pas s\u00fbr(e)`,`presenceGoogle`,`Je ne sais pas`,5)}
+    ${optCard(`\uD83D\uDE80`,`D\u00e8s que possible`,`Je veux avancer rapidement`,`timing`,`D\u00e8s que possible`,5)}
+    ${optCard(`\uD83D\uDCC5`,`Ce mois-ci`,`Je pr\u00e9vois de lancer dans les prochaines semaines`,`timing`,`Ce mois-ci`,5)}
+    ${optCard(`\uD83D\uDD0D`,`Je me renseigne`,`Je compare les options avant de d\u00e9cider`,`timing`,`Je me renseigne`,5)}
   </div>`;
 }
 
@@ -713,7 +713,7 @@ function screenRecap() {
   const rows = [
     [`Type de site`,    typeLabel],
     [`M\u00e9tier`,     a.metier          || `\u2014`],
-    [`Google`,          a.presenceGoogle  || `\u2014`],
+    [`Projet`,          a.timing          || `\u2014`],
     [`Objectif`,        a.desirPrincipal  || `\u2014`]
   ];
   const btnTxt = a.typeSite === `Sur-mesure` ? `Discuter de mon projet` : `Rappelez-moi sous 1h`;
@@ -912,7 +912,7 @@ function submitForm(e) {
       telephone:       state.a.telephone,
       type_site:       state.a.typeSite,
       metier:          state.a.metier,
-      presence_google: state.a.presenceGoogle,
+      timing:          state.a.timing,
       desir_principal: state.a.desirPrincipal,
       statut:          `nouveau`
     };
@@ -950,7 +950,7 @@ function sendTelegramNotif(a) {
       telephone:      a.telephone,
       typeSite:       a.typeSite,
       metier:         a.metier,
-      presenceGoogle: a.presenceGoogle,
+      timing:         a.timing,
       desirPrincipal: a.desirPrincipal
     })
   }).catch(function(err) { console.error(`Notif failed:`, err); });
