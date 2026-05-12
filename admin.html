@@ -1353,16 +1353,22 @@ async function confirmPurchase(prenom, telephone, montant, btn) {
   btn.disabled = true;
   btn.textContent = 'Envoi en cours...';
   try {
-    const res = await fetch('/api/meta-purchase', {
+    const res = await fetch('/api/meta-event', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ prenom, telephone, montant })
+      body:    JSON.stringify({
+        event_name:       'Purchase',
+        event_source_url: window.location.origin + '/admin',
+        user_data:        { fn: prenom, ph: telephone },
+        custom_data:      { value: Number(montant), currency: 'EUR' }
+      })
     });
     const data = await res.json();
     if (data.ok) {
       btn.textContent = '\u2705 Paiement confirm\u00e9 \u2014 \u00e9v\u00e9nement envoy\u00e9 \u00e0 Meta';
       btn.classList.add('purchase-done');
     } else {
+      console.error('CAPI Purchase error:', data);
       btn.textContent = '\u274C Erreur \u2014 r\u00e9essayer';
       btn.disabled = false;
     }

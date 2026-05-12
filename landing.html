@@ -847,6 +847,27 @@ function screenConfirm() {
 /* ═══════════════════════════════════════
    RENDER
 ═══════════════════════════════════════ */
+/* ── Helpers Meta CAPI ── */
+function genUUID() {
+  return `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === `x` ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+function sendCAPI(event_name, user_data, custom_data, event_id) {
+  fetch(`/api/meta-event`, {
+    method: `POST`,
+    headers: { 'Content-Type': `application/json` },
+    body: JSON.stringify({
+      event_name,
+      event_source_url: window.location.href,
+      user_data,
+      custom_data,
+      event_id
+    })
+  }).catch(err => console.warn(`[CAPI] ${event_name} error:`, err));
+}
+
 /* ── Meta Pixel — ViewContent sur le formulaire (step 7) ── */
 let _vcObserver = null;
 function setupViewContentObserver() {
@@ -855,7 +876,9 @@ function setupViewContentObserver() {
   if (!el || typeof fbq !== `function`) return;
   _vcObserver = new IntersectionObserver(function(entries) {
     if (entries[0].isIntersecting) {
-      fbq(`track`, `ViewContent`);
+      const eventId = genUUID();
+      fbq(`track`, `ViewContent`, {}, { eventID: eventId });
+      sendCAPI(`ViewContent`, {}, {}, eventId);
       _vcObserver.disconnect();
       _vcObserver = null;
     }
@@ -968,14 +991,20 @@ async function submitForm(e) {
     console.warn(`[QV] Supabase non initialisé — lead non sauvegardé en base.`);
   }
 
-  /* ── Meta Pixel — Lead avec advanced matching ── */
-  if (typeof fbq === `function`) {
-    const ph = (state.a.telephone || ``).replace(/\D/g, ``);
-    fbq(`init`, `821989530976997`, { fn: state.a.prenom, ph: ph });
-    fbq(`track`, `Lead`, {
-      value:    state.a.typeSite === `Boutique` ? 790 : state.a.typeSite === `Sur-mesure` ? 0 : 490,
-      currency: `EUR`
-    });
+  /* ── Meta Pixel + CAPI — Lead avec advanced matching et déduplication ── */
+  {
+    const leadEventId = genUUID();
+    const leadValue   = state.a.typeSite === `Boutique` ? 790 : state.a.typeSite === `Sur-mesure` ? 0 : 490;
+    const ph          = (state.a.telephone || ``).replace(/\D/g, ``);
+    if (typeof fbq === `function`) {
+      fbq(`init`, `821989530976997`, { fn: state.a.prenom, ph });
+      fbq(`track`, `Lead`, { value: leadValue, currency: `EUR` }, { eventID: leadEventId });
+    }
+    sendCAPI(`Lead`,
+      { fn: state.a.prenom, ph: state.a.telephone },
+      { value: leadValue, currency: `EUR` },
+      leadEventId
+    );
   }
 
   /* ── Telegram notification (async, non-bloquant) ── */
