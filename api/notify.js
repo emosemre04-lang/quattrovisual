@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
     "\uD83D\uDCDE " + (a.telephone || "") + "\n\n" +
     "\uD83D\uDCBC Type : " + (a.typeSite || "") + " \u2014 " + prix + "\n" +
     "\uD83D\uDEE0 M\u00e9tier : " + (a.metier || "") + "\n" +
-    "\uD83D\uDD0D Google : " + (a.presenceGoogle || "") + "\n" +
+    "\uD83D\uDCC5 Pour quand : " + (a.timing || "") + "\n" +
     "\uD83C\uDFAF D\u00e9sir : " + (a.desirPrincipal || "") + "\n\n" +
     "\u23F0 Re\u00e7u \u00e0 l\u2019instant \u2014 Rappeler dans l\u2019heure";
 
