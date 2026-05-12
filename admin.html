@@ -570,7 +570,10 @@ body {
 .ll-action-btn.btn-refuse:hover { background: var(--red-soft); border-color: var(--red); color: var(--red); }
 .ll-action-btn.active-appele { background: rgba(245,166,35,.15); border-color: #f5a623; color: #f5a623; }
 .ll-action-btn.active-signe  { background: var(--green-soft);    border-color: var(--green); color: var(--green); }
-.ll-action-btn.active-refuse { background: var(--red-soft);       border-color: var(--red);  color: var(--red); }
+.ll-action-btn.active-refuse  { background: var(--red-soft);       border-color: var(--red);  color: var(--red); }
+.ll-action-btn.btn-purchase:hover { background: rgba(124,77,255,.18); border-color: var(--accent); color: var(--accent-2); }
+.ll-action-btn.btn-purchase:disabled { opacity: .6; cursor: default; transform: none; }
+.ll-action-btn.purchase-done { background: var(--green-soft); border-color: var(--green); color: var(--green); font-size: 11px; }
 
 /* Note interne */
 .ll-note {
@@ -1241,8 +1244,9 @@ function renderLLLeads() {
 function buildLLCard(lead) {
   const initial  = (lead.prenom || '?').charAt(0).toUpperCase();
   const time     = getRelativeTime(lead.created_at);
-  const typeMap  = { 'Vitrine': { label: 'Vitrine 490\u20ac', cls: 'vitrine' }, 'Boutique': { label: 'Boutique 790\u20ac', cls: 'boutique' }, 'Sur-mesure': { label: 'Sur-mesure', cls: 'surmesure' } };
-  const typeDef  = typeMap[lead.type_site] || { label: lead.type_site || '-', cls: 'vitrine' };
+  const typeMap  = { 'Vitrine': { label: 'Vitrine 490\u20ac', cls: 'vitrine', montant: 490 }, 'Boutique': { label: 'Boutique 790\u20ac', cls: 'boutique', montant: 790 }, 'Sur-mesure': { label: 'Sur-mesure', cls: 'surmesure', montant: 0 } };
+  const typeDef  = typeMap[lead.type_site] || { label: lead.type_site || '-', cls: 'vitrine', montant: 490 };
+  const montant  = typeDef.montant;
   const statLabels = { nouveau: 'Nouveau', appele: 'Appel\u00e9', signe: 'Sign\u00e9', refuse: 'Refus\u00e9' };
   const statLabel  = statLabels[lead.statut] || lead.statut;
   const stripeMap  = { nouveau: 'linear-gradient(180deg,#7c4dff,#b07aff)', appele: 'linear-gradient(180deg,#f5a623,#ffd080)', signe: 'linear-gradient(180deg,#22d77c,#4dffa3)', refuse: 'linear-gradient(180deg,#555,#888)' };
@@ -1285,6 +1289,10 @@ function buildLLCard(lead) {
       <button class="ll-action-btn btn-refuse ${lead.statut === 'refuse' ? 'active-refuse' : ''}"
         onclick="markLLStatus('${lead.id}','refuse',this.closest('.ll-card'))">
         \uD83D\uDEAB Refus\u00e9
+      </button>
+      <button class="ll-action-btn btn-purchase"
+        onclick="confirmPurchase('${esc(lead.prenom)}','${esc(lead.telephone)}',${montant},this)">
+        \uD83D\uDCB3 Confirmer le paiement
       </button>
     </div>
     <textarea class="ll-note" placeholder="Note interne apr\u00e8s l\u2019appel..."
@@ -1337,6 +1345,31 @@ async function saveLLNote(id, note) {
   if (!error) {
     const idx = _llLeads.findIndex(l => l.id === id);
     if (idx !== -1) _llLeads[idx].note_interne = note;
+  }
+}
+
+// ===== META CAPI PURCHASE =====
+async function confirmPurchase(prenom, telephone, montant, btn) {
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours...';
+  try {
+    const res = await fetch('/api/meta-purchase', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ prenom, telephone, montant })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      btn.textContent = '\u2705 Paiement confirm\u00e9 \u2014 \u00e9v\u00e9nement envoy\u00e9 \u00e0 Meta';
+      btn.classList.add('purchase-done');
+    } else {
+      btn.textContent = '\u274C Erreur \u2014 r\u00e9essayer';
+      btn.disabled = false;
+    }
+  } catch(e) {
+    console.error('confirmPurchase error:', e);
+    btn.textContent = '\u274C Erreur r\u00e9seau';
+    btn.disabled = false;
   }
 }
 

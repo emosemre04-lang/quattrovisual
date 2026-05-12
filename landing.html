@@ -846,9 +846,26 @@ function screenConfirm() {
 /* ═══════════════════════════════════════
    RENDER
 ═══════════════════════════════════════ */
+/* ── Meta Pixel — ViewContent sur le formulaire (step 7) ── */
+let _vcObserver = null;
+function setupViewContentObserver() {
+  if (_vcObserver) { _vcObserver.disconnect(); _vcObserver = null; }
+  const el = document.getElementById(`screen-container`);
+  if (!el || typeof fbq !== `function`) return;
+  _vcObserver = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      fbq(`track`, `ViewContent`);
+      _vcObserver.disconnect();
+      _vcObserver = null;
+    }
+  }, { threshold: 0.5 });
+  _vcObserver.observe(el);
+}
+
 function render() {
   const map = {1:screenHero, 2:screenQ1, 3:screenQ2, 4:screenQ3, 5:screenQ4, 6:screenRecap, 7:screenForm, 8:screenConfirm};
   document.getElementById(`screen-container`).innerHTML = (map[state.step] || screenHero)();
+  if (state.step === 7) setupViewContentObserver();
 
   /* Progress */
   const show = state.step >= 2 && state.step <= 7;
