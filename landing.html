@@ -504,8 +504,11 @@ const state = {
     timing: ``,
     desirPrincipal: ``,
     prenom:         ``,
+    nom:            ``,
     nomEntreprise:  ``,
+    email:          ``,
     ville:          ``,
+    codePostal:     ``,
     telephone:      ``
   }
 };
@@ -770,14 +773,29 @@ function screenForm() {
         <div class="field-error" id="err-prenom">Veuillez indiquer votre pr\u00e9nom.</div>
       </div>
       <div>
+        <label class="form-label" for="f-nom">Votre nom *</label>
+        <input type="text" class="text-input" id="f-nom" placeholder="Dupont" autocomplete="family-name" value="${esc(state.a.nom)}">
+        <div class="field-error" id="err-nom">Veuillez indiquer votre nom.</div>
+      </div>
+      <div>
         <label class="form-label" for="f-entreprise">Nom de votre entreprise *</label>
         <input type="text" class="text-input" id="f-entreprise" placeholder="Mon Entreprise" autocomplete="organization" value="${esc(state.a.nomEntreprise)}">
         <div class="field-error" id="err-entreprise">Veuillez indiquer votre entreprise.</div>
       </div>
       <div>
+        <label class="form-label" for="f-email">Votre email *</label>
+        <input type="email" class="text-input" id="f-email" placeholder="jean@monentreprise.fr" autocomplete="email" inputmode="email" value="${esc(state.a.email)}">
+        <div class="field-error" id="err-email">Adresse email invalide.</div>
+      </div>
+      <div>
         <label class="form-label" for="f-ville">Votre ville *</label>
         <input type="text" class="text-input" id="f-ville" placeholder="Paris" autocomplete="address-level2" value="${esc(state.a.ville)}">
         <div class="field-error" id="err-ville">Veuillez indiquer votre ville.</div>
+      </div>
+      <div>
+        <label class="form-label" for="f-cp">Code postal *</label>
+        <input type="text" class="text-input" id="f-cp" placeholder="75001" autocomplete="postal-code" inputmode="numeric" maxlength="5" value="${esc(state.a.codePostal)}">
+        <div class="field-error" id="err-cp">Code postal invalide (5 chiffres).</div>
       </div>
       <div>
         <label class="form-label" for="f-tel">Votre t\u00e9l\u00e9phone *</label>
@@ -855,6 +873,31 @@ function genUUID() {
     return (c === `x` ? r : (r & 0x3 | 0x8)).toString(16);
   });
 }
+/* ── SHA-256 navigateur (Web Crypto API) ── */
+async function sha256c(str) {
+  if (!str) return ``;
+  const buf = await crypto.subtle.digest(`SHA-256`, new TextEncoder().encode((str || ``).trim().toLowerCase()));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, `0`)).join(``);
+}
+
+/* ── Formatage téléphone E.164 France ── */
+function toE164(phone) {
+  let p = (phone || ``).replace(/[\s.\-\(\)]/g, ``);
+  if (p.startsWith(`00`)) return `+` + p.slice(2);
+  if (p.startsWith(`0`))  return `+33` + p.slice(1);
+  if (!p.startsWith(`+`)) return `+33` + p;
+  return p;
+}
+
+/* ── Lecture cookies _fbc / _fbp ── */
+function getCookie(name) {
+  const m = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+  return m ? m.pop() : ``;
+}
+
+/* ── Code test Meta Events Manager (?_test=TESTxxxxx dans l'URL) ── */
+const _metaTestCode = new URLSearchParams(window.location.search).get(`_test`) || ``;
+
 function sendCAPI(event_name, user_data, custom_data, event_id) {
   fetch(`/api/meta-event`, {
     method: `POST`,
@@ -864,11 +907,12 @@ function sendCAPI(event_name, user_data, custom_data, event_id) {
       event_source_url: window.location.href,
       user_data,
       custom_data,
-      event_id
+      event_id,
+      ...(_metaTestCode && { test_event_code: _metaTestCode })
     })
   })
   .then(r => r.json())
-  .then(d => console.log(`[CAPI] ${event_name} envoyé — event_id: ${event_id}`, d))
+  .then(d => console.log(`[CAPI] ${event_name} ✓ event_id:${event_id}`, d))
   .catch(err => console.warn(`[CAPI] ${event_name} error:`, err));
 }
 
@@ -933,9 +977,12 @@ async function submitForm(e) {
   e.preventDefault();
   const fields = [
     {id:`f-prenom`,    key:`prenom`,       errId:`err-prenom`,    ok: v => v.length >= 2},
+    {id:`f-nom`,       key:`nom`,          errId:`err-nom`,       ok: v => v.length >= 2},
     {id:`f-entreprise`,key:`nomEntreprise`, errId:`err-entreprise`,ok: v => v.length >= 2},
-    {id:`f-ville`,     key:`ville`,         errId:`err-ville`,     ok: v => v.length >= 2},
-    {id:`f-tel`,       key:`telephone`,     errId:`err-tel`,       ok: v => v.replace(/\D/g,``).length >= 7}
+    {id:`f-email`,     key:`email`,        errId:`err-email`,     ok: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)},
+    {id:`f-ville`,     key:`ville`,        errId:`err-ville`,     ok: v => v.length >= 2},
+    {id:`f-cp`,        key:`codePostal`,   errId:`err-cp`,        ok: v => /^\d{5}$/.test(v)},
+    {id:`f-tel`,       key:`telephone`,    errId:`err-tel`,       ok: v => v.replace(/\D/g,``).length >= 7}
   ];
   let valid = true;
   fields.forEach(f => {
@@ -989,17 +1036,38 @@ async function submitForm(e) {
     console.warn(`[QV] Supabase non initialisé — lead non sauvegardé en base.`);
   }
 
-  /* ── Meta Pixel + CAPI — Lead avec advanced matching et déduplication ── */
+  /* ── Meta Pixel + CAPI — Lead enrichi (EMQ maximal) ── */
   {
     const leadEventId = genUUID();
     const leadValue   = state.a.typeSite === `Boutique` ? 790 : state.a.typeSite === `Sur-mesure` ? 0 : 490;
-    const ph          = (state.a.telephone || ``).replace(/\D/g, ``);
+
+    /* Hash SHA-256 côté navigateur pour le pixel (Advanced Matching) */
+    const [hFn, hLn, hEm, hPh, hCt, hZp] = await Promise.all([
+      sha256c(state.a.prenom),
+      sha256c(state.a.nom),
+      sha256c(state.a.email),
+      sha256c(toE164(state.a.telephone)),
+      sha256c(state.a.ville),
+      sha256c(state.a.codePostal)
+    ]);
+
     if (typeof fbq === `function`) {
-      fbq(`init`, `821989530976997`, { fn: state.a.prenom, ph });
+      fbq(`init`, `821989530976997`, { fn: hFn, ln: hLn, em: hEm, ph: hPh, ct: hCt, zp: hZp });
       fbq(`track`, `Lead`, { value: leadValue, currency: `EUR` }, { eventID: leadEventId });
     }
+
+    /* CAPI côté serveur — texte brut, le serveur hash et formate E.164 */
     sendCAPI(`Lead`,
-      { fn: state.a.prenom, ph: state.a.telephone },
+      {
+        fn:  state.a.prenom,
+        ln:  state.a.nom,
+        em:  state.a.email,
+        ph:  state.a.telephone,
+        ct:  state.a.ville,
+        zp:  state.a.codePostal,
+        fbc: getCookie(`_fbc`),
+        fbp: getCookie(`_fbp`)
+      },
       { value: leadValue, currency: `EUR` },
       leadEventId
     );
