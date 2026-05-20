@@ -1,1109 +1,751 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" style="scroll-behavior:smooth">
 <head>
 <meta charset="UTF-8">
 <meta name="facebook-domain-verification" content="w6l5oc9ua36evt0imks3qe1v3yqdgo" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Créer mon site — Quattro Visual</title>
-<meta name="description" content="Site web professionnel livré en 5 jours à partir de 490€. Répondez à 4 questions et recevez votre offre.">
+<title>Créer mon site professionnel — Quattro Visual</title>
+<meta name="description" content="Site web professionnel livré en 5 jours à partir de 490€. 3 questions rapides, on vous appelle dans l'heure.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@400;500;600;700;800&display=swap">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="supabase-config.js"></script>
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 
-:root {
-  --accent:      #6b3df5;
-  --accent-2:    #a06bff;
-  --accent-dark: #5429d8;
-  --accent-soft: #f0ecff;
-  --bg:          #ffffff;
-  --bg-soft:     #faf9fc;
-  --border:      #ece8f5;
-  --text:        #0f0a1e;
-  --text-2:      #6b6880;
-  --green:       #16a34a;
-  --green-soft:  #dcfce7;
-  --shadow-sm:   0 1px 4px rgba(0,0,0,.06);
-  --shadow-md:   0 4px 20px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.05);
-  --r:           16px;
-  --spring:      cubic-bezier(.34,1.56,.64,1);
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100dvh;
-  overflow-x: hidden;
-}
-
-/* ── Accent line ── */
-.accent-line {
-  position: fixed; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, var(--accent-dark), var(--accent), var(--accent-2), var(--accent), var(--accent-dark));
-  z-index: 200; pointer-events: none;
-}
-
-/* ── Nav ── */
-.lnav {
-  position: fixed; top: 3px; left: 0; right: 0; height: 56px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 20px;
-  background: rgba(255,255,255,.96);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
-  z-index: 100;
-}
-/* Logo forcé en noir */
-.lnav .logo {
-  height: 26px;
-  filter: brightness(0) saturate(0);
-}
-
-.btn-back {
-  display: flex; align-items: center; gap: 6px;
-  background: none; border: none;
-  color: var(--text-2); font-size: 14px; font-family: inherit;
-  cursor: pointer; padding: 6px 10px; border-radius: 8px;
-  transition: background .2s, color .2s;
-}
-.btn-back:hover { background: var(--accent-soft); color: var(--accent); }
-.btn-back.hidden { opacity: 0; pointer-events: none; }
-
-/* ── Progress bar ── */
-.progress-wrap {
-  position: fixed; top: 59px; left: 0; right: 0; height: 4px;
-  background: var(--border); z-index: 99;
-  transition: opacity .3s;
-}
-.progress-wrap.hidden { opacity: 0; pointer-events: none; }
-.progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  border-radius: 0 2px 2px 0;
-  transition: width .55s cubic-bezier(.22,1,.36,1);
-}
-
-/* ── Layout ── */
-.lmain {
-  min-height: 100dvh;
-  padding-top: 63px;
-  display: flex; flex-direction: column; align-items: center;
-}
-#screen-container {
-  width: 100%; max-width: 520px;
-  padding: 36px 20px 80px;
-  transition: opacity .22s ease, transform .22s ease;
-}
-#screen-container.exiting  { opacity: 0; transform: translateX(-24px); }
-#screen-container.entering { opacity: 0; transform: translateX(24px); transition: none; }
-
-/* ── Hero ── */
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 7px;
-  background: var(--accent-soft); color: var(--accent);
-  font-size: 12px; font-weight: 600;
-  padding: 5px 13px; border-radius: 99px;
-  margin-bottom: 20px; letter-spacing: .03em;
-}
-.hero-badge .dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--accent); animation: blink 2s ease infinite;
-}
-@keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
-
-.hero-title {
-  font-family: 'Inter Tight', sans-serif;
-  font-size: clamp(27px, 7.5vw, 44px);
-  font-weight: 800; line-height: 1.1;
-  letter-spacing: -.025em; margin-bottom: 16px;
-}
-.hero-title em {
-  font-style: normal;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.hero-sub { font-size: 16px; color: var(--text-2); line-height: 1.65; margin-bottom: 28px; }
-
-/* 4 trust badges: 2-col mobile / 4-col desktop */
-.trust-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 20px;
-}
-@media (min-width: 480px) { .trust-grid { grid-template-columns: repeat(4, 1fr); } }
-.trust-badge {
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 99px; padding: 8px 10px;
-  font-size: 12px; color: var(--text-2); white-space: nowrap;
-}
-
-/* ── Mini avis marquee (hero) ── */
-.mini-reviews-wrap {
-  margin-top: 20px;
-  overflow: hidden;
-  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-}
-.mini-reviews-track {
-  display: flex;
-  gap: 10px;
-  width: max-content;
-  animation: mini-rev-left 40s linear infinite;
-  will-change: transform;
-}
-@keyframes mini-rev-left {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.mini-rev-card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px 13px;
-  width: 210px;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,.05);
-}
-.mini-rev-stars { color: #F59E0B; font-size: 11px; letter-spacing: 0.5px; margin-bottom: 5px; }
-.mini-rev-text {
-  font-size: 11.5px;
-  color: var(--text-2);
-  line-height: 1.45;
-  margin-bottom: 8px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.mini-rev-author {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-.mini-rev-av {
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 700; color: #fff;
-  flex-shrink: 0;
-}
-.mini-rev-name { font-size: 11px; font-weight: 700; color: var(--text); }
-.mini-rev-city { font-size: 10px; color: var(--text-3, #9ca3af); }
-
-/* ── Q1 Big cards — CORRECTION 1 ── */
-.q1-card {
-  display: block; width: 100%; text-align: left;
-  background: #ffffff;
-  border: 2px solid #E5E7EB;
-  border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.06);
-  padding: 24px;
-  margin-bottom: 20px;
-  cursor: pointer; font-family: inherit; color: var(--text);
-  transition: all 250ms ease-out;
-}
-.q1-card:hover {
-  border-color: #7C3AED;
-  box-shadow: 0 8px 24px rgba(124,58,237,.15);
-  transform: translateY(-2px);
-}
-.q1-card:active {
-  border-color: #7C3AED;
-  background: #FAF8FF;
-  transform: translateY(0);
-}
-.q1-head {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 10px; margin-bottom: 12px;
-}
-.q1-icon-title { display: flex; align-items: center; gap: 10px; }
-.q1-icon  { font-size: 28px; line-height: 1; flex-shrink: 0; }
-.q1-title { font-size: 15px; font-weight: 700; line-height: 1.3; }
-.q1-price {
-  background: var(--accent); color: #fff;
-  font-size: 13px; font-weight: 700;
-  padding: 4px 12px; border-radius: 99px;
-  white-space: nowrap; flex-shrink: 0; margin-top: 2px;
-}
-.q1-price.devis { background: var(--bg-soft); color: var(--accent); border: 1.5px solid var(--accent); }
-.q1-desc {
-  font-size: 13px; color: var(--text-2); line-height: 1.55; margin-bottom: 14px;
-}
-.q1-checks { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-.q1-checks li { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-.ck {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 17px; height: 17px; border-radius: 50%;
-  background: var(--green-soft); flex-shrink: 0;
-}
-.ck svg { stroke: var(--green); }
-
-/* ── Q generic ── */
-.q-label {
-  font-size: 11px; font-weight: 700; color: var(--accent);
-  letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px;
-}
-.q-title {
-  font-family: 'Inter Tight', sans-serif;
-  font-size: clamp(20px, 5.5vw, 30px);
-  font-weight: 700; line-height: 1.2; margin-bottom: 8px;
-}
-.q-sub { font-size: 14px; color: var(--text-2); margin-bottom: 24px; line-height: 1.5; }
-
-/* ── Option cards (Q3-Q4) ── */
-.options-grid { display: flex; flex-direction: column; gap: 10px; }
-.opt-card {
-  display: flex; align-items: center; gap: 14px;
-  padding: 15px 18px;
-  background: var(--bg); border: 2px solid var(--border);
-  border-radius: var(--r);
-  cursor: pointer; text-align: left; width: 100%;
-  font-family: inherit; color: var(--text);
-  transition: border-color .18s, background .18s, transform .2s var(--spring), box-shadow .2s;
-}
-.opt-card:hover {
-  border-color: var(--accent); background: var(--accent-soft);
-  transform: translateY(-2px); box-shadow: var(--shadow-md);
-}
-.opt-card:active { transform: scale(.97); }
-.opt-icon  { font-size: 22px; line-height: 1; flex-shrink: 0; }
-.opt-text  { flex: 1; }
-.opt-title { font-size: 15px; font-weight: 600; display: block; margin-bottom: 2px; }
-.opt-desc  { font-size: 13px; color: var(--text-2); }
-.opt-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; }
-
-/* ── Text inputs ── */
-.field-wrap { margin-bottom: 4px; }
-.form-label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
-.text-input {
-  width: 100%; padding: 15px 17px;
-  background: var(--bg); border: 2px solid var(--border);
-  border-radius: var(--r);
-  font-size: 16px; font-family: inherit; color: var(--text);
-  outline: none; transition: border-color .18s, box-shadow .18s;
-}
-.text-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(107,61,245,.14); }
-.text-input.error { border-color: #e53e3e; }
-.field-error { color: #e53e3e; font-size: 12px; margin-top: 5px; display: none; }
-.field-error.show { display: block; }
-
-/* ── Buttons ── */
-.btn-primary {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 16px 24px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  color: #fff; font-size: 16px; font-weight: 600; font-family: inherit;
-  border: none; border-radius: var(--r); cursor: pointer;
-  box-shadow: 0 4px 20px rgba(107,61,245,.4), 0 2px 8px rgba(107,61,245,.25);
-  transition: transform .2s var(--spring), box-shadow .2s;
-  letter-spacing: -.01em;
-}
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(107,61,245,.5); }
-.btn-primary:active { transform: scale(.98); }
-.btn-primary.xl { padding: 20px 28px; font-size: 17px; border-radius: 18px; }
-
-.btn-secondary {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; padding: 14px 24px;
-  background: var(--bg-soft); color: var(--text);
-  font-size: 15px; font-weight: 500; font-family: inherit;
-  border: 1px solid var(--border); border-radius: var(--r);
-  cursor: pointer; text-decoration: none;
-  transition: background .18s, border-color .18s, color .18s;
-}
-.btn-secondary:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
-
-/* ── Recap ── */
-.recap-card {
-  background: var(--bg-soft); border: 1px solid var(--border);
-  border-radius: var(--r); overflow: hidden; margin-bottom: 20px;
-}
-.recap-row {
-  display: flex; align-items: flex-start; gap: 12px;
-  padding: 12px 18px; border-bottom: 1px solid var(--border);
-}
-.recap-row:last-child { border-bottom: none; }
-.recap-label { font-size: 12px; color: var(--text-2); min-width: 120px; padding-top: 1px; flex-shrink: 0; }
-.recap-val   { font-size: 14px; font-weight: 600; }
-.recap-delivery {
-  font-size: 14px; color: var(--green); font-weight: 500;
-  margin-bottom: 18px; display: flex; align-items: center; gap: 6px;
-}
-.note-sm { font-size: 13px; color: var(--text-2); text-align: center; margin-top: 12px; }
-
-/* ── Form screen ── */
-.form-title {
-  font-family: 'Inter Tight', sans-serif;
-  font-size: clamp(22px, 5.5vw, 30px);
-  font-weight: 800; line-height: 1.15; margin-bottom: 8px;
-}
-.form-sub { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 24px; }
-.form-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 18px; }
-
-.form-badges {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px;
-}
-.form-badge {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 12px; color: var(--text-2);
-  background: var(--bg-soft); border: 1px solid var(--border);
-  border-radius: 99px; padding: 5px 11px;
-}
-
-/* Trust bar sous le formulaire */
-.trust-bar {
-  display: flex; align-items: center; justify-content: center;
-  flex-wrap: wrap; gap: 6px 10px;
-  margin-top: 20px; padding-top: 16px;
-  border-top: 1px solid var(--border);
-  font-size: 12px; color: var(--text-2);
-}
-.trust-bar strong { color: var(--text); font-weight: 600; }
-.trust-sep { color: var(--border); }
-
-/* ── Confirmation — CORRECTION 3 ── */
-@keyframes checkPop {
-  0%   { transform: scale(0); opacity: 0; }
-  65%  { transform: scale(1.12); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
-}
-.confirm-icon {
-  width: 88px; height: 88px; border-radius: 50%;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 24px;
-  box-shadow: 0 10px 32px rgba(34,197,94,.38);
-  animation: checkPop .8s cubic-bezier(.22,1,.36,1) both;
-}
-.confirm-title {
-  font-family: 'Inter Tight', sans-serif;
-  font-size: clamp(24px, 6vw, 34px);
-  font-weight: 800; text-align: center; margin-bottom: 10px;
-}
-.confirm-sub {
-  font-size: 15px; color: var(--text-2);
-  line-height: 1.65; text-align: center; margin-bottom: 28px;
-}
-.confirm-promise-card {
-  background: #F5F3FF;
-  border: 1.5px solid #C4B5FD;
-  border-radius: var(--r);
-  padding: 22px 24px;
-  margin-bottom: 24px;
-  font-size: clamp(16px, 4vw, 19px);
-  font-weight: 500;
-  color: #1a1a2e;
-  line-height: 1.65;
-  text-align: center;
-}
-.confirm-card {
-  background: #fff; border: 1px solid var(--border);
-  border-radius: var(--r);
-  box-shadow: 0 4px 16px rgba(0,0,0,.06);
-  padding: 6px 0; margin-bottom: 28px;
-}
-.confirm-info-row {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 20px; border-bottom: 1px solid var(--border);
-}
-.confirm-info-row:last-child { border-bottom: none; }
-.confirm-info-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
-.confirm-info-text { font-size: 14px; font-weight: 500; }
-
-/* WhatsApp row animation */
-@keyframes waBounce {
-  0%, 80%, 100% { transform: scale(1); }
-  88%            { transform: scale(1.2); }
-}
-@keyframes waGlow {
-  0%, 100% { color: var(--text); }
-  50%       { color: #25D366; }
-}
-.wa-icon { display: inline-block; animation: waBounce 2.2s ease infinite; }
-.wa-text { animation: waGlow 2.2s ease infinite; }
-
-.confirm-note {
-  font-size: 13px; color: var(--text-2);
-  text-align: center; margin-top: 12px; line-height: 1.55;
-}
-
-.spacer-sm { height: 12px; }
-
-@media (max-width: 380px) {
-  #screen-container { padding: 24px 14px 70px; }
-  .recap-label { min-width: 100px; }
-}
-</style>
-<!-- Meta Pixel Code -->
+<!-- Meta Pixel -->
 <script>
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";
 n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '821989530976997');
-fbq('track', 'PageView');
+s.parentNode.insertBefore(t,s)}(window,document,"script",
+"https://connect.facebook.net/en_US/fbevents.js");
+fbq("init","821989530976997");
+fbq("track","PageView");
 </script>
 <noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=821989530976997&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
+src="https://www.facebook.com/tr?id=821989530976997&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel -->
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --accent:      #7C3AED;
+  --accent-dark: #5B21B6;
+  --accent-soft: #EDE9FE;
+  --accent-mid:  #8B5CF6;
+  --text:        #111827;
+  --text-2:      #6B7280;
+  --text-3:      #9CA3AF;
+  --bg:          #FAFAFA;
+  --white:       #FFFFFF;
+  --border:      #E5E7EB;
+  --green:       #16A34A;
+  --green-soft:  #DCFCE7;
+  --shadow-sm:   0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:   0 4px 16px rgba(0,0,0,.10),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:   0 10px 40px rgba(0,0,0,.12);
+  --r:           16px;
+}
+
+html{font-family:"Inter",system-ui,sans-serif;font-size:17px;color:var(--text);background:var(--bg)}
+body{min-height:100dvh;overflow-x:hidden}
+section{scroll-margin-top:76px}
+img{display:block;max-width:100%}
+
+/* ── NAV ── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 20px;height:64px;
+  display:flex;align-items:center;
+}
+.nav-inner{width:100%;max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo img{height:28px}
+.nav-logo-text{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.5px}
+.nav-phone{font-size:14px;font-weight:600;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:6px}
+
+/* ── SECTIONS ── */
+.section{padding:72px 20px}
+.section-inner{max-width:960px;margin:0 auto}
+.section-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent);background:var(--accent-soft);
+  padding:5px 14px;border-radius:99px;margin-bottom:20px;
+}
+.section-title{font-size:clamp(28px,5vw,40px);font-weight:800;line-height:1.2;margin-bottom:12px;letter-spacing:-.5px}
+.section-sub{font-size:18px;color:var(--text-2);line-height:1.6;margin-bottom:32px}
+
+/* ── HERO ── */
+#hero{background:var(--white);padding:72px 20px 56px;text-align:center}
+#hero .section-inner{max-width:760px}
+.hero-title em{font-style:normal;color:var(--accent)}
+.hero-sub{font-size:18px;color:var(--text-2);line-height:1.65;margin-bottom:36px}
+
+/* Badges hero */
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:36px}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:600;
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:99px;padding:8px 16px;color:var(--text-2);
+}
+
+/* Social proof */
+.social-proof{font-size:15px;font-weight:600;color:var(--text-2);margin-bottom:32px}
+.social-proof span{color:var(--text)}
+
+/* Review cards */
+.reviews{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.review-card{
+  background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:20px;max-width:320px;text-align:left;box-shadow:var(--shadow-sm);
+}
+.review-stars{color:#F59E0B;font-size:13px;margin-bottom:8px}
+.review-text{font-size:14px;color:var(--text-2);line-height:1.55;margin-bottom:12px}
+.review-author{display:flex;align-items:center;gap:10px}
+.review-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-mid));
+  color:white;font-size:13px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.review-name{font-size:13px;font-weight:700}
+.review-city{font-size:12px;color:var(--text-3)}
+
+/* Scroll anchor CTA */
+.scroll-cta{
+  margin-top:36px;display:inline-flex;flex-direction:column;align-items:center;gap:4px;
+  font-size:15px;font-weight:600;color:var(--accent);cursor:pointer;background:none;border:none;
+}
+.scroll-arrow{font-size:22px;animation:bounce 1.6s ease infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ── Q1 — SERVICE ── */
+#q1{background:var(--bg)}
+.cards-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px}
+.service-card{
+  position:relative;border:2px solid var(--border);border-radius:var(--r);
+  padding:28px 24px;background:var(--white);cursor:pointer;
+  transition:border-color .2s,box-shadow .2s,transform .15s;text-align:left;
+  box-shadow:var(--shadow-sm);
+}
+.service-card:hover{border-color:var(--accent-mid);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.service-card.selected{border-color:var(--accent);box-shadow:0 0 0 4px rgba(124,58,237,.12),var(--shadow-md);background:#FDFBFF}
+.card-popular{
+  position:absolute;top:16px;right:16px;
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  background:var(--accent);color:white;padding:4px 10px;border-radius:99px;
+}
+.card-check{
+  width:24px;height:24px;border-radius:50%;background:var(--accent);
+  color:white;display:none;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;position:absolute;top:16px;left:16px;
+}
+.service-card.selected .card-check{display:flex}
+.card-price{font-size:clamp(36px,6vw,48px);font-weight:800;color:var(--accent);line-height:1;margin-bottom:4px}
+.card-price span{font-size:18px;font-weight:600;color:var(--text-2)}
+.card-title{font-size:18px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.card-subtitle{font-size:13px;color:var(--text-2);margin-bottom:18px;line-height:1.4}
+.card-features{list-style:none;display:flex;flex-direction:column;gap:9px}
+.card-features li{font-size:14px;color:var(--text-2);display:flex;align-items:flex-start;gap:8px;line-height:1.4}
+.card-features li::before{content:"✓";color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* ── Q2 — TIMING ── */
+#q2{background:var(--white)}
+.timing-cards{display:flex;flex-direction:column;gap:14px;margin-top:8px;max-width:560px}
+.timing-card{
+  border:2px solid var(--border);border-radius:var(--r);
+  padding:22px 24px;background:var(--bg);cursor:pointer;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+  display:flex;align-items:center;gap:18px;
+  box-shadow:var(--shadow-sm);
+}
+.timing-card:hover{border-color:var(--accent-mid);box-shadow:var(--shadow-md);background:var(--white)}
+.timing-card.selected{border-color:var(--accent);background:#FDFBFF;box-shadow:0 0 0 4px rgba(124,58,237,.12)}
+.timing-emoji{font-size:32px;line-height:1;flex-shrink:0}
+.timing-text{}
+.timing-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:3px}
+.timing-sub{font-size:14px;color:var(--text-2)}
+.timing-checkmark{margin-left:auto;width:22px;height:22px;border-radius:50%;background:var(--accent);color:white;display:none;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.timing-card.selected .timing-checkmark{display:flex}
+
+/* ── FORM ── */
+#form-section{background:var(--bg)}
+.form-card{background:var(--white);border-radius:var(--r);border:1.5px solid var(--border);padding:36px 32px;box-shadow:var(--shadow-md);max-width:560px}
+.form-title{font-size:clamp(26px,4vw,34px);font-weight:800;margin-bottom:8px}
+.form-sub{font-size:16px;color:var(--text-2);line-height:1.6;margin-bottom:28px}
+.field{margin-bottom:18px}
+.field-label{display:block;font-size:14px;font-weight:600;margin-bottom:7px;color:var(--text)}
+.field-input{
+  width:100%;padding:16px 18px;font-size:16px;font-family:inherit;
+  border:2px solid var(--border);border-radius:12px;background:var(--bg);
+  color:var(--text);outline:none;transition:border-color .18s,box-shadow .18s;
+}
+.field-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,58,237,.12);background:var(--white)}
+.field-input.error{border-color:#EF4444}
+.field-error{font-size:12px;color:#EF4444;margin-top:5px;display:none}
+.field-error.show{display:block}
+.submit-btn{
+  width:100%;padding:20px 24px;font-size:17px;font-weight:700;
+  background:var(--accent);color:white;border:none;border-radius:14px;
+  cursor:pointer;transition:background .18s,transform .1s,box-shadow .18s;
+  margin-top:8px;line-height:1.3;
+}
+.submit-btn:hover:not(:disabled){background:var(--accent-dark);box-shadow:0 6px 24px rgba(124,58,237,.35);transform:translateY(-1px)}
+.submit-btn:active{transform:scale(.98)}
+.submit-btn:disabled{background:#C4B5FD;cursor:not-allowed;transform:none;box-shadow:none}
+.form-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px}
+.form-trust-badge{font-size:12px;color:var(--text-2)}
+.form-err-main{color:#EF4444;font-size:13px;margin-top:10px;display:none;text-align:center}
+.form-err-main.show{display:block}
+
+/* ── THANK YOU ── */
+#thank-you{display:none;min-height:100dvh;background:var(--bg);padding:60px 20px}
+.ty-inner{max-width:600px;margin:0 auto;text-align:center}
+.ty-check-wrap{display:flex;justify-content:center;margin-bottom:28px}
+.ty-circle{
+  width:96px;height:96px;border-radius:50%;
+  background:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  animation:checkIn .6s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes checkIn{
+  0%{transform:scale(0);opacity:0}
+  60%{transform:scale(1.15)}
+  100%{transform:scale(1);opacity:1}
+}
+.ty-check-svg{color:white}
+.ty-title{font-size:clamp(28px,5vw,38px);font-weight:800;margin-bottom:12px;letter-spacing:-.5px}
+.ty-sub{font-size:17px;color:var(--text-2);line-height:1.65;margin-bottom:28px}
+.ty-box{
+  background:var(--accent-soft);border:1.5px solid #C4B5FD;border-radius:var(--r);
+  padding:22px 24px;text-align:left;margin-bottom:28px;
+  font-size:15px;line-height:1.65;color:var(--text);
+}
+.ty-items{display:flex;flex-direction:column;gap:14px;margin-bottom:32px;text-align:left}
+.ty-item{display:flex;align-items:center;gap:14px;font-size:16px}
+.ty-item-icon{font-size:22px;flex-shrink:0;width:32px;text-align:center}
+.ty-wa{color:var(--green);font-weight:600}
+.ty-btn{
+  display:inline-block;width:100%;max-width:420px;
+  padding:18px 24px;font-size:17px;font-weight:700;
+  background:var(--accent);color:white;border-radius:14px;text-decoration:none;
+  transition:background .18s;margin-bottom:14px;
+}
+.ty-btn:hover{background:var(--accent-dark)}
+.ty-note{font-size:14px;color:var(--text-3)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:680px){
+  .section{padding:56px 16px}
+  #hero{padding:56px 16px 44px}
+  .cards-row{grid-template-columns:1fr}
+  .form-card{padding:24px 18px}
+  .card-popular{font-size:10px;padding:3px 8px}
+  .reviews{flex-direction:column;align-items:center}
+  .review-card{max-width:100%}
+  .nav-phone{display:none}
+}
+</style>
 </head>
 <body>
 
-<div class="accent-line"></div>
-
-<nav class="lnav">
-  <a href="index.html" aria-label="Quattro Visual">
-    <img src="assets/logo-v2-bold.png" class="logo" alt="Quattro Visual">
-  </a>
-  <button class="btn-back hidden" id="btn-back">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Retour
-  </button>
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="assets/logo-v2-bold.png" alt="Quattro Visual" onerror="this.style.display='none'">
+      <span class="nav-logo-text">QUATTRO VISUAL</span>
+    </a>
+    <a href="tel:+33000000000" class="nav-phone">📞 On vous rappelle</a>
+  </div>
 </nav>
 
-<div class="progress-wrap hidden" id="progress-wrap">
-  <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+<!-- ══════════════ MAIN CONTENT ══════════════ -->
+<div id="main-content">
+
+<!-- ── SECTION 1 : HERO ── -->
+<section id="hero">
+  <div class="section-inner">
+    <div class="section-label">✨ À partir de 490€</div>
+    <h1 class="section-title hero-title">Votre site internet professionnel<br><em>livré en 5 jours</em></h1>
+    <p class="hero-sub">Répondez à 3 questions rapides, on vous appelle<br>dans l'heure pour lancer votre projet.</p>
+
+    <div class="badges">
+      <span class="badge">⏱️ Livré en 5 jours</span>
+      <span class="badge">✅ Sans abonnement</span>
+      <span class="badge">💬 Service 7j/7</span>
+      <span class="badge">🎁 Logo + flyers offerts</span>
+    </div>
+
+    <div class="social-proof">⭐ <span>4,97/5</span> · <span>170+</span> sites livrés</div>
+
+    <div class="reviews">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Mon site est top ! Je reçois des demandes chaque semaine. Emre a tout compris à mon activité dès le premier appel."</p>
+        <div class="review-author">
+          <div class="review-avatar">S</div>
+          <div><div class="review-name">Sophie M.</div><div class="review-city">Bordeaux — Ostéopathe</div></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Livré en 4 jours, exactement ce que je voulais. Clair, moderne, et mes clients trouvent facilement mes infos."</p>
+        <div class="review-author">
+          <div class="review-avatar">M</div>
+          <div><div class="review-name">Maxime R.</div><div class="review-city">Orléans — Électricien</div></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="scroll-cta" onclick="scrollTo_q1()">
+      Commencer — 2 min
+      <span class="scroll-arrow">↓</span>
+    </button>
+  </div>
+</section>
+
+<!-- ── SECTION 2 : Q1 — QUEL SERVICE ? ── -->
+<section id="q1">
+  <div class="section-inner">
+    <div class="section-label">Étape 1 sur 3</div>
+    <h2 class="section-title">Quel site vous correspond ?</h2>
+    <p class="section-sub">Cliquez sur votre choix pour continuer.</p>
+
+    <div class="cards-row">
+
+      <!-- CARTE A — Site vitrine -->
+      <div class="service-card" id="card-vitrine" onclick="selectService('vitrine','Site vitrine',490)">
+        <span class="card-check">✓</span>
+        <span class="card-popular">Le plus populaire</span>
+        <div style="margin-top:12px">
+          <div class="card-price">490€ <span>/ unique</span></div>
+          <div class="card-title">Site vitrine</div>
+          <div class="card-subtitle">Paiement unique, sans abonnement</div>
+          <ul class="card-features">
+            <li>Site complet sur-mesure pour votre métier</li>
+            <li>Prise de RDV et demandes de devis en ligne</li>
+            <li>Photos de vos réalisations</li>
+            <li>Avis clients intégrés</li>
+            <li>Logo + flyers offerts</li>
+            <li>Livré en 5 jours</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CARTE B — Boutique -->
+      <div class="service-card" id="card-boutique" onclick="selectService('boutique','Site avec boutique en ligne',790)">
+        <span class="card-check">✓</span>
+        <div style="margin-top:36px">
+          <div class="card-price">790€ <span>/ unique</span></div>
+          <div class="card-title">Site avec boutique en ligne</div>
+          <div class="card-subtitle">Vendez vos produits ou services en ligne</div>
+          <ul class="card-features">
+            <li>Boutique en ligne complète</li>
+            <li>Paiement sécurisé par carte bancaire</li>
+            <li>Tableau de bord pour gérer vos articles</li>
+            <li>Modifiez prix, photos et stocks vous-même</li>
+            <li>Suivi des commandes en temps réel</li>
+            <li>Logo + flyers offerts</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 3 : Q2 — TIMING ── -->
+<section id="q2">
+  <div class="section-inner">
+    <div class="section-label">Étape 2 sur 3</div>
+    <h2 class="section-title">Vous lancez votre projet quand ?</h2>
+    <p class="section-sub">Choisissez votre délai souhaité.</p>
+
+    <div class="timing-cards">
+      <div class="timing-card" id="card-delai-asap" onclick="selectDelai('Tout de suite')">
+        <span class="timing-emoji">🚀</span>
+        <div class="timing-text">
+          <div class="timing-title">Tout de suite</div>
+          <div class="timing-sub">Je veux démarrer cette semaine</div>
+        </div>
+        <span class="timing-checkmark">✓</span>
+      </div>
+      <div class="timing-card" id="card-delai-soon" onclick="selectDelai('D\'ici quelques semaines')">
+        <span class="timing-emoji">📅</span>
+        <div class="timing-text">
+          <div class="timing-title">D'ici quelques semaines</div>
+          <div class="timing-sub">Je prépare mon projet</div>
+        </div>
+        <span class="timing-checkmark">✓</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SECTION 4 : FORMULAIRE ── -->
+<section id="form-section">
+  <div class="section-inner">
+    <div class="form-card">
+      <div class="section-label">🎯 Étape 3 sur 3</div>
+      <h2 class="form-title">Plus qu'une étape !</h2>
+      <p class="form-sub">On vous appelle dans l'heure pour finaliser votre projet.</p>
+
+      <form id="lead-form" novalidate onsubmit="handleSubmit(event)">
+        <div class="field">
+          <label class="field-label" for="f-prenom">Votre prénom *</label>
+          <input class="field-input" type="text" id="f-prenom" placeholder="Jean"
+            autocomplete="given-name" oninput="onInput('prenom',this)">
+          <div class="field-error" id="err-prenom">Veuillez indiquer votre prénom.</div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="f-nom">Votre nom *</label>
+          <input class="field-input" type="text" id="f-nom" placeholder="Dupont"
+            autocomplete="family-name" oninput="onInput('nom',this)">
+          <div class="field-error" id="err-nom">Veuillez indiquer votre nom.</div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="f-wa">Votre numéro WhatsApp *</label>
+          <input class="field-input" type="tel" id="f-wa" placeholder="06 00 00 00 00"
+            autocomplete="tel" inputmode="tel" oninput="onInput('whatsapp',this)">
+          <div class="field-error" id="err-wa">Numéro invalide (10 chiffres minimum).</div>
+        </div>
+
+        <div class="form-err-main" id="err-main">Une erreur est survenue. Réessayez.</div>
+
+        <button type="submit" class="submit-btn" id="submit-btn" disabled>
+          Complétez les 3 étapes ci-dessus →
+        </button>
+      </form>
+
+      <div class="form-trust">
+        <span class="form-trust-badge">⏱️ Livré en 5 jours</span>
+        <span class="form-trust-badge">·</span>
+        <span class="form-trust-badge">✅ Sans abonnement</span>
+        <span class="form-trust-badge">·</span>
+        <span class="form-trust-badge">⭐ 4,97/5 · 170+ sites livrés · Livraison en 5 jours</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /#main-content -->
+
+<!-- ══════════════ THANK YOU ══════════════ -->
+<div id="thank-you">
+  <div class="ty-inner">
+    <div class="ty-check-wrap">
+      <div class="ty-circle">
+        <svg class="ty-check-svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+    </div>
+
+    <h2 class="ty-title">C'est bien noté, <span id="ty-prenom">!</span></h2>
+    <p class="ty-sub">
+      Emre, le chef de projet, va vous appeler dans l'heure<br>
+      pour finaliser votre projet à <strong id="ty-prix">490€</strong>.
+    </p>
+
+    <div class="ty-box">
+      📞 On vous appelle dans l'heure pour valider votre projet,
+      vous envoyer la facture et lancer la production de votre site sous 5 jours.
+    </div>
+
+    <div class="ty-items">
+      <div class="ty-item">
+        <span class="ty-item-icon">📞</span>
+        <span>Notre équipe vous appelle dans l'heure</span>
+      </div>
+      <div class="ty-item">
+        <span class="ty-item-icon">🕐</span>
+        <span>Service client disponible 7j/7</span>
+      </div>
+      <div class="ty-item">
+        <span class="ty-item-icon">💬</span>
+        <span class="ty-wa">Disponible aussi sur WhatsApp</span>
+      </div>
+    </div>
+
+    <a href="/" class="ty-btn">Voir nos réalisations →</a>
+    <p class="ty-note">En attendant notre appel, découvrez les sites qu'on a livrés récemment.</p>
+  </div>
 </div>
 
-<main class="lmain">
-  <div id="screen-container"></div>
-</main>
-
 <script>
-// Meta Pixel chargé dans le <head>
-
-/* ── Supabase init ── */
-let _sb = null;
-(function() {
-  const cfg = window.QV_CONFIG;
-  if (!cfg || !cfg.supabaseUrl || cfg.supabaseUrl.includes(`VOTRE`)) return;
-  try {
-    _sb = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey);
-  } catch(e) { console.warn(`Supabase init error`, e); }
-})();
-
-/* ═══════════════════════════════════════
-   STATE
-   Screens: 1=Hero 2=Q1 3=Q2 4=Q3 5=Q4 6=Recap 7=Form 8=Confirm
-═══════════════════════════════════════ */
-const state = {
-  step: 1,
-  busy: false,
-  fromSurMesure: false,
-  a: {
-    typeSite:       ``,
-    metier:         ``,
-    timing: ``,
-    desirPrincipal: ``,
-    prenom:         ``,
-    nom:            ``,
-    nomEntreprise:  ``,
-    email:          ``,
-    ville:          ``,
-    codePostal:     ``,
-    telephone:      ``
-  }
+/* ════════════════════════════════════════
+   ÉTAT
+════════════════════════════════════════ */
+var S = {
+  service:     null,
+  serviceName: "",
+  prix:        0,
+  delai:       null,
+  prenom:      "",
+  nom:         "",
+  whatsapp:    ""
 };
 
-const PROGRESS  = {1:0, 2:25, 3:50, 4:75, 5:100, 6:100, 7:100, 8:0};
-const BACK_MAP  = {2:1, 3:2, 4:3, 5:4, 6:5, 7:6};
-const HIDE_BACK = new Set([1, 8]);
-
-/* ═══════════════════════════════════════
-   NAVIGATION
-═══════════════════════════════════════ */
-function goTo(n) {
-  if (state.busy) return;
-  state.busy = true;
-  const el = document.getElementById(`screen-container`);
-  el.classList.add(`exiting`);
-  setTimeout(() => {
-    state.step = n;
-    window.scrollTo(0, 0);
-    render();
-    el.classList.remove(`exiting`);
-    el.classList.add(`entering`);
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      el.classList.remove(`entering`);
-      state.busy = false;
-    }));
-  }, 220);
+/* ════════════════════════════════════════
+   SCROLL HELPERS
+════════════════════════════════════════ */
+function scrollTo_q1() {
+  document.getElementById("q1").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function scrollTo_q2() {
+  document.getElementById("q2").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function scrollTo_form() {
+  document.getElementById("form-section").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-document.getElementById(`btn-back`).addEventListener(`click`, () => {
-  if (state.busy) return;
-  /* Sur-mesure: form (7) revient sur Q1 (2) */
-  const prev = (state.fromSurMesure && state.step === 7) ? 2 : BACK_MAP[state.step];
-  if (prev !== undefined) goTo(prev);
-});
+/* ════════════════════════════════════════
+   SÉLECTION SERVICE (Q1)
+════════════════════════════════════════ */
+function selectService(type, name, prix) {
+  S.service     = type;
+  S.serviceName = name;
+  S.prix        = prix;
 
-/* ═══════════════════════════════════════
-   HELPERS
-═══════════════════════════════════════ */
-function esc(s) {
-  return String(s || ``).replace(/&/g,`&amp;`).replace(/</g,`&lt;`).replace(/>/g,`&gt;`).replace(/"/g,`&quot;`);
+  document.querySelectorAll(".service-card").forEach(function(c) { c.classList.remove("selected"); });
+  document.getElementById("card-" + type).classList.add("selected");
+
+  updateBtn();
+  setTimeout(scrollTo_q2, 320);
 }
 
-function getPrix() {
-  if (state.a.typeSite === `Vitrine`)  return `490\u20ac`;
-  if (state.a.typeSite === `Boutique`) return `790\u20ac`;
-  return null;
+/* ════════════════════════════════════════
+   SÉLECTION DÉLAI (Q2)
+════════════════════════════════════════ */
+function selectDelai(val) {
+  S.delai = val;
+
+  document.querySelectorAll(".timing-card").forEach(function(c) { c.classList.remove("selected"); });
+  if (val === "Tout de suite")           document.getElementById("card-delai-asap").classList.add("selected");
+  if (val === "D'ici quelques semaines") document.getElementById("card-delai-soon").classList.add("selected");
+
+  updateBtn();
+  setTimeout(scrollTo_form, 320);
 }
 
-function getDeliveryDate() {
-  const d = new Date();
-  d.setDate(d.getDate() + 5);
-  const jours = [`dimanche`,`lundi`,`mardi`,`mercredi`,`jeudi`,`vendredi`,`samedi`];
-  const mois  = [`janvier`,`f\u00e9vrier`,`mars`,`avril`,`mai`,`juin`,`juillet`,`ao\u00fbt`,`septembre`,`octobre`,`novembre`,`d\u00e9cembre`];
-  return `${jours[d.getDay()]} ${d.getDate()} ${mois[d.getMonth()]}`;
+/* ════════════════════════════════════════
+   INPUTS EN TEMPS RÉEL
+════════════════════════════════════════ */
+function onInput(key, el) {
+  S[key] = el.value.trim();
+
+  if (key === "whatsapp") {
+    var digits = el.value.replace(/\D/g, "");
+    var errEl  = document.getElementById("err-wa");
+    if (digits.length > 0 && digits.length < 10) {
+      el.classList.add("error");
+      if (errEl) errEl.classList.add("show");
+    } else {
+      el.classList.remove("error");
+      if (errEl) errEl.classList.remove("show");
+    }
+  }
+
+  updateBtn();
 }
 
-const ARROW  = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
-const CHK_OK = `<span class="ck"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+/* ════════════════════════════════════════
+   ÉTAT DU BOUTON
+════════════════════════════════════════ */
+function updateBtn() {
+  var btn   = document.getElementById("submit-btn");
+  var ready = S.service &&
+              S.delai &&
+              S.prenom.length >= 2 &&
+              S.nom.length >= 2 &&
+              S.whatsapp.replace(/\D/g, "").length >= 10;
 
-function optCard(icon, title, desc, field, val, next) {
-  return `<button class="opt-card" data-field="${field}" data-val="${val}" data-next="${next}">
-    <span class="opt-icon">${icon}</span>
-    <span class="opt-text"><span class="opt-title">${title}</span><span class="opt-desc">${desc}</span></span>
-    <span class="opt-check"></span>
-  </button>`;
-}
-
-/* ── Answer + route ── */
-function pick(field, val, next) {
-  state.a[field] = val;
-  if (field === `typeSite` && val === `Sur-mesure`) {
-    state.fromSurMesure = true;
-    goTo(7); /* form direct */
+  btn.disabled = !ready;
+  if (ready) {
+    btn.textContent = "Démarrer mon projet aujourd'hui — " + S.prix + "\u20ac \u2192";
   } else {
-    if (field === `typeSite`) state.fromSurMesure = false;
-    goTo(next);
+    btn.textContent = "Complétez les 3 étapes ci-dessus \u2192";
   }
 }
 
-/* Delegation clics */
-document.addEventListener(`click`, e => {
-  if (state.busy) return;
-  const q1  = e.target.closest(`.q1-card[data-field]`);
-  if (q1)  { pick(q1.dataset.field, q1.dataset.val, +q1.dataset.next); return; }
-  const opt = e.target.closest(`.opt-card[data-field]`);
-  if (opt) { pick(opt.dataset.field, opt.dataset.val, +opt.dataset.next); }
-});
+/* ════════════════════════════════════════
+   SOUMISSION
+════════════════════════════════════════ */
+async function handleSubmit(e) {
+  e.preventDefault();
+  var btn = document.getElementById("submit-btn");
+  btn.disabled    = true;
+  btn.textContent = "Envoi en cours\u2026";
 
-/* ═══════════════════════════════════════
-   SCREENS
-═══════════════════════════════════════ */
+  var errMain = document.getElementById("err-main");
+  if (errMain) errMain.classList.remove("show");
 
-/* ── 1. HERO ── */
-function screenHero() {
-  return `
-  <div class="hero-badge"><span class="dot"></span>\u00c0 partir de 490\u20ac</div>
-  <h1 class="hero-title">Votre site internet professionnel <em>livr\u00e9 en 5\u00a0jours</em></h1>
-  <p class="hero-sub">R\u00e9pondez \u00e0 4\u00a0questions et on vous appelle dans l\u2019heure pour finaliser votre site.</p>
-  <button class="btn-primary" onclick="goTo(2)">Commencer\u00a0\u2014\u00a02\u00a0min ${ARROW}</button>
-  <div class="trust-grid">
-    <span class="trust-badge">\u23f1\ufe0f Livr\u00e9 en 5\u00a0jours</span>
-    <span class="trust-badge">\u2705 Sans abonnement</span>
-    <span class="trust-badge">\uD83D\uDCAC Service 7j/7</span>
-    <span class="trust-badge">\uD83C\uDF81 Logo + flyers offerts</span>
-  </div>
-  <div class="mini-reviews-wrap">
-    <div class="mini-reviews-track">
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Mon site livr\u00e9 en 4 jours, design parfait pour mon restaurant.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#6b3df5,#a06bff)">KL</div><div><div class="mini-rev-name">Karim L.</div><div class="mini-rev-city">Lyon</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">J&apos;apparais sur Google et mes appels ont doubl\u00e9 en 1 mois.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#14b8a6,#2dd4bf)">YA</div><div><div class="mini-rev-name">Youssef A.</div><div class="mini-rev-city">Nice</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Logo offert + flyers inclus, le package est vraiment complet.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8)">SM</div><div><div class="mini-rev-name">Sophie M.</div><div class="mini-rev-city">Bordeaux</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">J&apos;ai d\u00e9croch\u00e9 un chantier de 12\u202f000\u20ac gr\u00e2ce au site le mois suivant.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#1d4ed8,#93c5fd)">MR</div><div><div class="mini-rev-name">Maxime R.</div><div class="mini-rev-city">Orl\u00e9ans</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Service client exceptionnel, chaque retouche faite le jour m\u00eame.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#f97316,#fb923c)">MT</div><div><div class="mini-rev-name">Mehdi T.</div><div class="mini-rev-city">Lille</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Livr\u00e9 en 5 jours comme promis. Rien \u00e0 redire, parfait de A \u00e0 Z.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#9d174d,#f9a8d4)">FB</div><div><div class="mini-rev-name">Fran\u00e7ois B.</div><div class="mini-rev-city">Perpignan</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Depuis la mise en ligne plus de demandes qu&apos;en 2 ans de bouche-\u00e0-oreille.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#10b981,#34d399)">AB</div><div><div class="mini-rev-name">Aurore B.</div><div class="mini-rev-city">Strasbourg</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Site livr\u00e9 en 5 jours, design au go\u00fbt du jour. Equipe patiente.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#0369a1,#38bdf8)">CT</div><div><div class="mini-rev-name">C\u00e9line T.</div><div class="mini-rev-city">Nancy</div></div></div></div>
-      <!-- Duplicate for seamless loop -->
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Mon site livr\u00e9 en 4 jours, design parfait pour mon restaurant.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#6b3df5,#a06bff)">KL</div><div><div class="mini-rev-name">Karim L.</div><div class="mini-rev-city">Lyon</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">J&apos;apparais sur Google et mes appels ont doubl\u00e9 en 1 mois.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#14b8a6,#2dd4bf)">YA</div><div><div class="mini-rev-name">Youssef A.</div><div class="mini-rev-city">Nice</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Logo offert + flyers inclus, le package est vraiment complet.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8)">SM</div><div><div class="mini-rev-name">Sophie M.</div><div class="mini-rev-city">Bordeaux</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">J&apos;ai d\u00e9croch\u00e9 un chantier de 12\u202f000\u20ac gr\u00e2ce au site le mois suivant.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#1d4ed8,#93c5fd)">MR</div><div><div class="mini-rev-name">Maxime R.</div><div class="mini-rev-city">Orl\u00e9ans</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Service client exceptionnel, chaque retouche faite le jour m\u00eame.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#f97316,#fb923c)">MT</div><div><div class="mini-rev-name">Mehdi T.</div><div class="mini-rev-city">Lille</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Livr\u00e9 en 5 jours comme promis. Rien \u00e0 redire, parfait de A \u00e0 Z.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#9d174d,#f9a8d4)">FB</div><div><div class="mini-rev-name">Fran\u00e7ois B.</div><div class="mini-rev-city">Perpignan</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Depuis la mise en ligne plus de demandes qu&apos;en 2 ans de bouche-\u00e0-oreille.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#10b981,#34d399)">AB</div><div><div class="mini-rev-name">Aurore B.</div><div class="mini-rev-city">Strasbourg</div></div></div></div>
-      <div class="mini-rev-card"><div class="mini-rev-stars">\u2605\u2605\u2605\u2605\u2605</div><p class="mini-rev-text">Site livr\u00e9 en 5 jours, design au go\u00fbt du jour. Equipe patiente.</p><div class="mini-rev-author"><div class="mini-rev-av" style="background:linear-gradient(135deg,#0369a1,#38bdf8)">CT</div><div><div class="mini-rev-name">C\u00e9line T.</div><div class="mini-rev-city">Nancy</div></div></div></div>
-    </div>
-  </div>`;
+  try {
+    var res = await fetch("/api/landing-submit", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({
+        prenom:  S.prenom,
+        nom:     S.nom,
+        whatsapp: S.whatsapp,
+        service: S.serviceName,
+        prix:    S.prix,
+        delai:   S.delai
+      })
+    });
+
+    if (!res.ok) throw new Error("HTTP " + res.status);
+
+    showThankYou();
+
+  } catch (err) {
+    console.error("[QV] Submit error:", err);
+    btn.disabled    = false;
+    btn.textContent = "Réessayer \u2192";
+    if (errMain) errMain.classList.add("show");
+  }
 }
 
-/* ── 2. Q1 TYPE DE SITE ── */
-function screenQ1() {
-  const cards = [
-    {
-      val:`Vitrine`, icon:`\uD83C\uDF10`,
-      title:`Site vitrine professionnel`, price:`490\u20ac`,
-      desc:`Pr\u00e9senter votre activit\u00e9, recevoir des appels et des demandes de devis. Id\u00e9al pour artisans, commer\u00e7ants, professions lib\u00e9rales.`,
-      checks:[`Prise de rendez-vous en ligne`,`Demandes de devis automatiques`,`Photos de vos r\u00e9alisations`,`Avis clients int\u00e9gr\u00e9s`,`Design sur-mesure selon votre m\u00e9tier`]
-    },
-    {
-      val:`Boutique`, icon:`\uD83D\uDED2`,
-      title:`Site avec boutique en ligne`, price:`790\u20ac`,
-      desc:`Vendre vos produits ou services en ligne avec paiement int\u00e9gr\u00e9. Id\u00e9al pour cr\u00e9ateurs, e-commerce, vente \u00e0 distance.`,
-      checks:[`Boutique en ligne compl\u00e8te`,`Paiement s\u00e9curis\u00e9 par carte`,`Tableau de bord pour g\u00e9rer vos articles`,`Modifier prix, photos et stocks vous-m\u00eame`,`Suivi des commandes en temps r\u00e9el`]
-    },
-    {
-      val:`Sur-mesure`, icon:`\uD83C\uDFAF`,
-      title:`Projet sur-mesure`, price:`sur devis`, devis:true,
-      desc:`Application mobile, plateforme m\u00e9tier, espace client priv\u00e9, fonctionnalit\u00e9s sp\u00e9cifiques. On en discute ensemble pour cr\u00e9er exactement ce dont vous avez besoin.`,
-      checks:[`Application mobile iOS et Android`,`Espace client s\u00e9curis\u00e9 avec connexion`,`Plateforme multi-utilisateurs`,`Fonctions personnalis\u00e9es sur-mesure`,`Devis gratuit sous 24h`]
-    }
-  ];
-  return `
-  <p class="q-label">Question 1 sur 4</p>
-  <h2 class="q-title">Quel type de site souhaitez-vous\u00a0?</h2>
-  <p class="q-sub">Nous adapterons notre offre \u00e0 votre besoin.</p>
-  ${cards.map(c => `
-  <button class="q1-card" data-field="typeSite" data-val="${c.val}" data-next="3">
-    <div class="q1-head">
-      <div class="q1-icon-title">
-        <span class="q1-icon">${c.icon}</span>
-        <span class="q1-title">${c.title}</span>
-      </div>
-      <span class="q1-price${c.devis ? ` devis` : ``}">${c.price}</span>
-    </div>
-    <p class="q1-desc">${c.desc}</p>
-    <ul class="q1-checks">
-      ${c.checks.map(ch => `<li>${CHK_OK}${ch}</li>`).join(``)}
-    </ul>
-  </button>`).join(``)}`;
+/* ════════════════════════════════════════
+   TRANSITION MERCI
+════════════════════════════════════════ */
+function showThankYou() {
+  var main = document.getElementById("main-content");
+  main.style.transition = "opacity 0.4s ease";
+  main.style.opacity    = "0";
+
+  setTimeout(function() {
+    main.style.display = "none";
+
+    /* Contenu dynamique */
+    var tyPrenom = document.getElementById("ty-prenom");
+    var tyPrix   = document.getElementById("ty-prix");
+    if (tyPrenom) tyPrenom.textContent = S.prenom + "\u00a0!";
+    if (tyPrix)   tyPrix.textContent   = S.prix + "\u20ac";
+
+    var ty = document.getElementById("thank-you");
+    ty.style.display    = "block";
+    ty.style.opacity    = "0";
+    ty.style.transition = "opacity 0.4s ease";
+    setTimeout(function() { ty.style.opacity = "1"; }, 30);
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    /* ── Meta Pixel Lead ── */
+    trackLead();
+
+    /* === GOOGLE ADS CONVERSION TAG — À COMPLÉTER ===
+       Collez votre ID après avoir créé l'action de conversion dans Google Ads.
+       gtag("event", "conversion", {
+         "send_to": "AW-XXXXXXX/XXXXXXX",
+         "value":   S.prix,
+         "currency": "EUR"
+       });
+    */
+
+  }, 420);
 }
 
-/* ── 3. Q2 MÉTIER ── */
-function screenQ2() {
-  return `
-  <p class="q-label">Question 2 sur 4</p>
-  <h2 class="q-title">Quel est votre m\u00e9tier\u00a0?</h2>
-  <p class="q-sub">Ex.\u00a0: Coiffeur, Architecte, Plombier, Photographe\u2026</p>
-  <div class="field-wrap">
-    <input type="text" class="text-input" id="f-metier"
-      placeholder="Votre m\u00e9tier ou secteur d\u2019activit\u00e9"
-      value="${esc(state.a.metier)}"
-      autocomplete="off" autocorrect="off" spellcheck="false">
-    <div class="field-error" id="err-metier">Veuillez indiquer votre m\u00e9tier.</div>
-  </div>
-  <div class="spacer-sm"></div>
-  <button class="btn-primary" onclick="continueMetier()">Continuer ${ARROW}</button>`;
-}
-
-/* ── 4. Q3 TIMING ── */
-function screenQ3() {
-  return `
-  <p class="q-label">Question 3 sur 4</p>
-  <h2 class="q-title">Votre projet, c\u2019est pour quand\u00a0?</h2>
-  <p class="q-sub"></p>
-  <div class="options-grid">
-    ${optCard(`\uD83D\uDE80`,`D\u00e8s que possible`,`Je veux avancer rapidement`,`timing`,`D\u00e8s que possible`,5)}
-    ${optCard(`\uD83D\uDCC5`,`Ce mois-ci`,`Je pr\u00e9vois de lancer dans les prochaines semaines`,`timing`,`Ce mois-ci`,5)}
-    ${optCard(`\uD83D\uDD0D`,`Je me renseigne`,`Je compare les options avant de d\u00e9cider`,`timing`,`Je me renseigne`,5)}
-  </div>`;
-}
-
-/* ── 5. Q4 DÉSIR PRINCIPAL ── */
-function screenQ4() {
-  return `
-  <p class="q-label">Question 4 sur 4</p>
-  <h2 class="q-title">Avec un site, qu\u2019est-ce qui vous pla\u00eerait le plus\u00a0?</h2>
-  <p class="q-sub">Choisissez ce qui vous correspond le mieux.</p>
-  <div class="options-grid">
-    ${optCard(`\uD83D\uDCDE`,`Recevoir plus d\u2019appels`,`Attirer de nouveaux clients au t\u00e9l\u00e9phone`,`desirPrincipal`,`Recevoir plus d\u2019appels`,6)}
-    ${optCard(`\u2B50`,`Inspirer confiance aux clients`,`Para\u00eetre professionnel et cr\u00e9dible`,`desirPrincipal`,`Inspirer confiance aux clients`,6)}
-    ${optCard(`\uD83D\uDCCD`,`\u00catre trouv\u00e9 plus facilement`,`Appara\u00eetre sur Google dans votre ville`,`desirPrincipal`,`\u00catre trouv\u00e9 plus facilement`,6)}
-    ${optCard(`\uD83D\uDD52`,`Gagner du temps au t\u00e9l\u00e9phone`,`Moins r\u00e9pondre aux questions basiques`,`desirPrincipal`,`Gagner du temps au t\u00e9l\u00e9phone`,6)}
-  </div>`;
-}
-
-/* ── 6. RÉCAP ── */
-function screenRecap() {
-  const a = state.a;
-  const typeLabel = a.typeSite === `Vitrine`  ? `Vitrine \u2014 490\u20ac` :
-                    a.typeSite === `Boutique` ? `Boutique \u2014 790\u20ac` :
-                    a.typeSite || `\u2014`;
-  const rows = [
-    [`Type de site`,    typeLabel],
-    [`M\u00e9tier`,     a.metier          || `\u2014`],
-    [`Projet`,          a.timing          || `\u2014`],
-    [`Objectif`,        a.desirPrincipal  || `\u2014`]
-  ];
-  const btnTxt = a.typeSite === `Sur-mesure` ? `Discuter de mon projet` : `Rappelez-moi sous 1h`;
-  return `
-  <p class="q-label">\u2728 Votre profil</p>
-  <h2 class="q-title">Votre projet est <span style="color:var(--accent)">r\u00e9alisable</span></h2>
-  <p class="recap-delivery">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    Livraison pr\u00e9vue avant le\u00a0<strong>${getDeliveryDate()}</strong>
-  </p>
-  <div class="recap-card">
-    ${rows.map(([l,v]) => `<div class="recap-row"><span class="recap-label">${l}</span><span class="recap-val">${esc(v)}</span></div>`).join(``)}
-  </div>
-  <button class="btn-primary" onclick="goTo(7)">${btnTxt} ${ARROW}</button>
-  <p class="note-sm">Sans engagement\u00a0\u2014 Pas de carte bancaire demand\u00e9e</p>`;
-}
-
-/* ── 7. FORMULAIRE ── */
-function screenForm() {
-  const isCus = state.fromSurMesure;
-  const btnTxt = isCus ? `Recevoir mon devis` :
-                 state.a.typeSite === `Boutique` ? `D\u00e9marrer ma boutique aujourd\u2019hui \u2014 790\u20ac` :
-                 `D\u00e9marrer mon site aujourd\u2019hui \u2014 490\u20ac`;
-  const badges = isCus
-    ? [`\uD83D\uDCDE R\u00e9ponse sous 1h`, `\uD83D\uDCCB Devis gratuit`, `\u2705 Sans engagement`]
-    : [`\u23f1\ufe0f Livr\u00e9 en 5\u00a0jours`, `\u2705 Sans abonnement`, `\uD83D\uDCAC Service 7j/7`, `\uD83C\uDF81 Logo + flyers offerts`];
-  return `
-  <h2 class="form-title">${isCus ? `\uD83C\uDFAF Parlons de votre projet` : `\uD83C\uDFAF Plus qu\u2019une \u00e9tape\u00a0!`}</h2>
-  <p class="form-sub">${isCus
-    ? `On vous appelle dans l\u2019heure pour discuter de votre projet et \u00e9tablir un devis personnalis\u00e9.`
-    : `On vous appelle dans l\u2019heure pour finaliser les d\u00e9tails et lancer votre site.`}</p>
-  <form id="lead-form" novalidate>
-    <div class="form-grid">
-      <div>
-        <label class="form-label" for="f-prenom">Votre pr\u00e9nom *</label>
-        <input type="text" class="text-input" id="f-prenom" placeholder="Jean" autocomplete="given-name" value="${esc(state.a.prenom)}">
-        <div class="field-error" id="err-prenom">Veuillez indiquer votre pr\u00e9nom.</div>
-      </div>
-      <div>
-        <label class="form-label" for="f-nom">Votre nom *</label>
-        <input type="text" class="text-input" id="f-nom" placeholder="Dupont" autocomplete="family-name" value="${esc(state.a.nom)}">
-        <div class="field-error" id="err-nom">Veuillez indiquer votre nom.</div>
-      </div>
-      <div>
-        <label class="form-label" for="f-entreprise">Nom de votre entreprise *</label>
-        <input type="text" class="text-input" id="f-entreprise" placeholder="Mon Entreprise" autocomplete="organization" value="${esc(state.a.nomEntreprise)}">
-        <div class="field-error" id="err-entreprise">Veuillez indiquer votre entreprise.</div>
-      </div>
-      <div>
-        <label class="form-label" for="f-email">Votre email *</label>
-        <input type="email" class="text-input" id="f-email" placeholder="jean@monentreprise.fr" autocomplete="email" inputmode="email" value="${esc(state.a.email)}">
-        <div class="field-error" id="err-email">Adresse email invalide.</div>
-      </div>
-      <div>
-        <label class="form-label" for="f-ville">Votre ville *</label>
-        <input type="text" class="text-input" id="f-ville" placeholder="Paris" autocomplete="address-level2" value="${esc(state.a.ville)}">
-        <div class="field-error" id="err-ville">Veuillez indiquer votre ville.</div>
-      </div>
-      <div>
-        <label class="form-label" for="f-cp">Code postal *</label>
-        <input type="text" class="text-input" id="f-cp" placeholder="75001" autocomplete="postal-code" inputmode="numeric" maxlength="5" value="${esc(state.a.codePostal)}">
-        <div class="field-error" id="err-cp">Code postal invalide (5 chiffres).</div>
-      </div>
-      <div>
-        <label class="form-label" for="f-tel">Votre t\u00e9l\u00e9phone *</label>
-        <input type="tel" class="text-input" id="f-tel" placeholder="06 00 00 00 00" autocomplete="tel" inputmode="numeric" value="${esc(state.a.telephone)}">
-        <div class="field-error" id="err-tel">Num\u00e9ro invalide (7\u00a0chiffres minimum).</div>
-      </div>
-    </div>
-    <div class="field-error" id="err-submit" style="margin-bottom:10px;font-size:13px;"></div>
-    <button type="submit" class="btn-primary">${btnTxt} ${ARROW}</button>
-  </form>
-  <div class="form-badges">
-    ${badges.map(b => `<span class="form-badge">${b}</span>`).join(``)}
-  </div>
-  <div class="trust-bar">
-    <span>\u2B50 <strong>4.97/5</strong></span>
-    <span class="trust-sep">\u00b7</span>
-    <span><strong>170+</strong> sites livr\u00e9s</span>
-    <span class="trust-sep">\u00b7</span>
-    <span>Livraison en 5\u00a0jours</span>
-  </div>`;
-}
-
-/* ── 8. CONFIRMATION — refonte ── */
-function screenConfirm() {
-  const name = esc(state.a.prenom) || `vous`;
-  return `
-  <div style="text-align:center">
-    <div class="confirm-icon">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-    </div>
-    <h2 class="confirm-title">C\u2019est bien not\u00e9\u00a0${name}\u00a0!</h2>
-    <p class="confirm-sub">Emre, le chef de projet de notre \u00e9quipe, va vous contacter dans l\u2019heure pour finaliser votre site.</p>
-  </div>
-
-  <div class="confirm-promise-card">
-    On vous appelle dans l\u2019heure pour valider votre projet, vous envoyer la facture et lancer la production de votre site sous 5\u00a0jours.
-  </div>
-
-  <div class="confirm-card">
-    <div class="confirm-info-row">
-      <span class="confirm-info-icon">\u260E\uFE0F</span>
-      <span class="confirm-info-text">Notre \u00e9quipe vous appelle dans l\u2019heure</span>
-    </div>
-    <div class="confirm-info-row">
-      <span class="confirm-info-icon">\uD83D\uDD52</span>
-      <span class="confirm-info-text">Service client disponible 7j/7</span>
-    </div>
-    <div class="confirm-info-row">
-      <span class="confirm-info-icon wa-icon">\uD83D\uDCAC</span>
-      <span class="confirm-info-text wa-text">Disponible aussi sur WhatsApp</span>
-    </div>
-  </div>
-
-  <button class="btn-primary xl" onclick="window.location.href='/'">
-    Voir nos r\u00e9alisations ${ARROW}
-  </button>
-  <p class="confirm-note">En attendant notre appel, d\u00e9couvrez les sites qu\u2019on a livr\u00e9s r\u00e9cemment.</p>
-
-  <div class="trust-bar" style="margin-top:24px">
-    <span>\u2B50 <strong>4.97/5</strong></span>
-    <span class="trust-sep">\u00b7</span>
-    <span><strong>170+</strong> sites livr\u00e9s</span>
-    <span class="trust-sep">\u00b7</span>
-    <span>D\u00e9lai moyen 5\u00a0jours</span>
-  </div>`;
-}
-
-/* ═══════════════════════════════════════
-   RENDER
-═══════════════════════════════════════ */
-/* ── Helpers Meta CAPI ── */
+/* ════════════════════════════════════════
+   META PIXEL + CAPI — LEAD
+════════════════════════════════════════ */
 function genUUID() {
-  return `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`.replace(/[xy]/g, c => {
-    const r = Math.random() * 16 | 0;
-    return (c === `x` ? r : (r & 0x3 | 0x8)).toString(16);
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0;
+    return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
   });
 }
-/* ── SHA-256 navigateur (Web Crypto API) ── */
+
 async function sha256c(str) {
-  if (!str) return ``;
-  const buf = await crypto.subtle.digest(`SHA-256`, new TextEncoder().encode((str || ``).trim().toLowerCase()));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, `0`)).join(``);
+  if (!str) return "";
+  var buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode((str || "").trim().toLowerCase()));
+  return Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, "0"); }).join("");
 }
 
-/* ── Formatage téléphone E.164 France ── */
 function toE164(phone) {
-  let p = (phone || ``).replace(/[\s.\-\(\)]/g, ``);
-  if (p.startsWith(`00`)) return `+` + p.slice(2);
-  if (p.startsWith(`0`))  return `+33` + p.slice(1);
-  if (!p.startsWith(`+`)) return `+33` + p;
+  var p = (phone || "").replace(/[\s.\-\(\)]/g, "");
+  if (p.startsWith("00")) return "+" + p.slice(2);
+  if (p.startsWith("0"))  return "+33" + p.slice(1);
+  if (!p.startsWith("+")) return "+33" + p;
   return p;
 }
 
-/* ── Lecture cookies _fbc / _fbp ── */
 function getCookie(name) {
-  const m = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
-  return m ? m.pop() : ``;
+  var m = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
+  return m ? m.pop() : "";
 }
 
-/* ── Code test Meta Events Manager (?_test=TESTxxxxx dans l'URL) ── */
-const _metaTestCode = new URLSearchParams(window.location.search).get(`_test`) || ``;
+var _metaTestCode = new URLSearchParams(window.location.search).get("_test") || "";
 
 function sendCAPI(event_name, user_data, custom_data, event_id) {
-  fetch(`/api/meta-event`, {
-    method: `POST`,
-    headers: { 'Content-Type': `application/json` },
-    body: JSON.stringify({
-      event_name,
-      event_source_url: window.location.href,
-      user_data,
-      custom_data,
-      event_id,
-      ...(_metaTestCode && { test_event_code: _metaTestCode })
-    })
+  var body = {
+    event_name:        event_name,
+    event_source_url:  window.location.href,
+    user_data:         user_data,
+    custom_data:       custom_data,
+    event_id:          event_id
+  };
+  if (_metaTestCode) body.test_event_code = _metaTestCode;
+
+  fetch("/api/meta-event", {
+    method:  "POST",
+    headers: { "Content-Type": "application/json" },
+    body:    JSON.stringify(body)
   })
-  .then(r => r.json())
-  .then(d => console.log(`[CAPI] ${event_name} ✓ event_id:${event_id}`, d))
-  .catch(err => console.warn(`[CAPI] ${event_name} error:`, err));
+  .then(function(r) { return r.json(); })
+  .then(function(d) { console.log("[CAPI] " + event_name + " \u2713 event_id:" + event_id, d); })
+  .catch(function(err) { console.warn("[CAPI] " + event_name + " error:", err); });
 }
 
-/* ── Meta Pixel — ViewContent sur le formulaire (step 7) ── */
-let _vcObserver = null;
-function setupViewContentObserver() {
-  if (_vcObserver) { _vcObserver.disconnect(); _vcObserver = null; }
-  const el = document.getElementById(`screen-container`);
-  if (!el || typeof fbq !== `function`) return;
-  _vcObserver = new IntersectionObserver(function(entries) {
-    if (entries[0].isIntersecting) {
-      const eventId = genUUID();
-      fbq(`track`, `ViewContent`, {}, { eventID: eventId });
-      sendCAPI(`ViewContent`, {}, {}, eventId);
-      _vcObserver.disconnect();
-      _vcObserver = null;
-    }
-  }, { threshold: 0.5 });
-  _vcObserver.observe(el);
-}
+async function trackLead() {
+  var eventId = genUUID();
+  var prix    = S.prix;
 
-function render() {
-  const map = {1:screenHero, 2:screenQ1, 3:screenQ2, 4:screenQ3, 5:screenQ4, 6:screenRecap, 7:screenForm, 8:screenConfirm};
-  document.getElementById(`screen-container`).innerHTML = (map[state.step] || screenHero)();
-  if (state.step === 7) setupViewContentObserver();
+  var hFn = await sha256c(S.prenom);
+  var hLn = await sha256c(S.nom);
+  var hPh = await sha256c(toE164(S.whatsapp));
 
-  /* Progress */
-  const show = state.step >= 2 && state.step <= 7;
-  document.getElementById(`progress-wrap`).classList.toggle(`hidden`, !show);
-  const pb = document.getElementById(`progress-bar`);
-  if (pb) pb.style.width = (PROGRESS[state.step] || 0) + `%`;
-
-  /* Back button */
-  document.getElementById(`btn-back`).classList.toggle(`hidden`, HIDE_BACK.has(state.step));
-
-  /* Listeners */
-  const form = document.getElementById(`lead-form`);
-  if (form) form.addEventListener(`submit`, submitForm);
-  const mi = document.getElementById(`f-metier`);
-  if (mi) mi.addEventListener(`keydown`, e => { if (e.key === `Enter`) continueMetier(); });
-}
-
-/* ═══════════════════════════════════════
-   FORM LOGIC
-═══════════════════════════════════════ */
-function continueMetier() {
-  const inp = document.getElementById(`f-metier`);
-  const err = document.getElementById(`err-metier`);
-  if (!inp) return;
-  const val = inp.value.trim();
-  if (val.length < 2) {
-    inp.classList.add(`error`);
-    if (err) err.classList.add(`show`);
-    inp.focus();
-    return;
-  }
-  state.a.metier = val;
-  goTo(4);
-}
-
-async function submitForm(e) {
-  e.preventDefault();
-  const fields = [
-    {id:`f-prenom`,    key:`prenom`,       errId:`err-prenom`,    ok: v => v.length >= 2},
-    {id:`f-nom`,       key:`nom`,          errId:`err-nom`,       ok: v => v.length >= 2},
-    {id:`f-entreprise`,key:`nomEntreprise`, errId:`err-entreprise`,ok: v => v.length >= 2},
-    {id:`f-email`,     key:`email`,        errId:`err-email`,     ok: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)},
-    {id:`f-ville`,     key:`ville`,        errId:`err-ville`,     ok: v => v.length >= 2},
-    {id:`f-cp`,        key:`codePostal`,   errId:`err-cp`,        ok: v => /^\d{5}$/.test(v)},
-    {id:`f-tel`,       key:`telephone`,    errId:`err-tel`,       ok: v => v.replace(/\D/g,``).length >= 7}
-  ];
-  let valid = true;
-  fields.forEach(f => {
-    const inp = document.getElementById(f.id);
-    const err = document.getElementById(f.errId);
-    if (!inp) return;
-    const val = inp.value.trim();
-    const ok  = f.ok(val);
-    inp.classList.toggle(`error`, !ok);
-    if (err) err.classList.toggle(`show`, !ok);
-    if (ok) state.a[f.key] = val;
-    else valid = false;
-  });
-  if (!valid) return;
-
-  /* ── Bouton en état chargement ── */
-  const submitBtn = document.querySelector(`#lead-form button[type="submit"]`);
-  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = `Envoi en cours\u2026`; }
-
-  /* ── localStorage fallback ── */
-  try {
-    const arr = JSON.parse(localStorage.getItem(`qv_leads`) || `[]`);
-    arr.unshift(Object.assign({}, state.a, { date: new Date().toLocaleDateString(`fr-FR`) }));
-    localStorage.setItem(`qv_leads`, JSON.stringify(arr));
-  } catch(_) {}
-
-  /* ── Supabase INSERT ── */
-  if (_sb) {
-    const row = {
-      prenom:          state.a.prenom,
-      nom_entreprise:  state.a.nomEntreprise,
-      ville:           state.a.ville,
-      telephone:       state.a.telephone,
-      type_site:       state.a.typeSite,
-      metier:          state.a.metier,
-      presence_google: state.a.timing,
-      desir_principal: state.a.desirPrincipal,
-      statut:          `nouveau`
-    };
-    const { data, error } = await _sb.from(`quattrovisual_landing_leads`).insert([row]).select().single();
-    if (error) {
-      console.error(`[QV] Supabase insert error:`, error);
-      /* Ré-activer le bouton et afficher l'erreur visible */
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = `Réessayer`; }
-      const errDiv = document.getElementById(`err-submit`);
-      if (errDiv) { errDiv.textContent = `Erreur : ${error.message || JSON.stringify(error)}`; errDiv.classList.add(`show`); }
-      return; /* Ne pas aller à l'écran de confirmation si l'INSERT échoue */
-    }
-    /* notify-lead Edge Function supprimée — Telegram gère les notifications via /api/notify */
-  } else {
-    console.warn(`[QV] Supabase non initialisé — lead non sauvegardé en base.`);
+  if (typeof fbq === "function") {
+    fbq("init", "821989530976997", { fn: hFn, ln: hLn, ph: hPh });
+    fbq("track", "Lead", { value: prix, currency: "EUR" }, { eventID: eventId });
   }
 
-  /* ── Meta Pixel + CAPI — Lead enrichi (EMQ maximal) ── */
-  {
-    const leadEventId = genUUID();
-    const leadValue   = state.a.typeSite === `Boutique` ? 790 : state.a.typeSite === `Sur-mesure` ? 0 : 490;
+  sendCAPI(
+    "Lead",
+    { fn: S.prenom, ln: S.nom, ph: S.whatsapp, fbc: getCookie("_fbc"), fbp: getCookie("_fbp") },
+    { value: prix, currency: "EUR" },
+    eventId
+  );
+}
 
-    /* Hash SHA-256 côté navigateur pour le pixel (Advanced Matching) */
-    const [hFn, hLn, hEm, hPh, hCt, hZp] = await Promise.all([
-      sha256c(state.a.prenom),
-      sha256c(state.a.nom),
-      sha256c(state.a.email),
-      sha256c(toE164(state.a.telephone)),
-      sha256c(state.a.ville),
-      sha256c(state.a.codePostal)
-    ]);
-
-    if (typeof fbq === `function`) {
-      fbq(`init`, `821989530976997`, { fn: hFn, ln: hLn, em: hEm, ph: hPh, ct: hCt, zp: hZp });
-      fbq(`track`, `Lead`, { value: leadValue, currency: `EUR` }, { eventID: leadEventId });
+/* ════════════════════════════════════════
+   VIEWCONTENT — formulaire visible
+════════════════════════════════════════ */
+(function() {
+  var fired = false;
+  var el = document.getElementById("form-section");
+  if (!el) return;
+  var obs = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting && !fired) {
+      fired = true;
+      var eid = genUUID();
+      if (typeof fbq === "function") fbq("track", "ViewContent", {}, { eventID: eid });
+      sendCAPI("ViewContent", {}, {}, eid);
+      obs.disconnect();
     }
-
-    /* CAPI côté serveur — texte brut, le serveur hash et formate E.164 */
-    sendCAPI(`Lead`,
-      {
-        fn:  state.a.prenom,
-        ln:  state.a.nom,
-        em:  state.a.email,
-        ph:  state.a.telephone,
-        ct:  state.a.ville,
-        zp:  state.a.codePostal,
-        fbc: getCookie(`_fbc`),
-        fbp: getCookie(`_fbp`)
-      },
-      { value: leadValue, currency: `EUR` },
-      leadEventId
-    );
-  }
-
-  /* ── Telegram notification (async, non-bloquant) ── */
-  sendTelegramNotif(state.a);
-
-  goTo(8);
-}
-
-/* ═══════════════════════════════════════
-   TELEGRAM NOTIFICATION
-═══════════════════════════════════════ */
-function sendTelegramNotif(a) {
-  // Appel vers la Vercel Serverless Function — le token reste cote serveur
-  fetch(`/api/notify`, {
-    method: `POST`,
-    headers: { [`Content-Type`]: `application/json` },
-    body: JSON.stringify({
-      prenom:         a.prenom,
-      nomEntreprise:  a.nomEntreprise,
-      ville:          a.ville,
-      telephone:      a.telephone,
-      typeSite:       a.typeSite,
-      metier:         a.metier,
-      timing:         a.timing,
-      desirPrincipal: a.desirPrincipal
-    })
-  }).catch(function(err) { console.error(`Notif failed:`, err); });
-}
-
-/* ═══════════════════════════════════════
-   BOOT
-═══════════════════════════════════════ */
-render();
+  }, { threshold: 0.4 });
+  obs.observe(el);
+})();
 </script>
+
 </body>
 </html>
