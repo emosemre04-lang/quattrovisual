@@ -545,7 +545,8 @@ function upd(){
   var ok=S.service&&S.delai&&S.prenom.length>=2&&S.nom.length>=2&&S.whatsapp.replace(/\D/g,"").length>=9;
   var wasDisabled=btn.disabled;
   btn.disabled=!ok;
-  btn.textContent=ok?"Je veux \u00eatre rappel\u00e9 sous 1h \u2014 "+S.prix+"\u20ac \u2192":"Je veux \u00eatre rappel\u00e9 sous 1h \u2192";
+  var prixTxt=S.prix?" \u2014 "+S.prix+"\u20ac":"";
+  btn.textContent="Je veux \u00eatre rappel\u00e9 sous 1h"+prixTxt+" \u2192";
   if(ok&&wasDisabled){btn.classList.add("pulse");stepDone(3)}
   if(!ok){btn.classList.remove("pulse")}
 }
