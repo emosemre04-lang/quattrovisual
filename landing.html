@@ -444,11 +444,6 @@ h1 em{font-style:normal;color:var(--v)}
           Complétez les 3 étapes ci-dessus →
         </button>
 
-        <div class="guarantee">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          Paiement 100% sécurisé · Aucun engagement
-        </div>
-
         <div class="form-trust">
           <span>Livré en 5 jours</span><span>·</span>
           <span>Logo + flyers offerts</span><span>·</span>
@@ -550,7 +545,7 @@ function upd(){
   var ok=S.service&&S.delai&&S.prenom.length>=2&&S.nom.length>=2&&S.whatsapp.replace(/\D/g,"").length>=9;
   var wasDisabled=btn.disabled;
   btn.disabled=!ok;
-  btn.textContent=ok?"Démarrer mon projet — "+S.prix+"\u20ac \u2192":"Complétez les 3 étapes ci-dessus \u2192";
+  btn.textContent=ok?"Je veux \u00eatre rappel\u00e9 sous 1h \u2014 "+S.prix+"\u20ac \u2192":"Je veux \u00eatre rappel\u00e9 sous 1h \u2192";
   if(ok&&wasDisabled){btn.classList.add("pulse");stepDone(3)}
   if(!ok){btn.classList.remove("pulse")}
 }
