@@ -509,8 +509,11 @@ function unlock(id){
   el.classList.remove("locked");
   el.classList.add("revealing");
   setTimeout(function(){
-    el.scrollIntoView({behavior:"smooth",block:"start"});
-  },120);
+    var navH=document.querySelector("nav").offsetHeight||56;
+    var gap=16;
+    var top=el.getBoundingClientRect().top+window.scrollY-navH-gap;
+    window.scrollTo({top:top,behavior:"smooth"});
+  },150);
 }
 
 function pick(type,name,prix){
