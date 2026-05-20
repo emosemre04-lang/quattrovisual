@@ -55,29 +55,38 @@ module.exports = async function handler(req, res) {
     console.warn("[landing-submit] SUPABASE_SERVICE_KEY manquant");
   }
 
-  /* ── 2. Telegram notification (non-bloquant si echoue) ── */
+  /* ── 2. Telegram notification (awaitee pour eviter coupure Vercel) ── */
   const TOKEN   = process.env.TELEGRAM_BOT_TOKEN;
   const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
+  let tgOk = false;
   if (TOKEN && CHAT_ID) {
     const msg =
-      "\uD83C\uDFAF NOUVEAU LEAD QUATTRO VISUAL\n\n" +
-      "\uD83D\uDC64 Nom : " + prenom + " " + nom + "\n" +
-      "\uD83D\uDCF1 WhatsApp : " + whatsapp + "\n" +
-      "\uD83D\uDCBC Service choisi : " + service + " \u2014 " + (prix || 0) + "\u20ac\n" +
+      "\uD83D\uDD25 NOUVEAU LEAD LANDING — QUATTRO VISUAL\n\n" +
+      "\uD83D\uDC64 " + prenom + " " + nom + "\n" +
+      "\uD83D\uDCF1 WhatsApp : +" + whatsapp + "\n" +
+      "\uD83D\uDCBC Service : " + service + " \u2014 " + (prix || 0) + "\u20ac\n" +
       "\u23F0 D\u00e9lai : " + delai + "\n" +
-      "\uD83D\uDCC5 Date : " + dateFR;
+      "\uD83D\uDCC5 " + dateFR;
 
-    fetch(
-      "https://api.telegram.org/bot" + TOKEN + "/sendMessage",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
-      }
-    ).catch(e => console.error("[landing-submit] Telegram error:", e));
+    try {
+      const tgRes = await fetch(
+        "https://api.telegram.org/bot" + TOKEN + "/sendMessage",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+        }
+      );
+      const tgData = await tgRes.json();
+      tgOk = tgData.ok;
+      if (!tgData.ok) console.error("[landing-submit] Telegram error:", tgData);
+    } catch (e) {
+      console.error("[landing-submit] Telegram fetch failed:", e);
+    }
+  } else {
+    console.warn("[landing-submit] TELEGRAM_BOT_TOKEN ou TELEGRAM_CHAT_ID manquant");
   }
 
-  // Retourner 200 meme si Telegram echoue — le lead est sauvegarde
-  return res.status(200).json({ ok: true, saved: supaOk });
+  return res.status(200).json({ ok: true, saved: supaOk, tg: tgOk });
 };
